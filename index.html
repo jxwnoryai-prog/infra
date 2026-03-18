@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>현대자동차 연구개발인프라지원시스템</title>
+<meta name="description" content="현대자동차 연구개발본부 인프라건설 - 공사 안전관리, 업무 자동화, 시설공사 매뉴얼화">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root {
+  --primary: #002C5F;
+  --accent: #00AAD2;
+  --dark: #0E1117;
+  --gray50: #F8F9FB;
+  --gray100: #EEF1F5;
+  --gray300: #C4CAD4;
+  --gray500: #6B7689;
+  --gray700: #3A4254;
+  --white: #FFFFFF;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: var(--white);
+}
+::selection { background: rgba(0,170,210,0.18); color: var(--dark); }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.navbar.scrolled {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom-color: var(--gray100);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between; height: 64px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; font-weight: 700; letter-spacing: -0.5px;
+}
+.nav-logo-text { font-size: 15px; font-weight: 600; color: var(--dark); letter-spacing: -0.3px; }
+.nav-logo-text span { color: var(--gray500); font-weight: 400; }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-link {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: var(--gray700); font-weight: 450; letter-spacing: -0.1px;
+  padding: 4px 0; transition: color 0.2s;
+}
+.nav-link:hover { color: var(--primary); }
+.nav-cta {
+  background: var(--primary); color: #fff; border: none;
+  padding: 8px 20px; border-radius: 100px; font-size: 13px; font-weight: 500;
+  cursor: pointer; letter-spacing: -0.1px; transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: scale(1.04); box-shadow: 0 4px 20px rgba(0,44,95,0.25); }
+.mobile-toggle {
+  display: none; background: none; border: none; cursor: pointer; padding: 4px;
+}
+.mobile-toggle svg { width: 22px; height: 22px; stroke: var(--dark); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.mobile-menu {
+  display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; z-index: 99;
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+  flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu button {
+  background: none; border: none; font-size: 28px; font-weight: 500; color: var(--dark); cursor: pointer; letter-spacing: -0.5px;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 32px 80px; position: relative; overflow: hidden;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,170,210,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 80% 100%, rgba(0,44,95,0.04) 0%, transparent 50%),
+              var(--white);
+}
+.hero-circle {
+  position: absolute; border-radius: 50%; border: 1px solid var(--gray100);
+  opacity: 0; transition: opacity 2s ease;
+}
+.hero-circle.c1 { top: 15%; left: 10%; width: 400px; height: 400px; transition-delay: 0.5s; }
+.hero-circle.c2 { bottom: 10%; right: 5%; width: 300px; height: 300px; transition-delay: 0.8s; }
+.hero.loaded .hero-circle.c1 { opacity: 0.5; }
+.hero.loaded .hero-circle.c2 { opacity: 0.4; }
+.hero-status {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px;
+  background: var(--gray50); border-radius: 100px; margin-bottom: 32px;
+  border: 1px solid var(--gray100);
+  opacity: 0; transform: translateY(30px);
+  transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.2s;
+}
+.hero.loaded .hero-status { opacity: 1; transform: translateY(0); }
+.hero-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; }
+.hero-status span { font-size: 13px; color: var(--gray500); font-weight: 450; }
+.hero h1 {
+  font-size: clamp(36px, 6vw, 72px); font-weight: 700; letter-spacing: -0.035em;
+  line-height: 1.08; color: var(--dark); max-width: 800px; margin: 0 auto 24px;
+  opacity: 0; transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.35s;
+}
+.hero.loaded h1 { opacity: 1; transform: translateY(0); }
+.hero h1 .highlight { color: var(--primary); }
+.hero-desc {
+  font-size: clamp(16px, 2vw, 20px); line-height: 1.7; color: var(--gray500);
+  max-width: 520px; margin: 0 auto 48px; font-weight: 400; letter-spacing: -0.2px;
+  opacity: 0; transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.5s;
+}
+.hero.loaded .hero-desc { opacity: 1; transform: translateY(0); }
+.hero-btns {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  opacity: 0; transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.65s;
+}
+.hero.loaded .hero-btns { opacity: 1; transform: translateY(0); }
+.btn-primary {
+  background: var(--primary); color: #fff; border: none;
+  padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.btn-primary:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(0,44,95,0.3); }
+.btn-primary svg { width: 16px; height: 16px; }
+.btn-secondary {
+  background: transparent; color: var(--dark); border: 1.5px solid var(--gray300);
+  padding: 14px 32px; border-radius: 100px; font-size: 15px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+.scroll-indicator {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  opacity: 0; transition: opacity 1s ease 1.5s;
+  animation: bounce 2s infinite;
+}
+.hero.loaded .scroll-indicator { opacity: 1; }
+.scroll-indicator svg { width: 20px; height: 20px; stroke: var(--gray300); stroke-width: 2; fill: none; }
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── SECTIONS COMMON ── */
+.section { padding: 120px 32px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-label {
+  font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent); margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 44px); font-weight: 700; letter-spacing: -0.03em;
+  color: var(--dark); line-height: 1.15; margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 17px; color: var(--gray500); max-width: 480px; line-height: 1.7; margin-bottom: 64px;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.d1 { transition-delay: 0.1s; }
+.reveal.d2 { transition-delay: 0.2s; }
+.reveal.d3 { transition-delay: 0.3s; }
+
+/* ── SERVICES ── */
+.services-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+}
+.service-card {
+  padding: 36px; border-radius: 20px; background: var(--white);
+  border: 1px solid var(--gray100); cursor: default;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; height: 100%;
+}
+.service-card:hover {
+  background: var(--gray50); border-color: var(--gray300); transform: translateY(-4px);
+}
+.service-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+  transition: transform 0.3s;
+}
+.service-card:hover .service-icon { transform: scale(1.08); }
+.service-icon svg { width: 22px; height: 22px; stroke-width: 1.8; fill: none; }
+.service-card h3 {
+  font-size: 20px; font-weight: 600; color: var(--dark); letter-spacing: -0.3px;
+  margin-bottom: 12px; white-space: pre-line; line-height: 1.35;
+}
+.service-card p { font-size: 15px; color: var(--gray500); line-height: 1.7; margin-bottom: 20px; flex: 1; }
+.service-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.service-tag {
+  font-size: 12px; padding: 4px 12px; border-radius: 100px; font-weight: 500;
+}
+
+/* ── ABOUT ── */
+.about-section {
+  background: linear-gradient(180deg, var(--gray50) 0%, var(--white) 100%);
+}
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 80px;
+}
+.about-text p { font-size: 17px; color: var(--gray500); line-height: 1.85; margin-bottom: 24px; }
+.about-text p:last-child { margin-bottom: 0; }
+.about-mission {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 24px; padding: 48px; color: #fff; position: relative; overflow: hidden;
+}
+.about-mission .circle {
+  position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12);
+}
+.about-mission .circle.c1 { top: -40px; right: -40px; width: 200px; height: 200px; }
+.about-mission .circle.c2 { bottom: -20px; left: -20px; width: 120px; height: 120px; }
+.about-mission .label { font-size: 14px; font-weight: 500; opacity: 0.7; margin-bottom: 16px; letter-spacing: 1px; }
+.about-mission .text { font-size: 24px; font-weight: 600; line-height: 1.45; letter-spacing: -0.3px; position: relative; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat-card {
+  text-align: center; padding: 32px 16px; border-radius: 16px;
+  background: var(--white); border: 1px solid var(--gray100);
+}
+.stat-num {
+  font-size: clamp(28px, 3vw, 36px); font-weight: 700; color: var(--primary);
+  letter-spacing: -1px; margin-bottom: 8px;
+}
+.stat-label { font-size: 14px; color: var(--gray500); font-weight: 450; }
+
+/* ── CONTACT ── */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.contact-card {
+  padding: 32px 28px; border-radius: 20px; background: var(--gray50);
+  border: 1px solid var(--gray100); transition: border-color 0.3s;
+}
+.contact-card:hover { border-color: var(--gray300); }
+.contact-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(0,44,95,0.05); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.contact-icon svg { width: 20px; height: 20px; stroke: var(--primary); stroke-width: 1.8; fill: none; }
+.contact-card .label { font-size: 13px; color: var(--gray500); margin-bottom: 6px; font-weight: 500; }
+.contact-card .value { font-size: 16px; color: var(--dark); font-weight: 600; letter-spacing: -0.2px; }
+.contact-card a.value { transition: color 0.2s; }
+.contact-card a.value:hover { color: var(--primary); }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 48px 32px; border-top: 1px solid var(--gray100); background: var(--white);
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+}
+.footer-left { display: flex; align-items: center; gap: 10px; }
+.footer-logo {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 700;
+}
+.footer-copy { font-size: 13px; color: var(--gray500); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 13px; color: var(--gray500); font-weight: 450; transition: color 0.2s; }
+.footer-links a:hover { color: var(--primary); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-links { display: none !important; }
+  .mobile-toggle { display: block !important; }
+  .about-grid { grid-template-columns: 1fr !important; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .section { padding: 80px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .footer-inner { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">H</div>
+      <div class="nav-logo-text">현대자동차 <span>인프라시스템</span></div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link" onclick="smoothScroll('services')">서비스</button>
+      <button class="nav-link" onclick="smoothScroll('about')">소개</button>
+      <button class="nav-link" onclick="smoothScroll('contact')">연락처</button>
+      <button class="nav-cta" onclick="smoothScroll('contact')">문의하기</button>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobile()">
+      <svg id="menuIcon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="closeIcon" viewBox="0 0 24 24" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="smoothScroll('services'); toggleMobile();">서비스</button>
+  <button onclick="smoothScroll('about'); toggleMobile();">소개</button>
+  <button onclick="smoothScroll('contact'); toggleMobile();">연락처</button>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-circle c1"></div>
+  <div class="hero-circle c2"></div>
+
+  <div class="hero-status">
+    <div class="dot"></div>
+    <span>연구개발인프라지원시스템 운영 중</span>
+  </div>
+
+  <h1>시설의 안전을,<br><span class="highlight">시스템</span>으로 완성하다.</h1>
+
+  <p class="hero-desc">공사 안전관리부터 자동 문서화까지,<br>현대자동차 인프라건설의 모든 프로세스를 하나로.</p>
+
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="smoothScroll('services')">
+      서비스 살펴보기
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button class="btn-secondary" onclick="smoothScroll('contact')">담당자 연결</button>
+  </div>
+
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label">Services</p>
+      <h2 class="section-title">인프라 관리의 새로운 기준</h2>
+      <p class="section-desc">현대자동차 연구개발 인프라의 효율적인 관리를 위한 핵심 서비스를 제공합니다.</p>
+    </div>
+
+    <div class="services-grid">
+      <!-- Card 1 -->
+      <div class="reveal d1">
+        <div class="service-card">
+          <div class="service-icon" style="background:rgba(0,44,95,0.06)">
+            <svg viewBox="0 0 24 24" stroke="#002C5F" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>공사 안전관리</h3>
+          <p>현장 안전 점검부터 리스크 평가까지, 체계적인 안전관리 프로세스로 무재해 사업장을 실현합니다.</p>
+          <div class="service-tags">
+            <span class="service-tag" style="background:rgba(0,44,95,0.06);color:#002C5F">안전점검</span>
+            <span class="service-tag" style="background:rgba(0,44,95,0.06);color:#002C5F">리스크평가</span>
+            <span class="service-tag" style="background:rgba(0,44,95,0.06);color:#002C5F">무재해</span>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="reveal d2">
+        <div class="service-card">
+          <div class="service-icon" style="background:rgba(0,170,210,0.08)">
+            <svg viewBox="0 0 24 24" stroke="#00AAD2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>업무 담당 안내 및
+PPT 자동 작성·메일 송부</h3>
+          <p>시설공사 관련 업무 담당자를 안내하고, PPT를 자동 생성하여 관련 부서에 즉시 메일로 전달합니다.</p>
+          <div class="service-tags">
+            <span class="service-tag" style="background:rgba(0,170,210,0.08);color:#00AAD2">자동화</span>
+            <span class="service-tag" style="background:rgba(0,170,210,0.08);color:#00AAD2">PPT생성</span>
+            <span class="service-tag" style="background:rgba(0,170,210,0.08);color:#00AAD2">메일발송</span>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="reveal d3">
+        <div class="service-card">
+          <div class="service-icon" style="background:rgba(52,211,153,0.1)">
+            <svg viewBox="0 0 24 24" stroke="#34D399" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h3>시설공사
+자동 매뉴얼화</h3>
+          <p>공사 프로세스와 기준을 자동으로 매뉴얼화하여 일관된 품질 관리와 지식 축적을 지원합니다.</p>
+          <div class="service-tags">
+            <span class="service-tag" style="background:rgba(52,211,153,0.1);color:#059669">매뉴얼</span>
+            <span class="service-tag" style="background:rgba(52,211,153,0.1);color:#059669">표준화</span>
+            <span class="service-tag" style="background:rgba(52,211,153,0.1);color:#059669">지식관리</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about-section" id="about">
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label">About</p>
+      <h2 class="section-title">연구개발인프라지원시스템</h2>
+    </div>
+
+    <div class="reveal d1">
+      <div class="about-grid">
+        <div class="about-text">
+          <p>현대자동차 연구개발본부 산하 인프라건설 조직은 연구시설의 안전하고 효율적인 관리를 위해 디지털 전환 기반의 통합 지원 시스템을 운영하고 있습니다.</p>
+          <p>공사 현장의 안전관리 체계화, 업무 프로세스 자동화, 그리고 시설공사 매뉴얼의 디지털화를 통해 현대자동차 R&D 인프라의 품질과 안전 수준을 한 단계 높이고 있습니다.</p>
+        </div>
+        <div class="about-mission">
+          <div class="circle c1"></div>
+          <div class="circle c2"></div>
+          <p class="label">OUR MISSION</p>
+          <p class="text">안전하고 스마트한<br>연구 인프라 환경을<br>구축합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="reveal"><div class="stat-card"><p class="stat-num">24/7</p><p class="stat-label">안전 모니터링</p></div></div>
+      <div class="reveal d1"><div class="stat-card"><p class="stat-num">98%</p><p class="stat-label">문서 자동화율</p></div></div>
+      <div class="reveal d2"><div class="stat-card"><p class="stat-num">50+</p><p class="stat-label">관리 시설 수</p></div></div>
+      <div class="reveal d3"><div class="stat-card"><p class="stat-num">Zero</p><p class="stat-label">중대재해 목표</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">문의 및 연락처</h2>
+      <p class="section-desc" style="margin-bottom:56px">시설 관련 문의사항은 아래 연락처로 편하게 연락 주세요.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="reveal d1">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <p class="label">이메일</p>
+          <a href="mailto:infra-support@hyundai.com" class="value">infra-support@hyundai.com</a>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <p class="label">전화</p>
+          <a href="tel:02-3464-1114" class="value">02-3464-1114</a>
+        </div>
+      </div>
+      <div class="reveal d3">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <p class="label">주소</p>
+          <p class="value">경기도 화성시 남양읍 현대자동차 남양연구소</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo">H</div>
+      <span class="footer-copy">© 2026 현대자동차 연구개발인프라지원시스템. All rights reserved.</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">개인정보처리방침</a>
+      <a href="#">이용약관</a>
+      <a href="#">사이트맵</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Smooth scroll
+function smoothScroll(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Navbar scroll effect
+window.addEventListener('scroll', function() {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Hero load animation
+setTimeout(function() {
+  document.querySelector('.hero').classList.add('loaded');
+}, 100);
+
+// Mobile menu toggle
+function toggleMobile() {
+  var menu = document.getElementById('mobileMenu');
+  var isOpen = menu.classList.toggle('open');
+  document.getElementById('menuIcon').style.display = isOpen ? 'none' : 'block';
+  document.getElementById('closeIcon').style.display = isOpen ? 'block' : 'none';
+}
+
+// Scroll reveal with IntersectionObserver
+var revealEls = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(function(el) { observer.observe(el); });
+</script>
+
+</body>
+</html>
