@@ -1,507 +1,3097 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>현대자동차 연구개발인프라지원시스템</title>
-<meta name="description" content="현대자동차 연구개발본부 인프라건설 - 공사 안전관리, 업무 자동화, 시설공사 매뉴얼화">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<style>
-:root {
-  --primary: #002C5F;
-  --accent: #00AAD2;
-  --dark: #0E1117;
-  --g50: #F8F9FB;
-  --g100: #EEF1F5;
-  --g300: #C4CAD4;
-  --g500: #6B7689;
-  --g700: #3A4254;
-  --white: #FFFFFF;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--dark); -webkit-font-smoothing: antialiased; overflow-x: hidden; background: var(--white);
-}
-::selection { background: rgba(0,170,210,0.18); }
-a { text-decoration: none; color: inherit; }
-button { font-family: inherit; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>현대자동차 연구개발인프라지원시스템</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <style>
+    :root {
+      --primary: #002C5F;
+      --accent: #00AAD2;
+      --dark: #0E1117;
+      --gray50: #F8F9FB;
+      --gray100: #EEF1F5;
+      --gray300: #C4CAD4;
+      --gray500: #6B7689;
+      --gray700: #3A4254;
+      --white: #FFFFFF;
+      --disc-arch: #002C5F;
+      --disc-elec: #E8A317;
+      --disc-mech: #00AAD2;
+      --disc-civil: #34855E;
+    }
 
-.navbar { position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:all .5s cubic-bezier(.16,1,.3,1) }
-.navbar.scrolled { background:rgba(255,255,255,.85);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom-color:var(--g100) }
-.nav-inner { max-width:1200px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px }
-.nav-logo { display:flex;align-items:center;gap:10px }
-.nav-logo-icon { width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700 }
-.nav-logo-text { font-size:15px;font-weight:600;letter-spacing:-.3px }
-.nav-logo-text span { color:var(--g500);font-weight:400 }
-.nav-links { display:flex;align-items:center;gap:36px }
-.nav-link { background:none;border:none;cursor:pointer;font-size:14px;color:var(--g700);font-weight:450;transition:color .2s }
-.nav-link:hover { color:var(--primary) }
-.nav-cta { background:var(--primary);color:#fff;border:none;padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;transition:transform .2s,box-shadow .2s }
-.nav-cta:hover { transform:scale(1.04);box-shadow:0 4px 20px rgba(0,44,95,.25) }
-.mobile-toggle { display:none;background:none;border:none;cursor:pointer;padding:4px }
-.mobile-toggle svg { width:22px;height:22px;stroke:var(--dark);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round }
-.mobile-menu { display:none;position:fixed;top:64px;left:0;right:0;bottom:0;z-index:99;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:32px }
-.mobile-menu.open { display:flex }
-.mobile-menu button { background:none;border:none;font-size:28px;font-weight:500;color:var(--dark);cursor:pointer }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
 
-.hero { min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 32px 80px;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,170,210,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 100%,rgba(0,44,95,.04) 0%,transparent 50%),var(--white) }
-.hero-circle { position:absolute;border-radius:50%;border:1px solid var(--g100);opacity:0;transition:opacity 2s ease }
-.hero-circle.c1 { top:15%;left:10%;width:400px;height:400px;transition-delay:.5s }
-.hero-circle.c2 { bottom:10%;right:5%;width:300px;height:300px;transition-delay:.8s }
-.hero.loaded .hero-circle.c1 { opacity:.5 }
-.hero.loaded .hero-circle.c2 { opacity:.4 }
-.hero-status { display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--g50);border-radius:100px;margin-bottom:32px;border:1px solid var(--g100);opacity:0;transform:translateY(30px);transition:all 1s cubic-bezier(.16,1,.3,1) .2s }
-.hero.loaded .hero-status { opacity:1;transform:translateY(0) }
-.hero-status .dot { width:6px;height:6px;border-radius:50%;background:#34D399 }
-.hero-status span { font-size:13px;color:var(--g500);font-weight:450 }
-.hero h1 { font-size:clamp(36px,6vw,72px);font-weight:700;letter-spacing:-.035em;line-height:1.08;max-width:800px;margin:0 auto 24px;opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.16,1,.3,1) .35s }
-.hero.loaded h1 { opacity:1;transform:translateY(0) }
-.hero h1 .hl { color:var(--primary) }
-.hero-desc { font-size:clamp(16px,2vw,20px);line-height:1.7;color:var(--g500);max-width:520px;margin:0 auto 48px;opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.16,1,.3,1) .5s }
-.hero.loaded .hero-desc { opacity:1;transform:translateY(0) }
-.hero-btns { display:flex;gap:16px;flex-wrap:wrap;justify-content:center;opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.16,1,.3,1) .65s }
-.hero.loaded .hero-btns { opacity:1;transform:translateY(0) }
-.btn-p { background:var(--primary);color:#fff;border:none;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .2s,box-shadow .3s }
-.btn-p:hover { transform:scale(1.04);box-shadow:0 8px 30px rgba(0,44,95,.3) }
-.btn-p svg { width:16px;height:16px }
-.btn-s { background:transparent;color:var(--dark);border:1.5px solid var(--g300);padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s }
-.btn-s:hover { border-color:var(--primary);color:var(--primary) }
-.scroll-ind { position:absolute;bottom:40px;left:50%;transform:translateX(-50%);opacity:0;transition:opacity 1s ease 1.5s;animation:bounce 2s infinite }
-.hero.loaded .scroll-ind { opacity:1 }
-.scroll-ind svg { width:20px;height:20px;stroke:var(--g300);stroke-width:2;fill:none }
-@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
-@keyframes fadeSlideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    ::selection { background: rgba(0, 170, 210, 0.3); color: var(--dark); }
 
-.section { padding:120px 32px }
-.section-inner { max-width:1100px;margin:0 auto }
-.section-label { font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px }
-.section-title { font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:16px }
-.section-desc { font-size:17px;color:var(--g500);max-width:480px;line-height:1.7;margin-bottom:64px }
-.reveal { opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1) }
-.reveal.visible { opacity:1;transform:translateY(0) }
-.reveal.d1 { transition-delay:.1s } .reveal.d2 { transition-delay:.2s } .reveal.d3 { transition-delay:.3s }
+    /* Animations */
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
 
-.search-wrap { position:relative;max-width:560px;margin-bottom:28px }
-.search-box { display:flex;align-items:center;gap:12px;background:var(--white);border-radius:16px;border:1.5px solid var(--g300);padding:14px 20px;transition:border-color .3s,box-shadow .3s }
-.search-box.focused { border-color:var(--primary);box-shadow:0 0 0 4px rgba(0,44,95,.07) }
-.search-box svg { width:20px;height:20px;stroke:var(--g500);stroke-width:2;fill:none;flex-shrink:0;transition:stroke .3s }
-.search-box.focused svg.search-icon { stroke:var(--primary) }
-.search-box input { border:none;outline:none;flex:1;font-size:15px;color:var(--dark);background:transparent;font-family:inherit;letter-spacing:-.2px }
-.search-box input::placeholder { color:var(--g300) }
-.clear-btn { background:none;border:none;cursor:pointer;padding:4px;display:flex }
-.clear-btn svg { width:16px;height:16px;stroke:var(--g500);stroke-width:2;fill:none }
-.zone-filters { display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap }
-.zone-btn { padding:8px 18px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;transition:all .25s;border:1px solid var(--g100);background:var(--white);color:var(--g500) }
-.zone-btn.active { border:1.5px solid var(--primary);background:rgba(0,44,95,.04);color:var(--primary) }
-.zone-count { font-size:13px;color:var(--g300);display:flex;align-items:center;margin-left:8px }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-.bldg-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px }
-.bldg-card { padding:20px;border-radius:16px;background:var(--white);border:1px solid var(--g100);cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1) }
-.bldg-card:hover { border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,44,95,.08) }
-.bldg-card-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px }
-.bldg-code { font-size:12px;font-weight:600;color:var(--primary);letter-spacing:.3px;background:rgba(0,44,95,.04);padding:3px 10px;border-radius:6px }
-.bldg-zone { font-size:11px;color:var(--g500);font-weight:450;background:var(--g50);padding:3px 8px;border-radius:6px }
-.bldg-card h4 { font-size:16px;font-weight:600;letter-spacing:-.3px;margin-bottom:12px }
-.disc-tags { display:flex;gap:6px;flex-wrap:wrap }
-.disc-tag { font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500 }
-.empty-state { grid-column:1/-1;text-align:center;padding:64px 20px }
-.empty-state svg { width:40px;height:40px;stroke:var(--g300);stroke-width:1.5;fill:none;margin-bottom:16px }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-.detail-panel { background:var(--g50);border-radius:24px;margin-bottom:32px;border:1px solid var(--g100);overflow:hidden;animation:fadeSlideIn .4s cubic-bezier(.16,1,.3,1) }
-.detail-header { background:linear-gradient(135deg,var(--primary),var(--accent));padding:28px 32px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px }
-.detail-badges { display:flex;align-items:center;gap:12px;margin-bottom:6px }
-.detail-badge { background:rgba(255,255,255,.2);border-radius:8px;padding:4px 12px;font-size:13px;font-weight:600;letter-spacing:.5px }
-.detail-zone-badge { background:rgba(255,255,255,.15);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:450 }
-.detail-header h3 { font-size:24px;font-weight:700;letter-spacing:-.5px }
-.back-btn { background:rgba(255,255,255,.15);border:none;border-radius:10px;padding:8px 16px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s }
-.back-btn:hover { background:rgba(255,255,255,.25) }
-.back-btn svg { width:14px;height:14px }
-.detail-body { padding:28px 32px }
-.detail-label { font-size:13px;color:var(--g500);font-weight:500;margin-bottom:20px;letter-spacing:.5px }
-.disc-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px }
-.disc-card { background:var(--white);border-radius:16px;overflow:hidden;border:1px solid var(--g100) }
-.disc-card-header { padding:14px 20px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:10px }
-.disc-icon { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px }
-.disc-card-body { padding:16px 20px }
-.disc-person { display:flex;align-items:center;gap:10px;margin-bottom:14px }
-.disc-avatar { width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600 }
-.disc-person p:first-child { font-size:15px;font-weight:600 }
-.disc-person p:last-child { font-size:12px;color:var(--g500) }
-.disc-contacts { display:flex;flex-direction:column;gap:8px }
-.disc-contacts a { display:flex;align-items:center;gap:8px;font-size:13px;color:var(--g700);transition:color .2s;word-break:break-all }
-.disc-contacts a svg { width:13px;height:13px;stroke-width:1.8;flex-shrink:0 }
-.disc-cta { display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:500;transition:all .2s }
-.disc-cta svg { width:13px;height:13px }
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+      border-bottom: 1px solid transparent;
+    }
+    .navbar.scrolled {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom-color: var(--gray100);
+    }
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: -0.3px;
+    }
+    .logo-text span {
+      color: var(--gray500);
+      font-weight: 400;
+    }
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-link {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--gray700);
+      font-weight: 450;
+      letter-spacing: -0.1px;
+      padding: 4px 0;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--primary); }
+    .nav-cta {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: -0.1px;
+      font-family: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      transform: scale(1.04);
+      box-shadow: 0 4px 20px rgba(0,44,95,0.25);
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-link {
+      background: none;
+      border: none;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--dark);
+      cursor: pointer;
+      letter-spacing: -0.5px;
+      font-family: inherit;
+    }
 
-.about-section { background:linear-gradient(180deg,var(--g50) 0%,var(--white) 100%) }
-.about-grid { display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:80px }
-.about-text p { font-size:17px;color:var(--g500);line-height:1.85;margin-bottom:24px }
-.about-mission { background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:24px;padding:48px;color:#fff;position:relative;overflow:hidden }
-.about-mission .circle { position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.12) }
-.about-mission .c1 { top:-40px;right:-40px;width:200px;height:200px }
-.about-mission .c2 { bottom:-20px;left:-20px;width:120px;height:120px }
-.stats-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:16px }
-.stat-card { text-align:center;padding:32px 16px;border-radius:16px;background:var(--white);border:1px solid var(--g100) }
-.stat-num { font-size:clamp(28px,3vw,36px);font-weight:700;color:var(--primary);letter-spacing:-1px;margin-bottom:8px }
-.stat-label { font-size:14px;color:var(--g500);font-weight:450 }
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 32px 80px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,170,210,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 100%, rgba(0,44,95,0.04) 0%, transparent 50%),
+        var(--white);
+    }
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--gray100);
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+    .hero-circle.c1 {
+      top: 15%;
+      left: 10%;
+      width: 400px;
+      height: 400px;
+      transition-delay: 0.5s;
+    }
+    .hero-circle.c2 {
+      bottom: 10%;
+      right: 5%;
+      width: 300px;
+      height: 300px;
+      transition-delay: 0.8s;
+    }
+    .hero.loaded .hero-circle.c1 { opacity: 0.5; }
+    .hero.loaded .hero-circle.c2 { opacity: 0.4; }
 
-.contact-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px }
-.contact-card { padding:32px 28px;border-radius:20px;background:var(--g50);border:1px solid var(--g100);transition:border-color .3s }
-.contact-card:hover { border-color:var(--g300) }
-.contact-icon { width:44px;height:44px;border-radius:12px;background:rgba(0,44,95,.05);display:flex;align-items:center;justify-content:center;margin-bottom:20px }
-.contact-icon svg { width:20px;height:20px;stroke:var(--primary);stroke-width:1.8;fill:none }
-.contact-card .label { font-size:13px;color:var(--g500);margin-bottom:6px;font-weight:500 }
-.contact-card .value { font-size:16px;font-weight:600;letter-spacing:-.2px }
-.contact-card a.value { transition:color .2s }
-.contact-card a.value:hover { color:var(--primary) }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--gray50);
+      border-radius: 100px;
+      margin-bottom: 32px;
+      border: 1px solid var(--gray100);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.2s;
+    }
+    .hero.loaded .hero-badge {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34D399;
+    }
+    .badge-text {
+      font-size: 13px;
+      color: var(--gray500);
+      font-weight: 450;
+    }
 
-.footer { padding:48px 32px;border-top:1px solid var(--g100) }
-.footer-inner { max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px }
-.footer-left { display:flex;align-items:center;gap:10px }
-.footer-logo { width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700 }
-.footer-copy { font-size:13px;color:var(--g500) }
-.footer-links { display:flex;gap:24px }
-.footer-links a { font-size:13px;color:var(--g500);font-weight:450;transition:color .2s }
-.footer-links a:hover { color:var(--primary) }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      color: var(--dark);
+      max-width: 800px;
+      margin: 0 auto 24px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.35s;
+    }
+    .hero.loaded h1 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hero h1 span { color: var(--primary); }
 
-@media (max-width:768px) {
-  .nav-links { display:none !important }
-  .mobile-toggle { display:block !important }
-  .about-grid { grid-template-columns:1fr !important }
-  .stats-grid { grid-template-columns:repeat(2,1fr) !important }
-  .section { padding:80px 20px }
-  .hero { padding:100px 20px 60px }
-  .footer-inner { flex-direction:column;text-align:center }
-  .disc-grid { grid-template-columns:1fr !important }
-}
-</style>
+    .hero-desc {
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.7;
+      color: var(--gray500);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.5s;
+    }
+    .hero.loaded .hero-desc {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.16,1,0.3,1) 0.65s;
+    }
+    .hero.loaded .hero-buttons {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .btn-primary:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 30px rgba(0,44,95,0.3);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--dark);
+      border: 1.5px solid var(--gray300);
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 1s ease 1.5s;
+      animation: bounce 2s infinite;
+    }
+    .hero.loaded .hero-scroll { opacity: 1; }
+
+    /* Services Section */
+    .services {
+      padding: 120px 32px;
+      background: var(--white);
+      min-height: 600px;
+    }
+    .services-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 17px;
+      color: var(--gray500);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    /* Search Bar */
+    .search-wrapper {
+      position: relative;
+      max-width: 560px;
+      margin-bottom: 28px;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white);
+      border-radius: 16px;
+      border: 1.5px solid var(--gray300);
+      padding: 14px 20px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .search-box.focused {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0, 44, 95, 0.07);
+    }
+    .search-box svg {
+      flex-shrink: 0;
+      transition: color 0.3s;
+      color: var(--gray500);
+    }
+    .search-box.focused svg { color: var(--primary); }
+    .search-input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 15px;
+      color: var(--dark);
+      background: transparent;
+      font-family: inherit;
+      letter-spacing: -0.2px;
+    }
+    .search-input::placeholder { color: var(--gray500); }
+    .search-clear {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .search-clear.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Zone Filter */
+    .zone-filter {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .zone-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 1px solid var(--gray100);
+      background: var(--white);
+      color: var(--gray500);
+      font-family: inherit;
+    }
+    .zone-btn.active {
+      border: 1.5px solid var(--primary);
+      background: rgba(0, 44, 95, 0.04);
+      color: var(--primary);
+    }
+    .zone-count {
+      font-size: 13px;
+      color: var(--gray300);
+      margin-left: 8px;
+    }
+
+    /* Building Grid */
+    .building-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .building-card {
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--white);
+      border: 1px solid var(--gray100);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .building-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,44,95,0.08);
+    }
+    .building-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .building-code {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 0.3px;
+      background: rgba(0, 44, 95, 0.04);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+    .building-zone {
+      font-size: 11px;
+      color: var(--gray500);
+      font-weight: 450;
+      background: var(--gray50);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .building-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+    .building-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .disc-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .disc-tag.arch { background: rgba(0, 44, 95, 0.04); color: var(--disc-arch); }
+    .disc-tag.elec { background: rgba(232, 163, 23, 0.1); color: var(--disc-elec); }
+    .disc-tag.mech { background: rgba(0, 170, 210, 0.1); color: var(--disc-mech); }
+    .disc-tag.civil { background: rgba(52, 133, 94, 0.1); color: var(--disc-civil); }
+
+    /* No Results */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 64px 20px;
+    }
+    .no-results svg {
+      margin-bottom: 16px;
+      color: var(--gray300);
+    }
+    .no-results h4 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gray500);
+      margin-bottom: 8px;
+    }
+    .no-results p {
+      font-size: 14px;
+      color: var(--gray300);
+    }
+
+    /* Building Detail */
+    .building-detail {
+      background: var(--gray50);
+      border-radius: 24px;
+      margin-bottom: 32px;
+      border: 1px solid var(--gray100);
+      overflow: hidden;
+      animation: fadeSlideIn 0.4s cubic-bezier(0.16,1,0.3,1);
+      display: none;
+    }
+    .building-detail.visible { display: block; }
+    .detail-header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      padding: 28px 32px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .detail-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .detail-code {
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .detail-zone {
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 450;
+    }
+    .detail-name {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .detail-back {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .detail-back:hover { background: rgba(255,255,255,0.25); }
+
+    .detail-body {
+      padding: 28px 32px;
+    }
+    .detail-label {
+      font-size: 13px;
+      color: var(--gray500);
+      font-weight: 500;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+    .managers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .manager-card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--gray100);
+      animation: fadeSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .manager-card:nth-child(2) { animation-delay: 0.08s; }
+    .manager-card:nth-child(3) { animation-delay: 0.16s; }
+    .manager-card:nth-child(4) { animation-delay: 0.24s; }
+
+    .manager-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--gray100);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .manager-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .manager-icon.arch { background: rgba(0, 44, 95, 0.06); }
+    .manager-icon.elec { background: rgba(232, 163, 23, 0.1); }
+    .manager-icon.mech { background: rgba(0, 170, 210, 0.1); }
+    .manager-icon.civil { background: rgba(52, 133, 94, 0.1); }
+    .manager-disc {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .manager-disc.arch { color: var(--disc-arch); }
+    .manager-disc.elec { color: var(--disc-elec); }
+    .manager-disc.mech { color: var(--disc-mech); }
+    .manager-disc.civil { color: var(--disc-civil); }
+
+    .manager-body { padding: 16px 20px; }
+    .manager-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .manager-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .manager-avatar.arch { background: rgba(0, 44, 95, 0.05); color: var(--disc-arch); }
+    .manager-avatar.elec { background: rgba(232, 163, 23, 0.1); color: var(--disc-elec); }
+    .manager-avatar.mech { background: rgba(0, 170, 210, 0.1); color: var(--disc-mech); }
+    .manager-avatar.civil { background: rgba(52, 133, 94, 0.1); color: var(--disc-civil); }
+    .manager-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .manager-team {
+      font-size: 12px;
+      color: var(--gray500);
+    }
+    .manager-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .manager-contact {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray700);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .manager-contact svg {
+      width: 13px;
+      height: 13px;
+    }
+    .manager-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .manager-cta.arch {
+      background: rgba(0, 44, 95, 0.04);
+      color: var(--disc-arch);
+      border: 1px solid rgba(0, 44, 95, 0.12);
+    }
+    .manager-cta.arch:hover { background: rgba(0, 44, 95, 0.1); }
+    .manager-cta.elec {
+      background: rgba(232, 163, 23, 0.08);
+      color: var(--disc-elec);
+      border: 1px solid rgba(232, 163, 23, 0.2);
+    }
+    .manager-cta.elec:hover { background: rgba(232, 163, 23, 0.15); }
+    .manager-cta.mech {
+      background: rgba(0, 170, 210, 0.08);
+      color: var(--disc-mech);
+      border: 1px solid rgba(0, 170, 210, 0.2);
+    }
+    .manager-cta.mech:hover { background: rgba(0, 170, 210, 0.15); }
+    .manager-cta.civil {
+      background: rgba(52, 133, 94, 0.08);
+      color: var(--disc-civil);
+      border: 1px solid rgba(52, 133, 94, 0.2);
+    }
+    .manager-cta.civil:hover { background: rgba(52, 133, 94, 0.15); }
+
+    /* Unified CTA Button */
+    .unified-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding: 16px 32px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 4px 16px rgba(0, 44, 95, 0.2);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+    }
+    .unified-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0, 44, 95, 0.3);
+    }
+    .unified-cta svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* About Section */
+    .about {
+      padding: 120px 32px;
+      background: linear-gradient(180deg, var(--gray50) 0%, var(--white) 100%);
+    }
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+    .about-text p {
+      font-size: 17px;
+      color: var(--gray500);
+      line-height: 1.85;
+      margin-bottom: 24px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-card {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 24px;
+      padding: 48px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .about-card-circle.c1 {
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+    }
+    .about-card-circle.c2 {
+      bottom: -20px;
+      left: -20px;
+      width: 120px;
+      height: 120px;
+      border-color: rgba(255,255,255,0.1);
+    }
+    .about-card-label {
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.7;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+    .about-card-text {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.45;
+      letter-spacing: -0.3px;
+      position: relative;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 32px 16px;
+      border-radius: 16px;
+      background: var(--white);
+      border: 1px solid var(--gray100);
+    }
+    .stat-num {
+      font-size: clamp(28px, 3vw, 36px);
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray500);
+      font-weight: 450;
+    }
+
+    /* Contact Section */
+    .contact {
+      padding: 120px 32px;
+      background: var(--white);
+    }
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .contact-card {
+      padding: 32px 28px;
+      border-radius: 20px;
+      background: var(--gray50);
+      border: 1px solid var(--gray100);
+      transition: border-color 0.3s;
+    }
+    .contact-card:hover { border-color: var(--gray300); }
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(0, 44, 95, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .contact-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+    }
+    .contact-label {
+      font-size: 13px;
+      color: var(--gray500);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .contact-value {
+      font-size: 16px;
+      color: var(--dark);
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: -0.2px;
+      transition: color 0.2s;
+    }
+    a.contact-value:hover { color: var(--primary); }
+
+    /* Footer */
+    .footer {
+      padding: 48px 32px;
+      border-top: 1px solid var(--gray100);
+      background: var(--white);
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: var(--gray500);
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-link {
+      font-size: 13px;
+      color: var(--gray500);
+      text-decoration: none;
+      font-weight: 450;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--primary); }
+
+    /* Modal - Apple Style */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal.modal-large {
+      max-width: 720px;
+    }
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+    .modal-header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--gray100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
+      letter-spacing: -0.4px;
+    }
+    .modal-subtitle {
+      font-size: 13px;
+      color: var(--gray500);
+      margin-top: 4px;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--gray100);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close:hover {
+      background: var(--gray300);
+    }
+    .modal-body {
+      padding: 24px 28px;
+      overflow-y: auto;
+      max-height: calc(90vh - 180px);
+    }
+    .form-section {
+      margin-bottom: 24px;
+    }
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+    .form-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .form-row.single {
+      grid-template-columns: 1fr;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray700);
+    }
+    .form-input,
+    .form-select,
+    .form-textarea {
+      padding: 12px 14px;
+      border: 1px solid var(--gray300);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 44, 95, 0.1);
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--gray300);
+    }
+    .form-input.readonly {
+      background: var(--gray50);
+      color: var(--gray700);
+    }
+    .form-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7689' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    /* File Upload */
+    .file-upload-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .file-upload-box {
+      border: 2px dashed var(--gray300);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--gray50);
+      position: relative;
+      overflow: hidden;
+    }
+    .file-upload-box:hover {
+      border-color: var(--primary);
+      background: rgba(0, 44, 95, 0.02);
+    }
+    .file-upload-box.has-file {
+      border-style: solid;
+      border-color: var(--accent);
+      background: rgba(0, 170, 210, 0.05);
+    }
+    .file-upload-box input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .file-upload-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 10px;
+      background: var(--gray100);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray500);
+    }
+    .file-upload-box.has-file .file-upload-icon {
+      background: rgba(0, 170, 210, 0.15);
+      color: var(--accent);
+    }
+    .file-upload-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray700);
+      margin-bottom: 4px;
+    }
+    .file-upload-hint {
+      font-size: 11px;
+      color: var(--gray500);
+    }
+    .file-preview {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: none;
+    }
+    .file-upload-box.has-file .file-preview {
+      display: block;
+    }
+    .file-upload-box.has-file .file-upload-icon,
+    .file-upload-box.has-file .file-upload-label,
+    .file-upload-box.has-file .file-upload-hint {
+      display: none;
+    }
+    .file-remove {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      z-index: 10;
+    }
+    .file-upload-box.has-file .file-remove {
+      display: flex;
+    }
+
+    .modal-footer {
+      padding: 20px 28px 24px;
+      border-top: 1px solid var(--gray100);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .btn-modal {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-modal-secondary {
+      background: var(--gray100);
+      border: none;
+      color: var(--gray700);
+    }
+    .btn-modal-secondary:hover {
+      background: var(--gray300);
+    }
+    .btn-modal-primary {
+      background: var(--primary);
+      border: none;
+      color: #fff;
+    }
+    .btn-modal-primary:hover {
+      background: #001F43;
+      box-shadow: 0 4px 16px rgba(0, 44, 95, 0.25);
+    }
+    .btn-modal-primary svg,
+    .btn-modal-secondary svg {
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .btn-send {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* AI Badge */
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-right: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .form-hint {
+      font-size: 13px;
+      color: var(--gray500);
+      margin-bottom: 16px;
+    }
+
+    /* Discipline Checkboxes */
+    .discipline-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--gray100);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .checkbox-item:hover {
+      border-color: var(--gray300);
+      background: var(--gray50);
+    }
+    .checkbox-item.checked {
+      border-color: var(--primary);
+      background: rgba(0, 44, 95, 0.03);
+    }
+    .checkbox-item.ai-recommended {
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+    }
+    .checkbox-item.ai-recommended::after {
+      content: 'AI 추천';
+      position: absolute;
+      top: -8px;
+      right: 10px;
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .checkbox-item input {
+      display: none;
+    }
+    .checkbox-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--gray300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      margin-top: 2px;
+    }
+    .checkbox-item.checked .checkbox-box {
+      border-color: transparent;
+    }
+    .checkbox-item.checked .checkbox-box::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .checkbox-box.arch { background: var(--gray100); }
+    .checkbox-item.checked .checkbox-box.arch { background: var(--disc-arch); }
+    .checkbox-box.elec { background: var(--gray100); }
+    .checkbox-item.checked .checkbox-box.elec { background: var(--disc-elec); }
+    .checkbox-box.mech { background: var(--gray100); }
+    .checkbox-item.checked .checkbox-box.mech { background: var(--disc-mech); }
+    .checkbox-box.civil { background: var(--gray100); }
+    .checkbox-item.checked .checkbox-box.civil { background: var(--disc-civil); }
+
+    .checkbox-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      display: block;
+    }
+    .checkbox-desc {
+      font-size: 11px;
+      color: var(--gray500);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* AI Recommend Button */
+    .btn-ai-recommend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-ai-recommend:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35);
+    }
+    .btn-ai-recommend:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-ai-recommend.loading {
+      pointer-events: none;
+    }
+    .btn-ai-recommend.loading::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* AI Result */
+    .ai-result {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(236, 72, 153, 0.08));
+      border-radius: 10px;
+      margin-top: 14px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    .ai-result-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #8B5CF6, #EC4899);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .ai-result-text {
+      font-size: 13px;
+      color: var(--gray700);
+      flex: 1;
+    }
+
+    /* PPT Preview Card */
+    .ppt-preview-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: var(--gray50);
+      border-radius: 14px;
+      border: 1px solid var(--gray100);
+    }
+    .ppt-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #D14424, #F57C4E);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .ppt-info {
+      flex: 1;
+    }
+    .ppt-filename {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .ppt-desc {
+      font-size: 12px;
+      color: var(--gray500);
+    }
+    .btn-download-ppt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-download-ppt:hover {
+      background: #001F43;
+      box-shadow: 0 4px 12px rgba(0, 44, 95, 0.25);
+    }
+
+    /* Recipients List */
+    .recipients-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .recipient-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--gray50);
+      border: 1px solid var(--gray100);
+      border-radius: 100px;
+    }
+    .recipient-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .recipient-avatar.arch { background: var(--disc-arch); }
+    .recipient-avatar.elec { background: var(--disc-elec); }
+    .recipient-avatar.mech { background: var(--disc-mech); }
+    .recipient-avatar.civil { background: var(--disc-civil); }
+    .recipient-info {
+      font-size: 13px;
+    }
+    .recipient-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .recipient-disc {
+      color: var(--gray500);
+      font-weight: 400;
+    }
+
+    /* Email Body */
+    .email-body {
+      min-height: 150px;
+    }
+    .form-label-hint {
+      font-weight: 400;
+      color: var(--gray500);
+      font-size: 12px;
+    }
+
+    /* Info Box */
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 18px;
+      background: rgba(0, 170, 210, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 170, 210, 0.2);
+      margin-top: 8px;
+    }
+    .info-box svg {
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .info-box p {
+      font-size: 13px;
+      color: var(--gray700);
+      line-height: 1.5;
+    }
+    .info-box strong {
+      color: var(--dark);
+    }
+
+    @media (max-width: 600px) {
+      .modal {
+        max-height: 95vh;
+        border-radius: 16px;
+      }
+      .modal-body {
+        max-height: calc(95vh - 160px);
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .file-upload-row {
+        grid-template-columns: 1fr;
+      }
+      .discipline-checkboxes {
+        grid-template-columns: 1fr;
+      }
+      .ppt-preview-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      .btn-download-ppt {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .desktop-nav { display: none !important; }
+      .mobile-menu-btn { display: block !important; }
+      .about-grid { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (min-width: 769px) {
+      .mobile-menu-btn { display: none !important; }
+    }
+  </style>
 </head>
 <body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-logo">
+        <div class="logo-icon">H</div>
+        <span class="logo-text">현대자동차 <span>인프라시스템</span></span>
+      </div>
+      <div class="desktop-nav">
+        <button class="nav-link" onclick="scrollToSection('services')">공사의뢰</button>
+        <button class="nav-link" onclick="scrollToSection('about')">소개</button>
+        <button class="nav-link" onclick="scrollToSection('contact')">연락처</button>
+        <button class="nav-cta" onclick="scrollToSection('contact')">문의하기</button>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="메뉴">
+        <svg id="menuIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg id="closeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
 
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <div class="nav-logo">
-      <div class="nav-logo-icon">H</div>
-      <div class="nav-logo-text">현대자동차 <span>인프라지원시스템</span></div>
-    </div>
-    <div class="nav-links">
-      <button class="nav-link" onclick="smoothScroll('services')">공사의뢰</button>
-      <button class="nav-link" onclick="smoothScroll('about')">소개</button>
-      <button class="nav-link" onclick="smoothScroll('contact')">연락처</button>
-      <button class="nav-cta" onclick="smoothScroll('contact')">문의하기</button>
-    </div>
-    <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobile()">
-      <svg id="menuIcon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      <svg id="closeIcon" viewBox="0 0 24 24" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-link" onclick="scrollToSection('services')">공사의뢰</button>
+    <button class="mobile-menu-link" onclick="scrollToSection('about')">소개</button>
+    <button class="mobile-menu-link" onclick="scrollToSection('contact')">연락처</button>
   </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <button onclick="smoothScroll('services');toggleMobile()">공사의뢰</button>
-  <button onclick="smoothScroll('about');toggleMobile()">소개</button>
-  <button onclick="smoothScroll('contact');toggleMobile()">연락처</button>
-</div>
 
-<section class="hero" id="hero">
-  <div class="hero-circle c1"></div>
-  <div class="hero-circle c2"></div>
-  <div class="hero-status"><div class="dot"></div><span>연구개발인프라지원시스템 운영 중</span></div>
-  <h1>시설의 안전을,<br><span class="hl">시스템</span>으로 완성하다.</h1>
-  <p class="hero-desc">공사 안전관리부터 자동 문서화까지,<br>현대자동차 인프라건설의 모든 프로세스를 하나로.</p>
-  <div class="hero-btns">
-    <button class="btn-p" onclick="smoothScroll('services')">담당자 검색하기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-    <button class="btn-s" onclick="smoothScroll('contact')">담당자 연결</button>
-  </div>
-  <div class="scroll-ind"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-</section>
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-circle c1"></div>
+    <div class="hero-circle c2"></div>
 
-<!-- ═══ SERVICES: 건물 검색 & 4공종 담당자 ═══ -->
-<section class="section" id="services" style="min-height:600px">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Facility Support</p>
-      <h2 class="section-title">인프라 공사 의뢰 및 기술 지원</h2>
-      <p class="section-desc" style="margin-bottom:40px">건물 코드 또는 건물명을 검색하여 공종별 담당자 정보를 확인하세요.</p>
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">연구개발인프라지원시스템 운영 중</span>
     </div>
-    <div class="reveal d1">
-      <div class="search-wrap">
-        <div class="search-box" id="searchBox">
-          <svg class="search-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="searchInput" placeholder="건물 코드 또는 건물명 검색 (예: C5-14, 안전연구동)" oninput="filterBuildings()" onfocus="document.getElementById('searchBox').classList.add('focused')" onblur="document.getElementById('searchBox').classList.remove('focused')">
-          <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearSearch()"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+
+    <h1>시설의 안전을,<br><span>시스템</span>으로 완성하다.</h1>
+
+    <p class="hero-desc">
+      공사 안전관리부터 자동 문서화까지,<br>
+      현대자동차 인프라건설의 모든 프로세스를 하나로.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="scrollToSection('services')">
+        담당자 검색하기
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+      <button class="btn-secondary" onclick="scrollToSection('contact')">담당자 연결</button>
+    </div>
+
+    <div class="hero-scroll">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4CAD4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="reveal">
+        <p class="section-label">Facility Support</p>
+        <h2 class="section-title">인프라 공사 의뢰 및 기술 지원</h2>
+        <p class="section-desc">건물 코드 또는 건물명을 검색하여 공종별 담당자 정보를 확인하세요.</p>
+      </div>
+
+      <div class="reveal" style="transition-delay: 0.1s;">
+        <div class="search-wrapper">
+          <div class="search-box" id="searchBox">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="search-input" id="searchInput" placeholder="건물 코드 또는 건물명 검색 (예: C5-14, 안전연구동)">
+            <button class="search-clear" id="searchClear" aria-label="검색어 지우기">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7689" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="reveal d2">
-      <div class="zone-filters" id="zoneFilters"></div>
-    </div>
-    <div id="detailPanel"></div>
-    <div class="bldg-grid" id="buildingGrid"></div>
-  </div>
-</section>
 
-<section class="section about-section" id="about">
-  <div class="section-inner">
-    <div class="reveal"><p class="section-label">About</p><h2 class="section-title">연구개발인프라지원시스템</h2></div>
-    <div class="reveal d1">
-      <div class="about-grid">
+      <div class="reveal" style="transition-delay: 0.15s;">
+        <div class="zone-filter" id="zoneFilter"></div>
+      </div>
+
+      <!-- Building Detail (hidden by default) -->
+      <div class="building-detail" id="buildingDetail"></div>
+
+      <!-- Building Grid -->
+      <div class="building-grid" id="buildingGrid"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="reveal">
+        <p class="section-label">About</p>
+        <h2 class="section-title">연구개발인프라지원시스템</h2>
+      </div>
+
+      <div class="reveal about-grid" style="transition-delay: 0.1s;">
         <div class="about-text">
           <p>현대자동차 연구개발본부 산하 인프라건설 조직은 연구시설의 안전하고 효율적인 관리를 위해 디지털 전환 기반의 통합 지원 시스템을 운영하고 있습니다.</p>
-          <p style="margin-bottom:0">공사 현장의 안전관리 체계화, 업무 프로세스 자동화, 그리고 시설공사 매뉴얼의 디지털화를 통해 현대자동차 R&D 인프라의 품질과 안전 수준을 한 단계 높이고 있습니다.</p>
+          <p>공사 현장의 안전관리 체계화, 업무 프로세스 자동화, 그리고 시설공사 매뉴얼의 디지털화를 통해 현대자동차 R&D 인프라의 품질과 안전 수준을 한 단계 높이고 있습니다.</p>
         </div>
-        <div class="about-mission">
-          <div class="circle c1"></div><div class="circle c2"></div>
-          <p style="font-size:14px;font-weight:500;opacity:.7;margin-bottom:16px;letter-spacing:1px">OUR MISSION</p>
-          <p style="font-size:24px;font-weight:600;line-height:1.45;letter-spacing:-.3px;position:relative">안전하고 스마트한<br>연구 인프라 환경을<br>구축합니다.</p>
+        <div class="about-card">
+          <div class="about-card-circle c1"></div>
+          <div class="about-card-circle c2"></div>
+          <p class="about-card-label">OUR MISSION</p>
+          <p class="about-card-text">안전하고 스마트한<br>연구 인프라 환경을<br>구축합니다.</p>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div class="reveal">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title">문의 및 연락처</h2>
+        <p class="section-desc" style="margin-bottom: 56px;">시설 관련 문의사항은 아래 연락처로 편하게 연락 주세요.</p>
+      </div>
+
+      <div class="contact-grid" id="contactGrid"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-logo">H</div>
+        <span class="footer-copy">© 2026 현대자동차 연구개발인프라지원시스템. All rights reserved.</span>
+      </div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">개인정보처리방침</a>
+        <a href="#" class="footer-link">이용약관</a>
+        <a href="#" class="footer-link">사이트맵</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 작업요청서 Modal - 2단계 프로세스 -->
+  <div class="modal-overlay" id="requestModal">
+    <div class="modal modal-large">
+      <!-- Step 1: 정보 입력 -->
+      <div id="modalStep1">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">시설물 작업요청서</h3>
+            <p class="modal-subtitle" id="modalSubtitle">건물 정보가 표시됩니다</p>
+          </div>
+          <button class="modal-close" id="modalClose">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <!-- 기본 정보 -->
+          <div class="form-section">
+            <p class="form-section-title">기본 정보</p>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">건물명</label>
+                <input type="text" class="form-input readonly" id="formBuilding" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">요청일자</label>
+                <input type="text" class="form-input readonly" id="formDate" readonly>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">상세 위치 (층)</label>
+                <select class="form-select" id="formFloor">
+                  <option value="">층을 선택하세요</option>
+                  <option value="B2">지하 2층 (B2)</option>
+                  <option value="B1">지하 1층 (B1)</option>
+                  <option value="1F">1층</option>
+                  <option value="2F">2층</option>
+                  <option value="3F">3층</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">상세 위치 (구역/실)</label>
+                <input type="text" class="form-input" id="formLocation" placeholder="예: 로비, 회의실 A, 복도 등">
+              </div>
+            </div>
+          </div>
+
+          <!-- 보수 내용 -->
+          <div class="form-section">
+            <p class="form-section-title">보수 내용</p>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">문제점</label>
+                <textarea class="form-textarea" id="formProblem" placeholder="현재 발생한 문제점을 상세히 기술해 주세요"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">요청사항</label>
+                <textarea class="form-textarea" id="formRequest" placeholder="원하시는 보수 또는 개선 사항을 적어주세요"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI 공종 추천 -->
+          <div class="form-section">
+            <p class="form-section-title">
+              <span class="ai-badge">AI</span> 담당 공종 추천
+            </p>
+            <p class="form-hint">문제점과 요청사항을 입력하면 AI가 담당 공종을 자동으로 추천합니다.</p>
+            <div class="discipline-checkboxes" id="disciplineCheckboxes">
+              <label class="checkbox-item" data-disc="건축">
+                <input type="checkbox" name="discipline" value="건축">
+                <span class="checkbox-box arch"></span>
+                <span class="checkbox-label">건축</span>
+                <span class="checkbox-desc">벽체, 천장, 바닥, 문, 창문, 마감재 등</span>
+              </label>
+              <label class="checkbox-item" data-disc="전기">
+                <input type="checkbox" name="discipline" value="전기">
+                <span class="checkbox-box elec"></span>
+                <span class="checkbox-label">전기</span>
+                <span class="checkbox-desc">조명, 콘센트, 배선, 분전반, 전력 등</span>
+              </label>
+              <label class="checkbox-item" data-disc="설비">
+                <input type="checkbox" name="discipline" value="설비">
+                <span class="checkbox-box mech"></span>
+                <span class="checkbox-label">설비</span>
+                <span class="checkbox-desc">냉난방, 환기, 배관, 급배수, 소방 등</span>
+              </label>
+              <label class="checkbox-item" data-disc="토목">
+                <input type="checkbox" name="discipline" value="토목">
+                <span class="checkbox-box civil"></span>
+                <span class="checkbox-label">토목</span>
+                <span class="checkbox-desc">도로, 배수로, 옹벽, 기초, 포장 등</span>
+              </label>
+            </div>
+            <button class="btn-ai-recommend" id="btnAiRecommend">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              AI 공종 분석하기
+            </button>
+            <div class="ai-result" id="aiResult" style="display: none;">
+              <div class="ai-result-icon">✓</div>
+              <p class="ai-result-text" id="aiResultText"></p>
+            </div>
+          </div>
+
+          <!-- 첨부 파일 -->
+          <div class="form-section">
+            <p class="form-section-title">첨부 파일</p>
+            <div class="file-upload-row">
+              <div class="file-upload-box" id="photoUploadBox">
+                <input type="file" accept="image/*" id="photoInput">
+                <button class="file-remove" id="photoRemove">×</button>
+                <div class="file-upload-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                </div>
+                <p class="file-upload-label">현장 사진</p>
+                <p class="file-upload-hint">클릭하여 이미지 첨부</p>
+                <img class="file-preview" id="photoPreview" alt="현장 사진 미리보기">
+              </div>
+              <div class="file-upload-box" id="drawingUploadBox">
+                <input type="file" accept="image/*,.pdf" id="drawingInput">
+                <button class="file-remove" id="drawingRemove">×</button>
+                <div class="file-upload-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                </div>
+                <p class="file-upload-label">도면</p>
+                <p class="file-upload-hint">클릭하여 파일 첨부</p>
+                <img class="file-preview" id="drawingPreview" alt="도면 미리보기">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-modal btn-modal-secondary" id="modalCancel">취소</button>
+          <button class="btn-modal btn-modal-primary" id="btnNextStep">
+            다음 단계
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: PPT 생성 & 이메일 작성 -->
+      <div id="modalStep2" style="display: none;">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">이메일 작성</h3>
+            <p class="modal-subtitle">PPT가 생성되었습니다. 이메일을 작성해주세요.</p>
+          </div>
+          <button class="modal-close" id="modalClose2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <!-- PPT 미리보기 -->
+          <div class="form-section">
+            <p class="form-section-title">생성된 작업요청서 (PPT)</p>
+            <div class="ppt-preview-card">
+              <div class="ppt-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <rect x="8" y="12" width="8" height="6" rx="1"></rect>
+                </svg>
+              </div>
+              <div class="ppt-info">
+                <p class="ppt-filename" id="pptFilename">시설물_작업요청서.pptx</p>
+                <p class="ppt-desc">작업요청서가 자동으로 생성되었습니다</p>
+              </div>
+              <button class="btn-download-ppt" id="btnDownloadPpt">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                PPT 다운로드
+              </button>
+            </div>
+          </div>
+
+          <!-- 수신자 정보 -->
+          <div class="form-section">
+            <p class="form-section-title">수신자</p>
+            <div class="recipients-list" id="recipientsList"></div>
+          </div>
+
+          <!-- 이메일 작성 -->
+          <div class="form-section">
+            <p class="form-section-title">이메일 내용</p>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">제목</label>
+                <input type="text" class="form-input readonly" id="emailSubject" readonly>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">내용 <span class="form-label-hint">(직접 작성)</span></label>
+                <textarea class="form-textarea email-body" id="emailBody" placeholder="이메일 본문을 작성해주세요.&#10;&#10;예시:&#10;안녕하세요, 시설물 보수를 요청드립니다.&#10;첨부된 작업요청서를 확인 부탁드리며,&#10;빠른 검토 부탁드립니다.&#10;&#10;감사합니다."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 안내 메시지 -->
+          <div class="info-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <p>이메일 클라이언트가 열리면 <strong>다운로드된 PPT 파일을 첨부</strong>해주세요.</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-modal btn-modal-secondary" id="btnPrevStep">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            이전
+          </button>
+          <button class="btn-modal btn-modal-primary btn-send" id="btnSendEmail">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            이메일 보내기
+          </button>
         </div>
       </div>
     </div>
-    <div class="stats-grid">
-      <div class="reveal"><div class="stat-card"><p class="stat-num">24/7</p><p class="stat-label">안전 모니터링</p></div></div>
-      <div class="reveal d1"><div class="stat-card"><p class="stat-num">98%</p><p class="stat-label">문서 자동화율</p></div></div>
-      <div class="reveal d2"><div class="stat-card"><p class="stat-num">50+</p><p class="stat-label">관리 시설 수</p></div></div>
-      <div class="reveal d3"><div class="stat-card"><p class="stat-num">Zero</p><p class="stat-label">중대재해 목표</p></div></div>
-    </div>
   </div>
-</section>
 
-<section class="section" id="contact">
-  <div class="section-inner">
-    <div class="reveal"><p class="section-label">Contact</p><h2 class="section-title">문의 및 연락처</h2><p class="section-desc" style="margin-bottom:56px">시설 관련 문의사항은 아래 연락처로 편하게 연락 주세요.</p></div>
-    <div class="contact-grid">
-      <div class="reveal d1"><div class="contact-card"><div class="contact-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><p class="label">이메일</p><a href="mailto:infra-support@hyundai.com" class="value">infra-support@hyundai.com</a></div></div>
-      <div class="reveal d2"><div class="contact-card"><div class="contact-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><p class="label">전화</p><a href="tel:02-3464-1114" class="value">02-3464-1114</a></div></div>
-      <div class="reveal d3"><div class="contact-card"><div class="contact-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><p class="label">주소</p><p class="value">경기도 화성시 남양읍 현대자동차 남양연구소</p></div></div>
-    </div>
-  </div>
-</section>
+  <script>
+    // ╔══════════════════════════════════════════════════════════════════╗
+    // ║  건물 데이터 — VS Code에서 이 부분만 수정하면 됩니다!           ║
+    // ║  아래 형식을 그대로 복사해서 건물을 추가/수정하세요.            ║
+    // ╚══════════════════════════════════════════════════════════════════╝
+    const BUILDINGS = [
+      {
+        code: "C5-14",
+        name: "안전연구동",
+        zone: "C구역",
+        managers: {
+          건축: { name: "김태현", phone: "031-368-5141", email: "th.kim@hyundai.com" },
+          전기: { name: "이수진", phone: "031-368-5142", email: "sj.lee@hyundai.com" },
+          설비: { name: "박정우", phone: "031-368-5143", email: "jw.park@hyundai.com" },
+          토목: { name: "정민서", phone: "031-368-5144", email: "ms.jung@hyundai.com" },
+        },
+      },
+      {
+        code: "C5-15",
+        name: "환경시험동",
+        zone: "C구역",
+        managers: {
+          건축: { name: "최영호", phone: "031-368-5151", email: "yh.choi@hyundai.com" },
+          전기: { name: "강하늘", phone: "031-368-5152", email: "hn.kang@hyundai.com" },
+          설비: { name: "윤서준", phone: "031-368-5153", email: "sj.yoon@hyundai.com" },
+          토목: { name: "한지민", phone: "031-368-5154", email: "jm.han@hyundai.com" },
+        },
+      },
+      {
+        code: "C3-01",
+        name: "파워트레인동",
+        zone: "C구역",
+        managers: {
+          건축: { name: "오재혁", phone: "031-368-3011", email: "jh.oh@hyundai.com" },
+          전기: { name: "임채원", phone: "031-368-3012", email: "cw.lim@hyundai.com" },
+          설비: { name: "송민호", phone: "031-368-3013", email: "mh.song@hyundai.com" },
+          토목: { name: "배수아", phone: "031-368-3014", email: "sa.bae@hyundai.com" },
+        },
+      },
+      {
+        code: "C3-02",
+        name: "전자연구동",
+        zone: "C구역",
+        managers: {
+          건축: { name: "류지훈", phone: "031-368-3021", email: "jh.ryu@hyundai.com" },
+          전기: { name: "조예린", phone: "031-368-3022", email: "yr.cho@hyundai.com" },
+          설비: { name: "신동현", phone: "031-368-3023", email: "dh.shin@hyundai.com" },
+          토목: { name: "문서영", phone: "031-368-3024", email: "sy.moon@hyundai.com" },
+        },
+      },
+      {
+        code: "A1-01",
+        name: "디자인센터",
+        zone: "A구역",
+        managers: {
+          건축: { name: "권도윤", phone: "031-368-1011", email: "dy.kwon@hyundai.com" },
+          전기: { name: "장서현", phone: "031-368-1012", email: "sh.jang@hyundai.com" },
+          설비: { name: "허재민", phone: "031-368-1013", email: "jm.heo@hyundai.com" },
+          토목: { name: "남지우", phone: "031-368-1014", email: "jw.nam@hyundai.com" },
+        },
+      },
+      {
+        code: "A1-03",
+        name: "본관동",
+        zone: "A구역",
+        managers: {
+          건축: { name: "고은채", phone: "031-368-1031", email: "ec.ko@hyundai.com" },
+          전기: { name: "양현우", phone: "031-368-1032", email: "hw.yang@hyundai.com" },
+          설비: { name: "백승리", phone: "031-368-1033", email: "sr.baek@hyundai.com" },
+          토목: { name: "유하진", phone: "031-368-1034", email: "hj.yu@hyundai.com" },
+        },
+      },
+      {
+        code: "A2-05",
+        name: "풍동시험동",
+        zone: "A구역",
+        managers: {
+          건축: { name: "서정민", phone: "031-368-2051", email: "jm.seo@hyundai.com" },
+          전기: { name: "노시은", phone: "031-368-2052", email: "se.noh@hyundai.com" },
+          설비: { name: "방태준", phone: "031-368-2053", email: "tj.bang@hyundai.com" },
+          토목: { name: "추연서", phone: "031-368-2054", email: "ys.chu@hyundai.com" },
+        },
+      },
+      {
+        code: "B2-01",
+        name: "충돌시험동",
+        zone: "B구역",
+        managers: {
+          건축: { name: "탁민준", phone: "031-368-2011", email: "mj.tak@hyundai.com" },
+          전기: { name: "공서아", phone: "031-368-2012", email: "sa.gong@hyundai.com" },
+          설비: { name: "변우진", phone: "031-368-2013", email: "wj.byun@hyundai.com" },
+          토목: { name: "피수빈", phone: "031-368-2014", email: "sb.pi@hyundai.com" },
+        },
+      },
+      {
+        code: "B2-03",
+        name: "배터리연구동",
+        zone: "B구역",
+        managers: {
+          건축: { name: "안준혁", phone: "031-368-2031", email: "jh.ahn@hyundai.com" },
+          전기: { name: "심하은", phone: "031-368-2032", email: "he.shim@hyundai.com" },
+          설비: { name: "복지호", phone: "031-368-2033", email: "jh.bok@hyundai.com" },
+          토목: { name: "길다은", phone: "031-368-2034", email: "de.gil@hyundai.com" },
+        },
+      },
+      {
+        code: "B3-07",
+        name: "수소연구동",
+        zone: "B구역",
+        managers: {
+          건축: { name: "진시우", phone: "031-368-3071", email: "sw.jin@hyundai.com" },
+          전기: { name: "엄채린", phone: "031-368-3072", email: "cr.eom@hyundai.com" },
+          설비: { name: "도경훈", phone: "031-368-3073", email: "kh.do@hyundai.com" },
+          토목: { name: "라윤아", phone: "031-368-3074", email: "ya.ra@hyundai.com" },
+        },
+      },
+      {
+        code: "D1-02",
+        name: "주행시험장 관리동",
+        zone: "D구역",
+        managers: {
+          건축: { name: "옥승현", phone: "031-368-1021", email: "sh.ok@hyundai.com" },
+          전기: { name: "표예진", phone: "031-368-1022", email: "yj.pyo@hyundai.com" },
+          설비: { name: "빈재윤", phone: "031-368-1023", email: "jy.bin@hyundai.com" },
+          토목: { name: "하준서", phone: "031-368-1024", email: "js.ha@hyundai.com" },
+        },
+      },
+      {
+        code: "D2-04",
+        name: "자율주행시험동",
+        zone: "D구역",
+        managers: {
+          건축: { name: "천도현", phone: "031-368-2041", email: "dh.cheon@hyundai.com" },
+          전기: { name: "봉서윤", phone: "031-368-2042", email: "sy.bong@hyundai.com" },
+          설비: { name: "국태민", phone: "031-368-2043", email: "tm.guk@hyundai.com" },
+          토목: { name: "빙나연", phone: "031-368-2044", email: "ny.bing@hyundai.com" },
+        },
+      },
+      // ── 새 건물을 추가하려면 아래에 같은 형식으로 복사 & 붙여넣기 하세요 ──
+      // {
+      //   code: "X0-00",
+      //   name: "새 건물명",
+      //   zone: "A구역",
+      //   managers: {
+      //     건축: { name: "이름", phone: "031-000-0000", email: "id@hyundai.com" },
+      //     전기: { name: "이름", phone: "031-000-0000", email: "id@hyundai.com" },
+      //     설비: { name: "이름", phone: "031-000-0000", email: "id@hyundai.com" },
+      //     토목: { name: "이름", phone: "031-000-0000", email: "id@hyundai.com" },
+      //   },
+      // },
+    ];
+    // ╔══════════════════════════════════════════════════════════════════╗
+    // ║  건물 데이터 수정은 여기까지! 아래 코드는 건드리지 않아도 됩니다. ║
+    // ╚══════════════════════════════════════════════════════════════════╝
 
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-left"><div class="footer-logo">H</div><span class="footer-copy">&copy; 2026 현대자동차 연구개발인프라지원시스템. All rights reserved.</span></div>
-    <div class="footer-links"><a href="#">개인정보처리방침</a><a href="#">이용약관</a><a href="#">사이트맵</a></div>
-  </div>
-</footer>
+    const ZONES = ["전체", "A구역", "B구역", "C구역", "D구역"];
+    const DISCIPLINES = ["건축", "전기", "설비", "토목"];
+    const DISC_CLASS = { 건축: "arch", 전기: "elec", 설비: "mech", 토목: "civil" };
+    const DISC_ICONS = { 건축: "🏢", 전기: "⚡", 설비: "🔧", 토목: "🏗" };
 
-<script>
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  건물 데이터 — VS Code에서 이 부분만 수정하면 됩니다!           ║
-// ║  아래 형식을 그대로 복사해서 건물을 추가/수정하세요.            ║
-// ╚══════════════════════════════════════════════════════════════════╝
-var BUILDINGS = [
-  {
-    code: "C5-14",           // 건물 코드
-    name: "안전연구동",       // 건물명
-    zone: "C구역",           // 구역
-    managers: {
-      "건축": { name: "김태현", phone: "031-368-5141", email: "th.kim@hyundai.com" },
-      "전기": { name: "이수진", phone: "031-368-5142", email: "sj.lee@hyundai.com" },
-      "설비": { name: "박정우", phone: "031-368-5143", email: "jw.park@hyundai.com" },
-      "토목": { name: "정민서", phone: "031-368-5144", email: "ms.jung@hyundai.com" }
+    const STATS = [
+      { num: "24/7", label: "안전 모니터링" },
+      { num: "98%", label: "문서 자동화율" },
+      { num: "50+", label: "관리 시설 수" },
+      { num: "Zero", label: "중대재해 목표" },
+    ];
+
+    const CONTACTS = [
+      { icon: "mail", label: "이메일", value: "infra-support@hyundai.com", href: "mailto:infra-support@hyundai.com" },
+      { icon: "phone", label: "전화", value: "02-3464-1114", href: "tel:02-3464-1114" },
+      { icon: "map", label: "주소", value: "경기도 화성시 남양읍 현대자동차 남양연구소" },
+    ];
+
+    let activeZone = "전체";
+    let selectedBuilding = null;
+
+    // Utility functions
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      closeMobileMenu();
     }
-  },
-  {
-    code: "C5-15", name: "환경시험동", zone: "C구역",
-    managers: {
-      "건축": { name: "최영호", phone: "031-368-5151", email: "yh.choi@hyundai.com" },
-      "전기": { name: "강하늘", phone: "031-368-5152", email: "hn.kang@hyundai.com" },
-      "설비": { name: "윤서준", phone: "031-368-5153", email: "sj.yoon@hyundai.com" },
-      "토목": { name: "한지민", phone: "031-368-5154", email: "jm.han@hyundai.com" }
+
+    function closeMobileMenu() {
+      document.getElementById("mobileMenu").classList.remove("open");
+      document.getElementById("menuIcon").style.display = "block";
+      document.getElementById("closeIcon").style.display = "none";
     }
-  },
-  {
-    code: "C3-01", name: "파워트레인동", zone: "C구역",
-    managers: {
-      "건축": { name: "오재혁", phone: "031-368-3011", email: "jh.oh@hyundai.com" },
-      "전기": { name: "임채원", phone: "031-368-3012", email: "cw.lim@hyundai.com" },
-      "설비": { name: "송민호", phone: "031-368-3013", email: "mh.song@hyundai.com" },
-      "토목": { name: "배수아", phone: "031-368-3014", email: "sa.bae@hyundai.com" }
+
+    // SVG Icons
+    const icons = {
+      mail: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+      phone: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
+      map: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>',
+      arrowLeft: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>',
+      mailSmall: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+      phoneSmall: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
+      search: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+    };
+
+    // Filter buildings
+    function getFilteredBuildings() {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      let list = BUILDINGS;
+      
+      if (activeZone !== "전체") {
+        list = list.filter(b => b.zone === activeZone);
+      }
+      
+      if (query) {
+        list = list.filter(b =>
+          b.code.toLowerCase().includes(query) ||
+          b.name.toLowerCase().includes(query) ||
+          Object.values(b.managers).some(m => m.name.includes(query))
+        );
+      }
+      
+      return list;
     }
-  },
-  {
-    code: "C3-02", name: "전자연구동", zone: "C구역",
-    managers: {
-      "건축": { name: "류지훈", phone: "031-368-3021", email: "jh.ryu@hyundai.com" },
-      "전기": { name: "조예린", phone: "031-368-3022", email: "yr.cho@hyundai.com" },
-      "설비": { name: "신동현", phone: "031-368-3023", email: "dh.shin@hyundai.com" },
-      "토목": { name: "문서영", phone: "031-368-3024", email: "sy.moon@hyundai.com" }
+
+    // Render zone filter
+    function renderZoneFilter() {
+      const container = document.getElementById("zoneFilter");
+      container.innerHTML = ZONES.map(z => `
+        <button class="zone-btn ${z === activeZone ? 'active' : ''}" data-zone="${z}">${z}</button>
+      `).join("") + `<span class="zone-count">${getFilteredBuildings().length}개 건물</span>`;
+
+      container.querySelectorAll(".zone-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeZone = btn.dataset.zone;
+          selectedBuilding = null;
+          renderZoneFilter();
+          renderBuildingGrid();
+          hideBuildingDetail();
+        });
+      });
     }
-  },
-  {
-    code: "A1-01", name: "디자인센터", zone: "A구역",
-    managers: {
-      "건축": { name: "권도윤", phone: "031-368-1011", email: "dy.kwon@hyundai.com" },
-      "전기": { name: "장서현", phone: "031-368-1012", email: "sh.jang@hyundai.com" },
-      "설비": { name: "허재민", phone: "031-368-1013", email: "jm.heo@hyundai.com" },
-      "토목": { name: "남지우", phone: "031-368-1014", email: "jw.nam@hyundai.com" }
+
+    // Render building grid
+    function renderBuildingGrid() {
+      const container = document.getElementById("buildingGrid");
+      const filtered = getFilteredBuildings();
+      const countEl = document.querySelector(".zone-count");
+      if (countEl) countEl.textContent = `${filtered.length}개 건물`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="no-results">
+            ${icons.search}
+            <h4>검색 결과가 없습니다</h4>
+            <p>건물 코드(예: C5-14) 또는 건물명(예: 안전연구동)으로 다시 검색해 주세요.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(b => `
+        <div class="building-card" data-code="${b.code}">
+          <div class="building-header">
+            <span class="building-code">${b.code}</span>
+            <span class="building-zone">${b.zone}</span>
+          </div>
+          <h4 class="building-name">${b.name}</h4>
+          <div class="building-tags">
+            ${DISCIPLINES.map(d => `<span class="disc-tag ${DISC_CLASS[d]}">${d}</span>`).join("")}
+          </div>
+        </div>
+      `).join("");
+
+      container.querySelectorAll(".building-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const code = card.dataset.code;
+          selectedBuilding = BUILDINGS.find(b => b.code === code);
+          showBuildingDetail();
+        });
+      });
     }
-  },
-  {
-    code: "A1-03", name: "본관동", zone: "A구역",
-    managers: {
-      "건축": { name: "고은채", phone: "031-368-1031", email: "ec.ko@hyundai.com" },
-      "전기": { name: "양현우", phone: "031-368-1032", email: "hw.yang@hyundai.com" },
-      "설비": { name: "백승리", phone: "031-368-1033", email: "sr.baek@hyundai.com" },
-      "토목": { name: "유하진", phone: "031-368-1034", email: "hj.yu@hyundai.com" }
+
+    // Show building detail
+    function showBuildingDetail() {
+      if (!selectedBuilding) return;
+      const b = selectedBuilding;
+      const container = document.getElementById("buildingDetail");
+      const grid = document.getElementById("buildingGrid");
+
+      container.innerHTML = `
+        <div class="detail-header">
+          <div>
+            <div class="detail-badges">
+              <span class="detail-code">${b.code}</span>
+              <span class="detail-zone">${b.zone}</span>
+            </div>
+            <h3 class="detail-name">${b.name}</h3>
+          </div>
+          <button class="detail-back" id="detailBack">
+            ${icons.arrowLeft} 목록으로
+          </button>
+        </div>
+        <div class="detail-body">
+          <p class="detail-label">공종별 담당자 정보</p>
+          <div class="managers-grid">
+            ${DISCIPLINES.map(disc => {
+              const m = b.managers[disc];
+              const cls = DISC_CLASS[disc];
+              return `
+                <div class="manager-card">
+                  <div class="manager-header">
+                    <div class="manager-icon ${cls}">${DISC_ICONS[disc]}</div>
+                    <span class="manager-disc ${cls}">${disc}</span>
+                  </div>
+                  <div class="manager-body">
+                    <div class="manager-info">
+                      <div class="manager-avatar ${cls}">${m.name.charAt(0)}</div>
+                      <div>
+                        <p class="manager-name">${m.name}</p>
+                        <p class="manager-team">인프라건설팀</p>
+                      </div>
+                    </div>
+                    <div class="manager-contacts">
+                      <a href="tel:${m.phone}" class="manager-contact">
+                        ${icons.phoneSmall} ${m.phone}
+                      </a>
+                      <a href="mailto:${m.email}" class="manager-contact" style="word-break:break-all;">
+                        ${icons.mailSmall} ${m.email}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+          <button class="unified-cta" id="openRequestModal">
+            ${icons.mailSmall} 공사 의뢰하기
+          </button>
+        </div>
+      `;
+
+      container.classList.add("visible");
+      grid.style.display = "none";
+      
+      document.getElementById("detailBack").addEventListener("click", hideBuildingDetail);
+      document.getElementById("openRequestModal").addEventListener("click", openRequestModal);
     }
-  },
-  {
-    code: "A2-05", name: "풍동시험동", zone: "A구역",
-    managers: {
-      "건축": { name: "서정민", phone: "031-368-2051", email: "jm.seo@hyundai.com" },
-      "전기": { name: "노시은", phone: "031-368-2052", email: "se.noh@hyundai.com" },
-      "설비": { name: "방태준", phone: "031-368-2053", email: "tj.bang@hyundai.com" },
-      "토목": { name: "추연서", phone: "031-368-2054", email: "ys.chu@hyundai.com" }
+
+    // Hide building detail
+    function hideBuildingDetail() {
+      selectedBuilding = null;
+      document.getElementById("buildingDetail").classList.remove("visible");
+      document.getElementById("buildingGrid").style.display = "grid";
     }
-  },
-  {
-    code: "B2-01", name: "충돌시험동", zone: "B구역",
-    managers: {
-      "건축": { name: "탁민준", phone: "031-368-2011", email: "mj.tak@hyundai.com" },
-      "전기": { name: "공서아", phone: "031-368-2012", email: "sa.gong@hyundai.com" },
-      "설비": { name: "변우진", phone: "031-368-2013", email: "wj.byun@hyundai.com" },
-      "토목": { name: "피수빈", phone: "031-368-2014", email: "sb.pi@hyundai.com" }
+
+    // Render stats
+    function renderStats() {
+      const container = document.getElementById("statsGrid");
+      container.innerHTML = STATS.map((s, i) => `
+        <div class="stat-card reveal" style="transition-delay: ${i * 0.08}s;">
+          <p class="stat-num">${s.num}</p>
+          <p class="stat-label">${s.label}</p>
+        </div>
+      `).join("");
     }
-  },
-  {
-    code: "B2-03", name: "배터리연구동", zone: "B구역",
-    managers: {
-      "건축": { name: "안준혁", phone: "031-368-2031", email: "jh.ahn@hyundai.com" },
-      "전기": { name: "심하은", phone: "031-368-2032", email: "he.shim@hyundai.com" },
-      "설비": { name: "복지호", phone: "031-368-2033", email: "jh.bok@hyundai.com" },
-      "토목": { name: "길다은", phone: "031-368-2034", email: "de.gil@hyundai.com" }
+
+    // Render contacts
+    function renderContacts() {
+      const container = document.getElementById("contactGrid");
+      container.innerHTML = CONTACTS.map((c, i) => `
+        <div class="contact-card reveal" style="transition-delay: ${i * 0.1}s;">
+          <div class="contact-icon">${icons[c.icon]}</div>
+          <p class="contact-label">${c.label}</p>
+          ${c.href 
+            ? `<a href="${c.href}" class="contact-value">${c.value}</a>`
+            : `<p class="contact-value">${c.value}</p>`
+          }
+        </div>
+      `).join("");
     }
-  },
-  {
-    code: "B3-07", name: "수소연구동", zone: "B구역",
-    managers: {
-      "건축": { name: "진시우", phone: "031-368-3071", email: "sw.jin@hyundai.com" },
-      "전기": { name: "엄채린", phone: "031-368-3072", email: "cr.eom@hyundai.com" },
-      "설비": { name: "도경훈", phone: "031-368-3073", email: "kh.do@hyundai.com" },
-      "토목": { name: "라윤아", phone: "031-368-3074", email: "ya.ra@hyundai.com" }
+
+    // Scroll reveal
+    function setupScrollReveal() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
     }
-  },
-  {
-    code: "D1-02", name: "주행시험장 관리동", zone: "D구역",
-    managers: {
-      "건축": { name: "옥승현", phone: "031-368-1021", email: "sh.ok@hyundai.com" },
-      "전기": { name: "표예진", phone: "031-368-1022", email: "yj.pyo@hyundai.com" },
-      "설비": { name: "빈재윤", phone: "031-368-1023", email: "jy.bin@hyundai.com" },
-      "토목": { name: "하준서", phone: "031-368-1024", email: "js.ha@hyundai.com" }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 작업요청서 모달 기능 (2단계 프로세스)
+    // ═══════════════════════════════════════════════════════════════
+    
+    // 상태 변수
+    let currentStep = 1;
+    let selectedDisciplines = [];
+    let generatedPptBlob = null;
+    let photoDataUrl = null;
+    let drawingDataUrl = null;
+    
+    // 오늘 날짜 포맷팅
+    function getTodayFormatted() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}년 ${month}월 ${day}일`;
     }
-  },
-  {
-    code: "D2-04", name: "자율주행시험동", zone: "D구역",
-    managers: {
-      "건축": { name: "천도현", phone: "031-368-2041", email: "dh.cheon@hyundai.com" },
-      "전기": { name: "봉서윤", phone: "031-368-2042", email: "sy.bong@hyundai.com" },
-      "설비": { name: "국태민", phone: "031-368-2043", email: "tm.guk@hyundai.com" },
-      "토목": { name: "빙나연", phone: "031-368-2044", email: "ny.bing@hyundai.com" }
+
+    // 모달 열기
+    function openRequestModal() {
+      if (!selectedBuilding) return;
+      
+      const modal = document.getElementById("requestModal");
+      const subtitle = document.getElementById("modalSubtitle");
+      const buildingInput = document.getElementById("formBuilding");
+      const dateInput = document.getElementById("formDate");
+      
+      // 상태 초기화
+      currentStep = 1;
+      selectedDisciplines = [];
+      generatedPptBlob = null;
+      photoDataUrl = null;
+      drawingDataUrl = null;
+      
+      // Step 표시 초기화
+      document.getElementById("modalStep1").style.display = "block";
+      document.getElementById("modalStep2").style.display = "none";
+      
+      // 폼 초기화
+      subtitle.textContent = `${selectedBuilding.code} ${selectedBuilding.name}`;
+      buildingInput.value = `${selectedBuilding.code} ${selectedBuilding.name}`;
+      dateInput.value = getTodayFormatted();
+      
+      // 다른 필드 초기화
+      document.getElementById("formFloor").value = "";
+      document.getElementById("formLocation").value = "";
+      document.getElementById("formProblem").value = "";
+      document.getElementById("formRequest").value = "";
+      
+      // 파일 업로드 초기화
+      resetFileUpload("photo");
+      resetFileUpload("drawing");
+      
+      // 체크박스 초기화
+      document.querySelectorAll(".checkbox-item").forEach(item => {
+        item.classList.remove("checked", "ai-recommended");
+        item.querySelector("input").checked = false;
+      });
+      
+      // AI 결과 숨기기
+      document.getElementById("aiResult").style.display = "none";
+      
+      // 모달 표시
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
     }
-  }
-  // ── 새 건물 추가: 위 형식을 복사해서 여기에 붙여넣기 하세요 ──
-];
-// ╔══════════════════════════════════════════════════════════════════╗
-// ║  건물 데이터 수정은 여기까지! 아래 코드는 건드리지 않아도 됩니다. ║
-// ╚══════════════════════════════════════════════════════════════════╝
 
-var ZONES = ["전체","A구역","B구역","C구역","D구역"];
-var DISCIPLINES = ["건축","전기","설비","토목"];
-var DISC_COLORS = {"건축":"#002C5F","전기":"#E8A317","설비":"#00AAD2","토목":"#34855E"};
-var DISC_EMOJIS = {"건축":"&#127959;","전기":"&#9889;","설비":"&#128295;","토목":"&#127959;"};
-var activeZone = "전체";
+    // 모달 닫기
+    function closeRequestModal() {
+      const modal = document.getElementById("requestModal");
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
 
-function smoothScroll(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
-window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40)},{passive:true});
-setTimeout(function(){document.querySelector('.hero').classList.add('loaded')},100);
+    // 파일 업로드 초기화
+    function resetFileUpload(type) {
+      const box = document.getElementById(`${type}UploadBox`);
+      const input = document.getElementById(`${type}Input`);
+      const preview = document.getElementById(`${type}Preview`);
+      
+      box.classList.remove("has-file");
+      input.value = "";
+      preview.src = "";
+      
+      if (type === "photo") photoDataUrl = null;
+      if (type === "drawing") drawingDataUrl = null;
+    }
 
-function toggleMobile(){
-  var m=document.getElementById('mobileMenu');var o=m.classList.toggle('open');
-  document.getElementById('menuIcon').style.display=o?'none':'block';
-  document.getElementById('closeIcon').style.display=o?'block':'none';
-}
+    // 파일 업로드 처리
+    function handleFileUpload(type, file) {
+      if (!file) return;
+      
+      const box = document.getElementById(`${type}UploadBox`);
+      const preview = document.getElementById(`${type}Preview`);
+      
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          box.classList.add("has-file");
+          if (type === "photo") photoDataUrl = e.target.result;
+          if (type === "drawing") drawingDataUrl = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 24 24' fill='none' stroke='%2300AAD2' stroke-width='1'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'%3E%3C/path%3E%3Cpolyline points='14 2 14 8 20 8'%3E%3C/polyline%3E%3C/svg%3E";
+        box.classList.add("has-file");
+      }
+    }
 
-// Scroll reveal
-var revealEls=document.querySelectorAll('.reveal');
-var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.15});
-revealEls.forEach(function(el){obs.observe(el)});
+    // ═══════════════════════════════════════════════════════════════
+    // AI 공종 추천 (키워드 기반 분석)
+    // ═══════════════════════════════════════════════════════════════
+    
+    const AI_KEYWORDS = {
+      건축: ['벽', '천장', '바닥', '문', '창문', '도어', '창호', '마감', '타일', '페인트', 
+             '도배', '유리', '파손', '균열', '누수', '결로', '단열', '방수', '칸막이', 
+             '천정', '몰딩', '걸레받이', '손잡이', '경첩', '실링', '코킹', '외벽', '지붕'],
+      전기: ['전기', '조명', '등', '콘센트', '스위치', '배선', '차단기', '분전반', '누전',
+             '합선', '전력', '전압', '램프', 'LED', '형광등', '안정기', '소켓', '플러그',
+             '인터폰', 'CCTV', '통신', '전화', '네트워크', '접지', '감전', '단락', '과부하'],
+      설비: ['냉방', '난방', '에어컨', '보일러', '환기', '덕트', '배관', '파이프', '수도',
+             '급수', '배수', '하수', '정화조', '펌프', '밸브', '온수', '냉수', '가스',
+             '소방', '스프링클러', '소화기', '경보기', '화재', '연기', '감지기', '공조',
+             '열교환기', '칠러', '팬코일', 'AHU', '냉매', '필터', '결빙', '동파'],
+      토목: ['도로', '포장', '아스팔트', '보도', '인도', '주차장', '배수로', '하수구',
+             '맨홀', '빗물', '침수', '지반', '기초', '옹벽', '석축', '울타리', '펜스',
+             '경계', '조경', '잔디', '수목', '화단', '보차', '경사', '함몰', '싱크홀']
+    };
 
-// Zone filters
-function renderZones(){
-  var html='';
-  ZONES.forEach(function(z){
-    html+='<button class="zone-btn'+(z===activeZone?' active':'')+'" onclick="setZone(\''+z+'\')">'+z+'</button>';
-  });
-  html+='<span class="zone-count" id="bldgCount"></span>';
-  document.getElementById('zoneFilters').innerHTML=html;
-}
+    function analyzeTextForDisciplines(text) {
+      const results = {};
+      const lowerText = text.toLowerCase();
+      
+      for (const [discipline, keywords] of Object.entries(AI_KEYWORDS)) {
+        let score = 0;
+        let matchedKeywords = [];
+        
+        for (const keyword of keywords) {
+          if (lowerText.includes(keyword)) {
+            score++;
+            matchedKeywords.push(keyword);
+          }
+        }
+        
+        if (score > 0) {
+          results[discipline] = { score, keywords: matchedKeywords };
+        }
+      }
+      
+      return results;
+    }
 
-function setZone(z){activeZone=z;renderZones();filterBuildings();}
+    function runAiRecommendation() {
+      const problem = document.getElementById("formProblem").value;
+      const request = document.getElementById("formRequest").value;
+      const combinedText = `${problem} ${request}`;
+      
+      if (!combinedText.trim()) {
+        alert("문제점과 요청사항을 먼저 입력해 주세요.");
+        return;
+      }
+      
+      const btn = document.getElementById("btnAiRecommend");
+      btn.classList.add("loading");
+      btn.disabled = true;
+      
+      // 분석 시뮬레이션 (실제로는 즉시 실행)
+      setTimeout(() => {
+        const analysis = analyzeTextForDisciplines(combinedText);
+        
+        // 체크박스 초기화
+        document.querySelectorAll(".checkbox-item").forEach(item => {
+          item.classList.remove("ai-recommended");
+        });
+        
+        // 분석 결과 적용
+        const recommendedDisciplines = [];
+        
+        for (const [discipline, data] of Object.entries(analysis)) {
+          if (data.score >= 1) {
+            recommendedDisciplines.push(discipline);
+            const item = document.querySelector(`.checkbox-item[data-disc="${discipline}"]`);
+            if (item) {
+              item.classList.add("ai-recommended", "checked");
+              item.querySelector("input").checked = true;
+            }
+          }
+        }
+        
+        // 결과 없으면 건축 기본 선택
+        if (recommendedDisciplines.length === 0) {
+          recommendedDisciplines.push("건축");
+          const item = document.querySelector('.checkbox-item[data-disc="건축"]');
+          if (item) {
+            item.classList.add("ai-recommended", "checked");
+            item.querySelector("input").checked = true;
+          }
+        }
+        
+        // 결과 표시
+        const aiResult = document.getElementById("aiResult");
+        const aiResultText = document.getElementById("aiResultText");
+        
+        aiResultText.textContent = `분석 완료! ${recommendedDisciplines.join(', ')} 공종 담당자에게 요청하는 것을 추천합니다.`;
+        aiResult.style.display = "flex";
+        
+        btn.classList.remove("loading");
+        btn.disabled = false;
+        
+        updateSelectedDisciplines();
+      }, 800);
+    }
 
-function getFiltered(){
-  var q=document.getElementById('searchInput').value.trim().toLowerCase();
-  var list=BUILDINGS;
-  if(activeZone!=="전체") list=list.filter(function(b){return b.zone===activeZone});
-  if(q) list=list.filter(function(b){
-    return b.code.toLowerCase().indexOf(q)>-1||b.name.toLowerCase().indexOf(q)>-1||
-      DISCIPLINES.some(function(d){return b.managers[d].name.indexOf(q)>-1});
-  });
-  return list;
-}
+    function updateSelectedDisciplines() {
+      selectedDisciplines = [];
+      document.querySelectorAll(".checkbox-item input:checked").forEach(input => {
+        selectedDisciplines.push(input.value);
+      });
+    }
 
-function filterBuildings(){
-  document.getElementById('detailPanel').innerHTML='';
-  var list=getFiltered();
-  document.getElementById('bldgCount').textContent=list.length+'개 건물';
-  var btn=document.getElementById('clearBtn');
-  btn.style.display=document.getElementById('searchInput').value?'flex':'none';
-  if(list.length===0){
-    document.getElementById('buildingGrid').innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p style="font-size:17px;font-weight:600;color:var(--g500);margin-bottom:8px">검색 결과가 없습니다</p><p style="font-size:14px;color:var(--g300)">건물 코드(예: C5-14) 또는 건물명(예: 안전연구동)으로 다시 검색해 주세요.</p></div>';
-    return;
-  }
-  var html='';
-  list.forEach(function(b,i){
-    var tags='';
-    DISCIPLINES.forEach(function(d){tags+='<span class="disc-tag" style="background:'+DISC_COLORS[d]+'0A;color:'+DISC_COLORS[d]+'">'+d+'</span>'});
-    html+='<div class="bldg-card" onclick="showDetail(\''+b.code+'\')"><div class="bldg-card-top"><span class="bldg-code">'+b.code+'</span><span class="bldg-zone">'+b.zone+'</span></div><h4>'+b.name+'</h4><div class="disc-tags">'+tags+'</div></div>';
-  });
-  document.getElementById('buildingGrid').innerHTML=html;
-}
+    // ═══════════════════════════════════════════════════════════════
+    // PPT 생성
+    // ═══════════════════════════════════════════════════════════════
+    
+    async function generatePPT() {
+      const b = selectedBuilding;
+      const floor = document.getElementById("formFloor").value;
+      const location = document.getElementById("formLocation").value;
+      const problem = document.getElementById("formProblem").value;
+      const request = document.getElementById("formRequest").value;
+      const date = getTodayFormatted();
+      const locationFull = location ? `${floor} ${location}` : floor;
+      
+      // pptxgenjs 사용
+      const pptx = new PptxGenJS();
+      
+      // 프레젠테이션 설정
+      pptx.layout = "LAYOUT_16x9";
+      pptx.title = `시설물 작업요청서 - ${b.code} ${b.name}`;
+      pptx.author = "연구개발인프라지원시스템";
+      
+      // 슬라이드 1: 표지
+      const slide1 = pptx.addSlide();
+      
+      // 배경색
+      slide1.background = { color: "002C5F" };
+      
+      // 현대자동차 로고 텍스트
+      slide1.addText("HYUNDAI", {
+        x: 0.5, y: 0.4, w: 3, h: 0.4,
+        fontSize: 14, color: "FFFFFF", fontFace: "Arial",
+        bold: true, letterSpacing: 3
+      });
+      
+      // 제목
+      slide1.addText("시설물 작업요청서", {
+        x: 0.5, y: 2.5, w: 9, h: 1,
+        fontSize: 44, color: "FFFFFF", fontFace: "맑은 고딕",
+        bold: true
+      });
+      
+      // 건물 정보
+      slide1.addText(`${b.code} ${b.name}`, {
+        x: 0.5, y: 3.6, w: 9, h: 0.6,
+        fontSize: 24, color: "00AAD2", fontFace: "맑은 고딕"
+      });
+      
+      // 날짜
+      slide1.addText(date, {
+        x: 0.5, y: 4.8, w: 9, h: 0.4,
+        fontSize: 16, color: "AAAAAA", fontFace: "맑은 고딕"
+      });
+      
+      // 슬라이드 2: 요청 내용
+      const slide2 = pptx.addSlide();
+      slide2.background = { color: "FFFFFF" };
+      
+      // 헤더 바
+      slide2.addShape("rect", {
+        x: 0, y: 0, w: 13.33, h: 1,
+        fill: { color: "002C5F" }
+      });
+      
+      slide2.addText("작업 요청 내용", {
+        x: 0.5, y: 0.25, w: 5, h: 0.5,
+        fontSize: 20, color: "FFFFFF", fontFace: "맑은 고딕", bold: true
+      });
+      
+      // 기본 정보 섹션
+      slide2.addText("■ 기본 정보", {
+        x: 0.5, y: 1.3, w: 12, h: 0.4,
+        fontSize: 16, color: "002C5F", fontFace: "맑은 고딕", bold: true
+      });
+      
+      // 테이블 형태 정보
+      const infoData = [
+        ["건물명", `${b.code} ${b.name}`],
+        ["상세 위치", locationFull],
+        ["요청일자", date],
+        ["담당 공종", selectedDisciplines.join(", ") || "미지정"]
+      ];
+      
+      slide2.addTable(infoData, {
+        x: 0.5, y: 1.8, w: 12, h: 1.6,
+        fontSize: 12, fontFace: "맑은 고딕",
+        border: { pt: 0.5, color: "CCCCCC" },
+        fill: { color: "F8F9FB" },
+        colW: [2.5, 9.5],
+        valign: "middle"
+      });
+      
+      // 문제점
+      slide2.addText("■ 문제점", {
+        x: 0.5, y: 3.6, w: 12, h: 0.4,
+        fontSize: 16, color: "002C5F", fontFace: "맑은 고딕", bold: true
+      });
+      
+      slide2.addText(problem || "(내용 없음)", {
+        x: 0.5, y: 4.1, w: 12, h: 1,
+        fontSize: 12, color: "333333", fontFace: "맑은 고딕",
+        valign: "top"
+      });
+      
+      // 요청사항
+      slide2.addText("■ 요청사항", {
+        x: 0.5, y: 5.2, w: 12, h: 0.4,
+        fontSize: 16, color: "002C5F", fontFace: "맑은 고딕", bold: true
+      });
+      
+      slide2.addText(request || "(내용 없음)", {
+        x: 0.5, y: 5.7, w: 12, h: 1,
+        fontSize: 12, color: "333333", fontFace: "맑은 고딕",
+        valign: "top"
+      });
+      
+      // 슬라이드 3: 첨부 사진/도면 (있는 경우)
+      if (photoDataUrl || drawingDataUrl) {
+        const slide3 = pptx.addSlide();
+        slide3.background = { color: "FFFFFF" };
+        
+        slide3.addShape("rect", {
+          x: 0, y: 0, w: 13.33, h: 1,
+          fill: { color: "002C5F" }
+        });
+        
+        slide3.addText("첨부 자료", {
+          x: 0.5, y: 0.25, w: 5, h: 0.5,
+          fontSize: 20, color: "FFFFFF", fontFace: "맑은 고딕", bold: true
+        });
+        
+        if (photoDataUrl && drawingDataUrl) {
+          // 둘 다 있는 경우 좌우 배치
+          slide3.addText("현장 사진", {
+            x: 0.5, y: 1.3, w: 6, h: 0.4,
+            fontSize: 14, color: "002C5F", fontFace: "맑은 고딕", bold: true
+          });
+          slide3.addImage({
+            data: photoDataUrl,
+            x: 0.5, y: 1.8, w: 5.8, h: 4.5,
+            sizing: { type: "contain", w: 5.8, h: 4.5 }
+          });
+          
+          slide3.addText("도면", {
+            x: 6.8, y: 1.3, w: 6, h: 0.4,
+            fontSize: 14, color: "002C5F", fontFace: "맑은 고딕", bold: true
+          });
+          slide3.addImage({
+            data: drawingDataUrl,
+            x: 6.8, y: 1.8, w: 5.8, h: 4.5,
+            sizing: { type: "contain", w: 5.8, h: 4.5 }
+          });
+        } else if (photoDataUrl) {
+          slide3.addText("현장 사진", {
+            x: 0.5, y: 1.3, w: 12, h: 0.4,
+            fontSize: 14, color: "002C5F", fontFace: "맑은 고딕", bold: true
+          });
+          slide3.addImage({
+            data: photoDataUrl,
+            x: 2, y: 1.8, w: 9, h: 5,
+            sizing: { type: "contain", w: 9, h: 5 }
+          });
+        } else if (drawingDataUrl) {
+          slide3.addText("도면", {
+            x: 0.5, y: 1.3, w: 12, h: 0.4,
+            fontSize: 14, color: "002C5F", fontFace: "맑은 고딕", bold: true
+          });
+          slide3.addImage({
+            data: drawingDataUrl,
+            x: 2, y: 1.8, w: 9, h: 5,
+            sizing: { type: "contain", w: 9, h: 5 }
+          });
+        }
+      }
+      
+      // PPT Blob 생성
+      generatedPptBlob = await pptx.write({ outputType: "blob" });
+      
+      return `시설물_작업요청서_${b.code}_${b.name}.pptx`;
+    }
 
-function clearSearch(){document.getElementById('searchInput').value='';filterBuildings();document.getElementById('searchInput').focus();}
+    // PPT 다운로드
+    function downloadPPT() {
+      if (!generatedPptBlob) {
+        alert("PPT가 생성되지 않았습니다.");
+        return;
+      }
+      
+      const b = selectedBuilding;
+      const filename = `시설물_작업요청서_${b.code}_${b.name}.pptx`;
+      
+      const url = URL.createObjectURL(generatedPptBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
 
-function showDetail(code){
-  var b=BUILDINGS.find(function(x){return x.code===code});
-  if(!b)return;
-  document.getElementById('buildingGrid').style.display='none';
-  var cards='';
-  DISCIPLINES.forEach(function(d,i){
-    var m=b.managers[d];var c=DISC_COLORS[d];
-    cards+='<div class="disc-card" style="animation:fadeSlideIn .4s cubic-bezier(.16,1,.3,1) '+(i*0.08)+'s both">'
-      +'<div class="disc-card-header"><div class="disc-icon" style="background:'+c+'10;font-size:15px">'+DISC_EMOJIS[d]+'</div><span style="font-size:14px;font-weight:600;color:'+c+'">'+d+'</span></div>'
-      +'<div class="disc-card-body">'
-      +'<div class="disc-person"><div class="disc-avatar" style="background:'+c+'0C;color:'+c+'">'+m.name.charAt(0)+'</div><div><p style="font-size:15px;font-weight:600">'+m.name+'</p><p style="font-size:12px;color:var(--g500)">인프라건설팀</p></div></div>'
-      +'<div class="disc-contacts">'
-      +'<a href="tel:'+m.phone+'" onmouseover="this.style.color=\''+c+'\'" onmouseout="this.style.color=\'var(--g700)\'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.88.37 1.73.7 2.54a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.81.33 1.66.57 2.54.7A2 2 0 0 1 22 16.92z"/></svg> '+m.phone+'</a>'
-      +'<a href="mailto:'+m.email+'" onmouseover="this.style.color=\''+c+'\'" onmouseout="this.style.color=\'var(--g700)\'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> '+m.email+'</a>'
-      +'</div>'
-      +'<a href="mailto:'+m.email+'?subject=[공사의뢰-'+d+'] '+b.code+' '+b.name+'" class="disc-cta" style="background:'+c+'0A;color:'+c+';border:1px solid '+c+'20" onmouseover="this.style.background=\''+c+'18\'" onmouseout="this.style.background=\''+c+'0A\'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> 공사 의뢰</a>'
-      +'</div></div>';
-  });
-  document.getElementById('detailPanel').innerHTML=
-    '<div class="detail-panel"><div class="detail-header"><div><div class="detail-badges"><span class="detail-badge">'+b.code+'</span><span class="detail-zone-badge">'+b.zone+'</span></div><h3>'+b.name+'</h3></div><button class="back-btn" onclick="hideDetail()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> 목록으로</button></div><div class="detail-body"><p class="detail-label">공종별 담당자 정보</p><div class="disc-grid">'+cards+'</div></div></div>';
-}
+    // ═══════════════════════════════════════════════════════════════
+    // Step 전환
+    // ═══════════════════════════════════════════════════════════════
+    
+    async function goToStep2() {
+      const floor = document.getElementById("formFloor").value;
+      const problem = document.getElementById("formProblem").value;
+      const request = document.getElementById("formRequest").value;
+      
+      // 유효성 검사
+      if (!floor) {
+        alert("층을 선택해 주세요.");
+        return;
+      }
+      if (!problem.trim()) {
+        alert("문제점을 입력해 주세요.");
+        return;
+      }
+      if (!request.trim()) {
+        alert("요청사항을 입력해 주세요.");
+        return;
+      }
+      
+      // 선택된 공종 확인
+      updateSelectedDisciplines();
+      if (selectedDisciplines.length === 0) {
+        alert("담당 공종을 1개 이상 선택해 주세요.");
+        return;
+      }
+      
+      // PPT 생성
+      const btn = document.getElementById("btnNextStep");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading-spinner"></span> PPT 생성 중...';
+      
+      try {
+        const filename = await generatePPT();
+        
+        // Step 2 표시
+        document.getElementById("modalStep1").style.display = "none";
+        document.getElementById("modalStep2").style.display = "block";
+        
+        // Step 2 데이터 설정
+        document.getElementById("pptFilename").textContent = filename;
+        
+        // 수신자 목록
+        renderRecipients();
+        
+        // 이메일 제목 설정
+        const b = selectedBuilding;
+        const location = document.getElementById("formLocation").value;
+        const locationFull = location ? `${floor} ${location}` : floor;
+        document.getElementById("emailSubject").value = `[시설물 보수 요청서] ${b.code} ${b.name} ${locationFull}`;
+        
+        // 이메일 본문 초기화
+        document.getElementById("emailBody").value = "";
+        
+        currentStep = 2;
+      } catch (error) {
+        console.error("PPT 생성 오류:", error);
+        alert("PPT 생성 중 오류가 발생했습니다.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '다음 단계 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+      }
+    }
 
-function hideDetail(){
-  document.getElementById('detailPanel').innerHTML='';
-  document.getElementById('buildingGrid').style.display='grid';
-}
+    function goToStep1() {
+      document.getElementById("modalStep1").style.display = "block";
+      document.getElementById("modalStep2").style.display = "none";
+      currentStep = 1;
+    }
 
-renderZones();
-filterBuildings();
-</script>
+    // 수신자 렌더링
+    function renderRecipients() {
+      const container = document.getElementById("recipientsList");
+      const b = selectedBuilding;
+      
+      const recipientHtml = selectedDisciplines.map(disc => {
+        const m = b.managers[disc];
+        const cls = DISC_CLASS[disc];
+        return `
+          <div class="recipient-chip">
+            <div class="recipient-avatar ${cls}">${m.name.charAt(0)}</div>
+            <div class="recipient-info">
+              <span class="recipient-name">${m.name}</span>
+              <span class="recipient-disc">(${disc})</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+      
+      container.innerHTML = recipientHtml;
+    }
+
+    // 이메일 발송
+    function sendEmail() {
+      const b = selectedBuilding;
+      const subject = document.getElementById("emailSubject").value;
+      const body = document.getElementById("emailBody").value;
+      
+      if (!body.trim()) {
+        alert("이메일 내용을 작성해 주세요.");
+        return;
+      }
+      
+      // 선택된 공종 담당자 이메일만
+      const emails = selectedDisciplines.map(disc => b.managers[disc].email).join(",");
+      
+      const encodedSubject = encodeURIComponent(subject);
+      const encodedBody = encodeURIComponent(body + "\n\n---\n※ 첨부: 시설물 작업요청서 PPT 파일\n(다운로드 후 첨부해주세요)");
+      
+      // 먼저 PPT 다운로드
+      downloadPPT();
+      
+      // 잠시 후 이메일 클라이언트 열기
+      setTimeout(() => {
+        window.location.href = `mailto:${emails}?subject=${encodedSubject}&body=${encodedBody}`;
+        closeRequestModal();
+      }, 500);
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      // Hero animation
+      setTimeout(() => document.getElementById("hero").classList.add("loaded"), 100);
+
+      // Navbar scroll
+      window.addEventListener("scroll", () => {
+        document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 40);
+      }, { passive: true });
+
+      // Mobile menu
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
+      const closeIcon = document.getElementById("closeIcon");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        const isOpen = mobileMenu.classList.toggle("open");
+        menuIcon.style.display = isOpen ? "none" : "block";
+        closeIcon.style.display = isOpen ? "block" : "none";
+      });
+
+      // Search
+      const searchInput = document.getElementById("searchInput");
+      const searchBox = document.getElementById("searchBox");
+      const searchClear = document.getElementById("searchClear");
+
+      searchInput.addEventListener("focus", () => searchBox.classList.add("focused"));
+      searchInput.addEventListener("blur", () => searchBox.classList.remove("focused"));
+      searchInput.addEventListener("input", () => {
+        searchClear.classList.toggle("visible", searchInput.value.length > 0);
+        selectedBuilding = null;
+        hideBuildingDetail();
+        renderBuildingGrid();
+      });
+      searchClear.addEventListener("click", () => {
+        searchInput.value = "";
+        searchClear.classList.remove("visible");
+        searchInput.focus();
+        selectedBuilding = null;
+        hideBuildingDetail();
+        renderBuildingGrid();
+      });
+
+      // Render components
+      renderZoneFilter();
+      renderBuildingGrid();
+      renderStats();
+      renderContacts();
+
+      // Setup scroll reveal
+      setTimeout(setupScrollReveal, 100);
+
+      // ═══════════════════════════════════════════════════════════════
+      // 모달 이벤트 리스너
+      // ═══════════════════════════════════════════════════════════════
+      
+      // Step 1 - 모달 닫기 버튼
+      document.getElementById("modalClose").addEventListener("click", closeRequestModal);
+      document.getElementById("modalCancel").addEventListener("click", closeRequestModal);
+      
+      // Step 2 - 모달 닫기 버튼
+      document.getElementById("modalClose2").addEventListener("click", closeRequestModal);
+      
+      // 모달 외부 클릭 시 닫기
+      document.getElementById("requestModal").addEventListener("click", (e) => {
+        if (e.target.id === "requestModal") {
+          closeRequestModal();
+        }
+      });
+      
+      // Step 전환 버튼
+      document.getElementById("btnNextStep").addEventListener("click", goToStep2);
+      document.getElementById("btnPrevStep").addEventListener("click", goToStep1);
+      
+      // AI 공종 분석 버튼
+      document.getElementById("btnAiRecommend").addEventListener("click", runAiRecommendation);
+      
+      // 체크박스 클릭 이벤트
+      document.querySelectorAll(".checkbox-item").forEach(item => {
+        item.addEventListener("click", (e) => {
+          if (e.target.tagName === "INPUT") return;
+          const checkbox = item.querySelector("input");
+          checkbox.checked = !checkbox.checked;
+          item.classList.toggle("checked", checkbox.checked);
+          updateSelectedDisciplines();
+        });
+        
+        item.querySelector("input").addEventListener("change", () => {
+          item.classList.toggle("checked", item.querySelector("input").checked);
+          updateSelectedDisciplines();
+        });
+      });
+      
+      // PPT 다운로드 버튼
+      document.getElementById("btnDownloadPpt").addEventListener("click", downloadPPT);
+      
+      // 이메일 보내기 버튼
+      document.getElementById("btnSendEmail").addEventListener("click", sendEmail);
+      
+      // 파일 업로드 - 현장 사진
+      document.getElementById("photoInput").addEventListener("change", (e) => {
+        handleFileUpload("photo", e.target.files[0]);
+      });
+      document.getElementById("photoRemove").addEventListener("click", (e) => {
+        e.stopPropagation();
+        resetFileUpload("photo");
+      });
+      
+      // 파일 업로드 - 도면
+      document.getElementById("drawingInput").addEventListener("change", (e) => {
+        handleFileUpload("drawing", e.target.files[0]);
+      });
+      document.getElementById("drawingRemove").addEventListener("click", (e) => {
+        e.stopPropagation();
+        resetFileUpload("drawing");
+      });
+      
+      // ESC 키로 모달 닫기
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeRequestModal();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
