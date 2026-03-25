@@ -1284,6 +1284,52 @@
       margin-bottom: 16px;
     }
 
+    /* 공사명 입력란 */
+    .project-name-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid var(--gray300);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .project-name-wrapper:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 44, 95, 0.1);
+    }
+    .project-name-prefix {
+      padding: 12px 14px;
+      background: var(--gray50);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      border-right: 1px solid var(--gray200);
+    }
+    .project-name-input {
+      flex: 1;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    .project-name-input:focus {
+      box-shadow: none !important;
+    }
+
+    /* 서브 라벨 */
+    .form-sublabel {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray700);
+      margin: 20px 0 12px 0;
+    }
+    .form-sublabel-hint {
+      font-weight: 400;
+      color: var(--gray500);
+      font-size: 12px;
+    }
+
     /* Discipline Checkboxes */
     .discipline-checkboxes {
       display: grid;
@@ -1825,6 +1871,19 @@
             </div>
           </div>
 
+          <!-- 공사명 (AI 자동 생성) -->
+          <div class="form-section">
+            <p class="form-section-title">공사명</p>
+            <div class="form-row single">
+              <div class="form-group">
+                <div class="project-name-wrapper">
+                  <span class="project-name-prefix">[시설물 공사 의뢰]</span>
+                  <input type="text" class="form-input project-name-input" id="formProjectName" placeholder="AI 분석 후 자동 생성됩니다 (직접 수정 가능)">
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- 보수 내용 -->
           <div class="form-section">
             <p class="form-section-title">보수 내용</p>
@@ -1842,12 +1901,30 @@
             </div>
           </div>
 
-          <!-- AI 공종 추천 -->
+          <!-- AI 분석 & 담당 공종 -->
           <div class="form-section">
             <p class="form-section-title">
               <span class="ai-badge">AI</span> 담당 공종 추천
             </p>
-            <p class="form-hint">문제점과 요청사항을 입력하면 AI가 담당 공종을 자동으로 추천합니다.</p>
+            <p class="form-hint">문제점과 요청사항을 입력 후 AI 분석 버튼을 누르면 공사명과 담당 공종이 자동으로 추천됩니다.</p>
+            
+            <!-- AI 분석 버튼 (상단 배치) -->
+            <button class="btn-ai-recommend" id="btnAiRecommend">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              AI 분석하기
+            </button>
+            
+            <div class="ai-result" id="aiResult" style="display: none;">
+              <div class="ai-result-icon">✓</div>
+              <p class="ai-result-text" id="aiResultText"></p>
+            </div>
+            
+            <!-- 공종 체크박스 (AI 분석 결과, 수정 가능) -->
+            <p class="form-sublabel">담당 공종 선택 <span class="form-sublabel-hint">(클릭하여 수정 가능)</span></p>
             <div class="discipline-checkboxes" id="disciplineCheckboxes">
               <label class="checkbox-item" data-disc="건축">
                 <input type="checkbox" name="discipline" value="건축">
@@ -1873,18 +1950,6 @@
                 <span class="checkbox-label">토목</span>
                 <span class="checkbox-desc">도로, 배수로, 옹벽, 기초, 포장 등</span>
               </label>
-            </div>
-            <button class="btn-ai-recommend" id="btnAiRecommend">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-              </svg>
-              AI 공종 분석하기
-            </button>
-            <div class="ai-result" id="aiResult" style="display: none;">
-              <div class="ai-result-icon">✓</div>
-              <p class="ai-result-text" id="aiResultText"></p>
             </div>
           </div>
 
@@ -1987,8 +2052,8 @@
             <p class="form-section-title">이메일 내용</p>
             <div class="form-row single">
               <div class="form-group">
-                <label class="form-label">제목</label>
-                <input type="text" class="form-input readonly" id="emailSubject" readonly>
+                <label class="form-label">제목 <span class="form-label-hint">(자동 생성, 수정 가능)</span></label>
+                <input type="text" class="form-input" id="emailSubject">
               </div>
             </div>
             <div class="form-row single">
@@ -2472,6 +2537,7 @@
       document.getElementById("formLocation").value = "";
       document.getElementById("formProblem").value = "";
       document.getElementById("formRequest").value = "";
+      document.getElementById("formProjectName").value = "";
       
       // 파일 업로드 초기화
       resetFileUpload("photo");
@@ -2580,6 +2646,8 @@
     function runAiRecommendation() {
       const problem = document.getElementById("formProblem").value;
       const request = document.getElementById("formRequest").value;
+      const floor = document.getElementById("formFloor").value;
+      const location = document.getElementById("formLocation").value;
       const combinedText = `${problem} ${request}`;
       
       if (!combinedText.trim()) {
@@ -2624,11 +2692,17 @@
           }
         }
         
+        // ═══════════════════════════════════════════════════════════════
+        // 공사명 자동 생성
+        // ═══════════════════════════════════════════════════════════════
+        const projectName = generateProjectName(combinedText, floor, location, recommendedDisciplines);
+        document.getElementById("formProjectName").value = projectName;
+        
         // 결과 표시
         const aiResult = document.getElementById("aiResult");
         const aiResultText = document.getElementById("aiResultText");
         
-        aiResultText.textContent = `분석 완료! ${recommendedDisciplines.join(', ')} 공종 담당자에게 요청하는 것을 추천합니다.`;
+        aiResultText.textContent = `분석 완료! 공사명과 담당 공종(${recommendedDisciplines.join(', ')})이 자동으로 설정되었습니다. 필요시 직접 수정할 수 있습니다.`;
         aiResult.style.display = "flex";
         
         btn.classList.remove("loading");
@@ -2636,6 +2710,94 @@
         
         updateSelectedDisciplines();
       }, 800);
+    }
+
+    // 공사명 자동 생성 함수
+    function generateProjectName(text, floor, location, disciplines) {
+      const b = selectedBuilding;
+      const lowerText = text.toLowerCase();
+      
+      // 작업 유형 키워드 매핑
+      const workTypes = {
+        // 수리/교체 관련
+        '교체': ['교체', '바꿔', '바꾸', '변경', '교환'],
+        '수리': ['수리', '고장', '수선', '보수', '고쳐', '작동 안', '안 됨', '안됨', '멈춤'],
+        '설치': ['설치', '신설', '추가', '새로'],
+        '점검': ['점검', '검사', '확인', '체크'],
+        '철거': ['철거', '제거', '해체', '뜯어'],
+        '청소': ['청소', '세척', '클리닝'],
+        '도장': ['도장', '페인트', '칠', '도색'],
+        '방수': ['방수', '누수', '새는', '물이'],
+        '보강': ['보강', '강화', '보완'],
+      };
+      
+      // 대상물 키워드 매핑
+      const targets = {
+        // 건축
+        '벽체': ['벽', '벽체', '벽면', '파티션'],
+        '천장': ['천장', '천정', '텍스'],
+        '바닥': ['바닥', '마루', '타일', '장판'],
+        '문': ['문', '도어', '출입문', '방화문'],
+        '창문': ['창문', '창호', '유리창', '샷시'],
+        // 전기
+        '조명': ['조명', '등', '램프', 'LED', '형광등', '전등'],
+        '콘센트': ['콘센트', '플러그', '소켓'],
+        '배선': ['배선', '전선', '케이블'],
+        '분전반': ['분전반', '차단기', '누전'],
+        // 설비
+        '에어컨': ['에어컨', '냉방', '냉난방', '공조'],
+        '난방': ['난방', '보일러', '히터', '온수'],
+        '환기': ['환기', '환풍기', '덕트'],
+        '배관': ['배관', '파이프', '수도', '급수', '배수'],
+        '소방': ['소방', '스프링클러', '소화기', '감지기'],
+        // 토목
+        '도로': ['도로', '아스팔트', '포장'],
+        '배수로': ['배수로', '하수구', '맨홀'],
+        '주차장': ['주차장', '주차'],
+      };
+      
+      // 작업 유형 찾기
+      let workType = '보수';
+      for (const [type, keywords] of Object.entries(workTypes)) {
+        if (keywords.some(kw => lowerText.includes(kw))) {
+          workType = type;
+          break;
+        }
+      }
+      
+      // 대상물 찾기
+      let target = '';
+      for (const [name, keywords] of Object.entries(targets)) {
+        if (keywords.some(kw => lowerText.includes(kw))) {
+          target = name;
+          break;
+        }
+      }
+      
+      // 공사명 조합
+      let parts = [];
+      
+      // 위치 정보
+      if (floor) {
+        parts.push(floor);
+      }
+      if (location) {
+        parts.push(location);
+      }
+      
+      // 대상물
+      if (target) {
+        parts.push(target);
+      } else if (disciplines.length > 0) {
+        // 대상물 못 찾으면 공종명으로 대체
+        parts.push(disciplines[0] + ' 시설');
+      }
+      
+      // 작업 유형
+      parts.push(workType);
+      parts.push('공사');
+      
+      return parts.join(' ');
     }
 
     function updateSelectedDisciplines() {
@@ -2893,11 +3055,9 @@
         // 수신자 목록
         renderRecipients();
         
-        // 이메일 제목 설정
-        const b = selectedBuilding;
-        const location = document.getElementById("formLocation").value;
-        const locationFull = location ? `${floor} ${location}` : floor;
-        document.getElementById("emailSubject").value = `[시설물 보수 요청서] ${b.code} ${b.name} ${locationFull}`;
+        // 이메일 제목 설정 (공사명 기반)
+        const projectName = document.getElementById("formProjectName").value;
+        document.getElementById("emailSubject").value = `[시설물 공사 의뢰] ${projectName}`;
         
         // 이메일 본문 초기화
         document.getElementById("emailBody").value = "";
