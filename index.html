@@ -2604,7 +2604,7 @@
     // Gemini AI API 연동
     // ═══════════════════════════════════════════════════════════════
     
-    const GEMINI_API_KEY = "AIzaSyDceVh3uW4Uz0XuuPSLqaQQe_lsQUb9qoU";
+    const GEMINI_API_KEY = "AIzaSyCfUR_n5zegs7dxFbeFlt7EwiTkhgQNE_s";
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     async function runAiRecommendation() {
@@ -2658,7 +2658,7 @@
             }],
             generationConfig: {
               temperature: 0.3,
-              maxOutputTokens: 200,
+              maxOutputTokens: 1000,
             }
           })
         });
