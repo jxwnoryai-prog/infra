@@ -408,7 +408,39 @@
 .user-name { font-size:14px; font-weight:500; color:var(--dark); }
 .logout-btn { background:none; border:1px solid var(--gray300); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:500; color:var(--gray500); cursor:pointer; font-family:inherit; transition:all 0.2s; }
 .logout-btn:hover { border-color:var(--primary); color:var(--primary); }
-  </style>
+/* ─── 권한 관리 ─── */
+.admin-panel { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; }
+.admin-panel.active { display:flex; }
+.admin-box { background:var(--white); border-radius:20px; width:100%; max-width:700px; max-height:85vh; overflow:hidden; box-shadow:0 25px 80px rgba(0,0,0,0.2); }
+.admin-header { padding:24px 28px; border-bottom:1px solid var(--gray100); display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,var(--primary),var(--accent)); color:#fff; }
+.admin-header-title { font-size:18px; font-weight:700; }
+.admin-header-sub { font-size:13px; opacity:0.8; margin-top:2px; }
+.admin-close { background:rgba(255,255,255,0.2); border:none; border-radius:8px; padding:6px 12px; color:#fff; cursor:pointer; font-family:inherit; font-size:13px; }
+.admin-body { padding:24px 28px; overflow-y:auto; max-height:calc(85vh - 100px); }
+.admin-section-title { font-size:14px; font-weight:600; color:var(--dark); margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--gray100); }
+.admin-user-row { display:flex; align-items:center; gap:16px; padding:16px; background:var(--gray50); border-radius:12px; margin-bottom:12px; border:1px solid var(--gray100); }
+.admin-user-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--accent)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; font-weight:700; flex-shrink:0; }
+.admin-user-name { font-size:14px; font-weight:600; color:var(--dark); min-width:80px; }
+.admin-user-id { font-size:12px; color:var(--gray500); }
+.admin-perms { display:flex; gap:8px; flex-wrap:wrap; flex:1; }
+.perm-toggle { display:flex; align-items:center; gap:6px; padding:5px 12px; border-radius:100px; border:1.5px solid var(--gray300); background:var(--white); font-size:12px; font-weight:500; color:var(--gray500); cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.perm-toggle.active { border-color:var(--primary); background:rgba(0,44,95,0.08); color:var(--primary); }
+.perm-toggle .perm-dot { width:6px; height:6px; border-radius:50%; background:var(--gray300); }
+.perm-toggle.active .perm-dot { background:var(--primary); }
+.admin-empty { text-align:center; padding:40px; color:var(--gray500); font-size:14px; }
+.admin-btn { background:none; border:none; cursor:pointer; font-family:inherit; }
+
+/* 섹션 잠금 */
+.section-locked { position:relative; pointer-events:none; }
+.section-lock-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(248,249,251,0.92); backdrop-filter:blur(4px); z-index:10; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; border-radius:16px; }
+.section-lock-icon { font-size:40px; }
+.section-lock-text { font-size:16px; font-weight:600; color:var(--gray700); }
+.section-lock-sub { font-size:13px; color:var(--gray500); }
+
+/* 관리자 버튼 */
+.admin-nav-btn { background:rgba(0,44,95,0.08); border:1px solid rgba(0,44,95,0.2); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:600; color:var(--primary); cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.admin-nav-btn:hover { background:var(--primary); color:#fff; }
+</style>
 </head>
 <body>
 
@@ -459,6 +491,7 @@
       <div class="user-info" id="userInfo" style="display:none">
   <div class="user-avatar" id="userAvatar">?</div>
   <span class="user-name" id="userName"></span>
+  <button class="admin-nav-btn" id="adminNavBtn" style="display:none" onclick="openAdminPanel()">⚙ 권한관리</button>
   <button class="logout-btn" onclick="doLogout()">로그아웃</button>
 </div>
     </div>
@@ -829,7 +862,26 @@ function renderMgmtFilters() {
 function setYearFilter(y) { mgmtFilterYear=y; renderMgmtFilters(); renderMgmtDashboard(); }
 function setMonthFilter(m) { mgmtFilterMonth=m===0?null:m; renderMgmtFilters(); renderMgmtDashboard(); 
 // ─── 인증 초기화 ───
-  checkAuth();  }
+  function checkAuth() {
+  const user = getCurrentUser();
+  if (!user) {
+    document.getElementById('authOverlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.getElementById('authOverlay').style.display = 'none';
+    document.body.style.overflow = '';
+    document.getElementById('userInfo').style.display = 'flex';
+    document.getElementById('userName').textContent = user.name;
+    document.getElementById('userAvatar').textContent = user.name.charAt(0);
+
+    // 관리자 버튼 표시
+    const isAdmin = ADMIN_ACCOUNTS.some(a => a.id === user.id);
+    document.getElementById('adminNavBtn').style.display = isAdmin ? 'block' : 'none';
+
+    // 섹션 권한 적용
+    applySectionPermissions();
+  }
+}}
 
 // ─── 대시보드 렌더링 ───
 function renderMgmtDashboard() {
@@ -1131,16 +1183,26 @@ function showSignup(){
   document.getElementById('signupError').classList.remove('show');
 }
 
-function doLogin(){
-  const id=document.getElementById('loginId').value.trim();
-  const pw=document.getElementById('loginPw').value;
-  const users=getUsers();
-  const user=users.find(u=>u.id===id&&u.pw===pw);
-  if(!user){
+function doLogin() {
+  const id = document.getElementById('loginId').value.trim();
+  const pw = document.getElementById('loginPw').value;
+
+  // 관리자 계정 먼저 확인
+  const adminUser = ADMIN_ACCOUNTS.find(a => a.id === id && a.pw === pw);
+  if (adminUser) {
+    sessionStorage.setItem('infraCurrentUser', JSON.stringify({ name: adminUser.name, id: adminUser.id }));
+    checkAuth();
+    return;
+  }
+
+  // 일반 사용자 확인
+  const users = getUsers();
+  const user = users.find(u => u.id === id && u.pw === pw);
+  if (!user) {
     document.getElementById('loginError').classList.add('show');
     return;
   }
-  sessionStorage.setItem('infraCurrentUser',JSON.stringify(user));
+  sessionStorage.setItem('infraCurrentUser', JSON.stringify(user));
   checkAuth();
 }
 
@@ -1163,6 +1225,134 @@ function doLogout(){
   sessionStorage.removeItem('infraCurrentUser');
   document.getElementById('userInfo').style.display='none';
   checkAuth();
+}
+// ═══════════════════════════════════════════════════════════
+// 권한 관리 시스템
+// ═══════════════════════════════════════════════════════════
+
+// 최초 관리자 계정 (코드에 고정)
+const ADMIN_ACCOUNTS = [
+  { id: "admin", pw: "hyundai1234", name: "관리자" }
+];
+
+// 섹션 목록
+const SECTIONS = [
+  { key: "section_services", label: "공사의뢰", id: "services" },
+  { key: "section_about",    label: "소개",     id: "about" },
+  { key: "section_contact",  label: "연락처",   id: "contact" },
+  { key: "section_infra",    label: "인프라관리", id: "infra-manage" },
+];
+
+// 권한 저장/불러오기
+function getAllPermissions() {
+  try { return JSON.parse(localStorage.getItem('infraPermissions') || '{}'); } catch { return {}; }
+}
+function savePermissions(p) { localStorage.setItem('infraPermissions', JSON.stringify(p)); }
+
+function getUserPermissions(userId) {
+  const all = getAllPermissions();
+  // 기본 권한: 공사의뢰, 소개, 연락처는 기본 허용 / 인프라관리는 관리자만
+  if (!all[userId]) {
+    return ["section_services", "section_about", "section_contact"];
+  }
+  return all[userId];
+}
+
+function setUserPermission(userId, sectionKey, allow) {
+  const all = getAllPermissions();
+  if (!all[userId]) all[userId] = ["section_services", "section_about", "section_contact"];
+  if (allow) {
+    if (!all[userId].includes(sectionKey)) all[userId].push(sectionKey);
+  } else {
+    all[userId] = all[userId].filter(k => k !== sectionKey);
+  }
+  savePermissions(all);
+  applySectionPermissions();
+}
+
+// 섹션 잠금/해제 적용
+function applySectionPermissions() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const isAdmin = ADMIN_ACCOUNTS.some(a => a.id === user.id);
+  const perms = isAdmin
+    ? SECTIONS.map(s => s.key) // 관리자는 전체 허용
+    : getUserPermissions(user.id);
+
+  SECTIONS.forEach(section => {
+    const el = document.getElementById(section.id);
+    if (!el) return;
+
+    // 기존 잠금 오버레이 제거
+    const existing = el.querySelector('.section-lock-overlay');
+    if (existing) existing.remove();
+    el.classList.remove('section-locked');
+
+    if (!perms.includes(section.key)) {
+      // 잠금 적용
+      el.classList.add('section-locked');
+      el.style.position = 'relative';
+      const overlay = document.createElement('div');
+      overlay.className = 'section-lock-overlay';
+      overlay.innerHTML = `
+        <div class="section-lock-icon">🔒</div>
+        <div class="section-lock-text">${section.label} 섹션</div>
+        <div class="section-lock-sub">열람 권한이 없습니다. 관리자에게 문의하세요.</div>
+      `;
+      el.appendChild(overlay);
+    }
+  });
+}
+
+// 관리자 패널 열기/닫기
+function openAdminPanel() {
+  renderAdminUserList();
+  document.getElementById('adminPanel').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeAdminPanel() {
+  document.getElementById('adminPanel').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// 관리자 패널 사용자 목록 렌더링
+function renderAdminUserList() {
+  const users = getUsers().filter(u => !ADMIN_ACCOUNTS.some(a => a.id === u.id));
+  const container = document.getElementById('adminUserList');
+
+  if (users.length === 0) {
+    container.innerHTML = `<div class="admin-empty">👤 등록된 일반 사용자가 없습니다.<br><small>회원가입한 사용자가 여기에 표시됩니다.</small></div>`;
+    return;
+  }
+
+  container.innerHTML = users.map(user => {
+    const perms = getUserPermissions(user.id);
+    return `
+      <div class="admin-user-row">
+        <div class="admin-user-avatar">${user.name.charAt(0)}</div>
+        <div>
+          <div class="admin-user-name">${user.name}</div>
+          <div class="admin-user-id">@${user.id}</div>
+        </div>
+        <div class="admin-perms">
+          ${SECTIONS.map(s => `
+            <button class="perm-toggle ${perms.includes(s.key) ? 'active' : ''}"
+              onclick="togglePerm('${user.id}', '${s.key}', this)">
+              <span class="perm-dot"></span>${s.label}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function togglePerm(userId, sectionKey, btn) {
+  const isActive = btn.classList.contains('active');
+  setUserPermission(userId, sectionKey, !isActive);
+  btn.classList.toggle('active');
+  btn.querySelector('.perm-dot').style.background = !isActive ? 'var(--primary)' : 'var(--gray300)';
 }
 // Initialize
 document.addEventListener("DOMContentLoaded",()=>{
@@ -1196,5 +1386,21 @@ document.addEventListener("DOMContentLoaded",()=>{
   renderMgmtDashboard();
 });
 </script>
+<!-- 관리자 권한 패널 -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-box">
+    <div class="admin-header">
+      <div>
+        <div class="admin-header-title">⚙ 권한 관리</div>
+        <div class="admin-header-sub">섹션별 사용자 열람 권한을 설정합니다</div>
+      </div>
+      <button class="admin-close" onclick="closeAdminPanel()">닫기</button>
+    </div>
+    <div class="admin-body">
+      <p class="admin-section-title">등록된 사용자 목록</p>
+      <div id="adminUserList"></div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
