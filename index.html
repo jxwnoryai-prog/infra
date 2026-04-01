@@ -1561,6 +1561,7 @@ function sendEmail(){
   renderMgmtFilters();renderMgmtDashboard();
   downloadPPT();
   setTimeout(()=>{window.location.href=`mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body+"\n\n---\n※ 첨부: 시설물 작업요청서 PPT 파일")}`;closeRequestModal();},500);
+}
 // ═══════════════════════════════════════════════════════════
 // 로그인 / 회원가입 / 권한관리
 // ═══════════════════════════════════════════════════════════
