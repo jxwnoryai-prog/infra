@@ -440,6 +440,40 @@
 /* 관리자 버튼 */
 .admin-nav-btn { background:rgba(0,44,95,0.08); border:1px solid rgba(0,44,95,0.2); padding:5px 12px; border-radius:100px; font-size:12px; font-weight:600; color:var(--primary); cursor:pointer; font-family:inherit; transition:all 0.2s; }
 .admin-nav-btn:hover { background:var(--primary); color:#fff; }
+/* ─── 새 PPT 모달 스타일 ─── */
+.slide-section-title{font-size:11px;font-weight:500;color:var(--gray500);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.slide-page-label{font-size:11px;color:var(--gray500);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.slide-page-badge{background:rgba(0,44,95,0.08);color:var(--primary);font-size:10px;padding:1px 7px;border-radius:100px;}
+.a4-preview{width:100%;aspect-ratio:297/210;background:#ffffff;border:0.5px solid #cccccc;border-radius:6px;overflow:hidden;position:relative;font-family:'Malgun Gothic','Apple SD Gothic Neo','Pretendard Variable',sans-serif;display:flex;flex-direction:column;}
+.a4-header-bar{background:#002C5F;padding:1.8% 3%;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.a4-header-title{font-size:clamp(7px,1.3vw,12px);color:#ffffff;font-weight:500;}
+.a4-header-page{font-size:clamp(6px,1vw,9px);color:#7ABFDD;}
+.a4-accent{height:2px;background:#00AAD2;flex-shrink:0;}
+.a4-body{flex:1;padding:1.5% 2%;display:flex;flex-direction:column;gap:1%;overflow:hidden;}
+.a4-section-label{font-size:clamp(5px,0.85vw,8px);font-weight:600;color:#111;margin-bottom:0.5%;}
+.a4-table{width:100%;border-collapse:collapse;font-size:clamp(5px,0.75vw,7px);}
+.a4-table td{border:0.5px solid #bbbbbb;padding:0.8% 1.5%;vertical-align:middle;}
+.a4-th{background:#e8e8e8;font-weight:600;text-align:center;white-space:nowrap;}
+.a4-photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;height:100%;}
+.a4-photo-box{background:#f5f5f5;display:flex;align-items:center;justify-content:center;border:0.5px solid #ddd;min-height:30px;}
+.a4-photo-box span{font-size:clamp(4px,0.65vw,6px);color:#aaa;}
+.a4-right-content{padding:1.5% 2%;font-size:clamp(5px,0.7vw,7px);color:#333;line-height:1.8;}
+.a4-right-title{font-weight:700;color:#002C5F;margin-bottom:1px;font-size:clamp(5px,0.75vw,7px);}
+.add-page-btn{width:100%;padding:10px;border:1.5px dashed var(--gray300);background:transparent;border-radius:8px;font-size:13px;color:var(--gray500);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;transition:all 0.2s;}
+.add-page-btn:hover{background:var(--gray50);border-color:var(--primary);color:var(--primary);}
+.filename-preview{background:var(--gray50);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;border:0.5px solid var(--gray100);}
+.filename-ppt-icon{width:32px;height:32px;background:linear-gradient(135deg,#D14424,#F57C4E);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ppt-filename-text{font-size:12px;font-weight:500;color:var(--dark);}
+.ppt-filename-sub{font-size:11px;color:var(--gray500);}
+.disc-chips-row{display:flex;gap:6px;flex-wrap:wrap;}
+.disc-chip-btn{padding:5px 13px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--gray300);background:var(--white);color:var(--gray500);font-family:inherit;transition:all 0.2s;}
+.disc-chip-btn.active-arch{border-color:#002C5F;background:rgba(0,44,95,0.06);color:#002C5F;}
+.disc-chip-btn.active-elec{border-color:#E8A317;background:rgba(232,163,23,0.1);color:#B8831A;}
+.disc-chip-btn.active-mech{border-color:#00AAD2;background:rgba(0,170,210,0.1);color:#007A96;}
+.disc-chip-btn.active-civil{border-color:#34855E;background:rgba(52,133,94,0.1);color:#2A6B4A;}
+.email-note{font-size:11px;color:var(--gray500);margin-top:5px;display:flex;align-items:center;gap:4px;}
+.page-remove-btn{background:rgba(239,68,68,0.08);border:0.5px solid rgba(239,68,68,0.2);color:#EF4444;border-radius:100px;padding:2px 8px;font-size:10px;cursor:pointer;font-family:inherit;}
+.page-remove-btn:hover{background:#EF4444;color:#fff;}
 </style>
 </head>
 <body>
@@ -656,83 +690,200 @@
 <!-- ─── 작업요청서 MODAL ─── -->
 <div class="modal-overlay" id="requestModal">
   <div class="modal modal-large">
-    <div id="modalStep1">
-      <div class="modal-header">
-        <div><h3 class="modal-title">시설물 작업요청서</h3><p class="modal-subtitle" id="modalSubtitle">건물 정보가 표시됩니다</p></div>
-        <button class="modal-close" id="modalClose"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+   <div id="modalStep1">
+  <div class="modal-header">
+    <div>
+      <h3 class="modal-title">시설물 작업요청서</h3>
+      <p class="modal-subtitle" id="modalSubtitle">건물 정보가 표시됩니다</p>
+    </div>
+    <button class="modal-close" id="modalClose">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- 기본 정보 -->
+    <div class="form-section">
+      <p class="form-section-title">기본 정보</p>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">건물명</label><input type="text" class="form-input readonly" id="formBuilding" readonly></div>
+        <div class="form-group"><label class="form-label">요청일자</label><input type="text" class="form-input readonly" id="formDate" readonly></div>
       </div>
-      <div class="modal-body">
-        <div class="form-section">
-          <p class="form-section-title">기본 정보</p>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label">건물명</label><input type="text" class="form-input readonly" id="formBuilding" readonly></div>
-            <div class="form-group"><label class="form-label">요청일자</label><input type="text" class="form-input readonly" id="formDate" readonly></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">상세 위치 (층)</label>
-              <select class="form-select" id="formFloor">
-                <option value="">층을 선택하세요</option>
-                <option value="B2">지하 2층 (B2)</option><option value="B1">지하 1층 (B1)</option>
-                <option value="1F">1층</option><option value="2F">2층</option><option value="3F">3층</option>
-              </select>
-            </div>
-            <div class="form-group"><label class="form-label">상세 위치 (구역/실)</label><input type="text" class="form-input" id="formLocation" placeholder="예: 로비, 회의실 A, 복도 등"></div>
-          </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">상세 위치 (층)</label>
+          <select class="form-select" id="formFloor">
+            <option value="">층을 선택하세요</option>
+            <option value="B2">지하 2층 (B2)</option><option value="B1">지하 1층 (B1)</option>
+            <option value="1F">1층</option><option value="2F">2층</option><option value="3F">3층</option>
+          </select>
         </div>
-        <div class="form-section">
-          <p class="form-section-title">공사명</p>
-          <div class="form-row single"><div class="form-group">
-            <div class="project-name-wrapper">
-              <span class="project-name-prefix">[시설물 공사 의뢰]</span>
-              <input type="text" class="form-input project-name-input" id="formProjectName" placeholder="AI 분석 후 자동 생성됩니다 (직접 수정 가능)">
-            </div>
-          </div></div>
-        </div>
-        <div class="form-section">
-          <p class="form-section-title">보수 내용</p>
-          <div class="form-row single"><div class="form-group"><label class="form-label">문제점</label><textarea class="form-textarea" id="formProblem" placeholder="현재 발생한 문제점을 상세히 기술해 주세요"></textarea></div></div>
-          <div class="form-row single"><div class="form-group"><label class="form-label">요청사항</label><textarea class="form-textarea" id="formRequest" placeholder="원하시는 보수 또는 개선 사항을 적어주세요"></textarea></div></div>
-        </div>
-        <div class="form-section">
-          <p class="form-section-title"><span class="ai-badge">AI</span> 담당 공종 추천</p>
-          <p class="form-hint">문제점과 요청사항을 입력 후 AI 분석 버튼을 누르면 공사명과 담당 공종이 자동으로 추천됩니다.</p>
-          <button class="btn-ai-recommend" id="btnAiRecommend">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            AI 분석하기
-          </button>
-          <div class="ai-result" id="aiResult" style="display:none"><div class="ai-result-icon">✓</div><p class="ai-result-text" id="aiResultText"></p></div>
-          <p class="form-sublabel">담당 공종 선택 <span class="form-sublabel-hint">(클릭하여 수정 가능)</span></p>
-          <div class="discipline-checkboxes">
-            <label class="checkbox-item" data-disc="건축"><input type="checkbox" name="discipline" value="건축"><span class="checkbox-box arch"></span><span class="checkbox-label">건축</span><span class="checkbox-desc">벽체, 천장, 바닥, 문, 창문, 마감재 등</span></label>
-            <label class="checkbox-item" data-disc="전기"><input type="checkbox" name="discipline" value="전기"><span class="checkbox-box elec"></span><span class="checkbox-label">전기</span><span class="checkbox-desc">조명, 콘센트, 배선, 분전반, 전력 등</span></label>
-            <label class="checkbox-item" data-disc="설비"><input type="checkbox" name="discipline" value="설비"><span class="checkbox-box mech"></span><span class="checkbox-label">설비</span><span class="checkbox-desc">냉난방, 환기, 배관, 급배수, 소방 등</span></label>
-            <label class="checkbox-item" data-disc="토목"><input type="checkbox" name="discipline" value="토목"><span class="checkbox-box civil"></span><span class="checkbox-label">토목</span><span class="checkbox-desc">도로, 배수로, 옹벽, 기초, 포장 등</span></label>
-          </div>
-        </div>
-        <div class="form-section">
-          <p class="form-section-title">첨부 파일</p>
-          <div class="file-upload-row">
-            <div class="file-upload-box" id="photoUploadBox">
-              <input type="file" accept="image/*" id="photoInput"><button class="file-remove" id="photoRemove">×</button>
-              <div class="file-upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-              <p class="file-upload-label">현장 사진</p><p class="file-upload-hint">클릭하여 이미지 첨부</p>
-              <img class="file-preview" id="photoPreview" alt="">
-            </div>
-            <div class="file-upload-box" id="drawingUploadBox">
-              <input type="file" accept="image/*,.pdf" id="drawingInput"><button class="file-remove" id="drawingRemove">×</button>
-              <div class="file-upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-              <p class="file-upload-label">도면</p><p class="file-upload-hint">클릭하여 파일 첨부</p>
-              <img class="file-preview" id="drawingPreview" alt="">
-            </div>
-          </div>
-        </div>
+        <div class="form-group"><label class="form-label">상세 위치 (구역/실)</label><input type="text" class="form-input" id="formLocation" placeholder="예: 로비, 회의실 A, 복도 등"></div>
       </div>
-      <div class="modal-footer">
-        <button class="btn-modal btn-modal-secondary" id="modalCancel">취소</button>
-        <button class="btn-modal btn-modal-primary" id="btnNextStep">다음 단계 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">의뢰자 이름 / 연락처</label><input type="text" class="form-input" id="formRequester" placeholder="예: 홍길동 책임 / 031-368-0000"></div>
+        <div class="form-group"><label class="form-label">완료 요청날짜</label><input type="text" class="form-input" id="formDeadline" placeholder="예: '26.09/30"></div>
       </div>
     </div>
+
+    <!-- 공사명 -->
+    <div class="form-section">
+      <p class="form-section-title">품목 / 공사명</p>
+      <div class="form-row single">
+        <div class="form-group">
+          <div class="project-name-wrapper">
+            <span class="project-name-prefix">[시설물 공사 의뢰]</span>
+            <input type="text" class="form-input project-name-input" id="formProjectName" placeholder="AI 분석 후 자동 생성됩니다 (품목과 동일하게 적용)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 보수 내용 -->
+    <div class="form-section">
+      <p class="form-section-title">보수 내용</p>
+      <div class="form-row single"><div class="form-group"><label class="form-label">문제점</label><textarea class="form-textarea" id="formProblem" placeholder="현재 발생한 문제점을 상세히 기술해 주세요"></textarea></div></div>
+      <div class="form-row single"><div class="form-group"><label class="form-label">요청사항</label><textarea class="form-textarea" id="formRequest" placeholder="원하시는 보수 또는 개선 사항을 적어주세요"></textarea></div></div>
+    </div>
+
+    <!-- AI 분석 + 담당 공종 -->
+    <div class="form-section">
+      <p class="form-section-title"><span class="ai-badge">AI</span> 담당 공종 추천</p>
+      <p class="form-hint">문제점과 요청사항 입력 후 AI 분석하면 공사명·파일명·담당 공종이 자동 설정됩니다.</p>
+      <button class="btn-ai-recommend" id="btnAiRecommend">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        AI 분석하기
+      </button>
+      <div class="ai-result" id="aiResult" style="display:none"><div class="ai-result-icon">✓</div><p class="ai-result-text" id="aiResultText"></p></div>
+      <p class="form-sublabel">담당 공종 선택 <span class="form-sublabel-hint">(이메일 발송 대상 — PPT에는 미포함)</span></p>
+      <div class="disc-chips-row" id="disciplineChips">
+        <button class="disc-chip-btn" data-disc="건축" onclick="toggleDiscChip(this)">건축</button>
+        <button class="disc-chip-btn" data-disc="전기" onclick="toggleDiscChip(this)">전기</button>
+        <button class="disc-chip-btn" data-disc="설비" onclick="toggleDiscChip(this)">설비</button>
+        <button class="disc-chip-btn" data-disc="토목" onclick="toggleDiscChip(this)">토목</button>
+      </div>
+      <div class="email-note">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        선택된 공종 담당자에게만 이메일 발송됩니다
+      </div>
+    </div>
+
+    <!-- 파일명 미리보기 -->
+    <div class="form-section">
+      <p class="form-section-title">생성될 PPT 파일명</p>
+      <div class="filename-preview">
+        <div class="filename-ppt-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div>
+          <div class="ppt-filename-text" id="pptFilenamePreview">AI 분석 후 자동 생성됩니다</div>
+          <div class="ppt-filename-sub">건물명_층_실_핵심요약.pptx</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 슬라이드 페이지 구성 -->
+    <div class="form-section">
+      <div class="slide-section-title">
+        <span>슬라이드 페이지 구성</span>
+        <span id="slideCountBadge" class="slide-page-badge">1 페이지</span>
+      </div>
+
+      <!-- 페이지 1 (기본 - 항상 존재) -->
+      <div style="margin-bottom:14px;">
+        <div class="slide-page-label">페이지 1 <span style="font-size:10px;color:var(--gray300)">· 기본 정보 포함</span></div>
+        <div class="a4-preview" id="slidePreview1">
+          <div class="a4-header-bar"><div class="a4-header-title">■ 시설물 작업 요청서</div><div class="a4-header-page" id="a4page1">1/1</div></div>
+          <div class="a4-accent"></div>
+          <div class="a4-body">
+            <div class="a4-section-label">1. 내 용</div>
+            <table class="a4-table" style="flex-shrink:0;margin-bottom:1%;">
+              <tr>
+                <td class="a4-th" style="width:7%;">의뢰자</td><td id="prev-requester" style="width:28%;">—</td>
+                <td class="a4-th" style="width:10%;">완료 요청날짜</td><td id="prev-deadline">—</td>
+              </tr>
+              <tr>
+                <td class="a4-th">건물명</td><td id="prev-building">—</td>
+                <td class="a4-th">상세 위치</td><td id="prev-location">—</td>
+              </tr>
+              <tr>
+                <td class="a4-th" rowspan="3" style="font-size:clamp(4px,0.6vw,6px);letter-spacing:1px;">작<br>업<br>내<br>용</td>
+                <td class="a4-th" style="width:7%;">품 목</td><td colspan="2" id="prev-project">—</td>
+              </tr>
+              <tr><td class="a4-th">문제점</td><td colspan="2" id="prev-problem">—</td></tr>
+              <tr><td class="a4-th">요청사항</td><td colspan="2" id="prev-request">—</td></tr>
+            </table>
+            <div class="a4-section-label">2. 현장사진 및 위치</div>
+            <table class="a4-table" style="flex:1;">
+              <tr><td class="a4-th" style="width:7%;">구분</td><td class="a4-th">현장 사진 및 공사 내용</td></tr>
+              <tr style="height:100%;">
+                <td class="a4-th" style="font-size:clamp(4px,0.55vw,6px);">사진<br>첨부</td>
+                <td style="padding:0;">
+                  <div style="display:flex;height:100%;">
+                    <div style="width:48%;display:grid;grid-template-columns:1fr 1fr;border-right:0.5px solid #ddd;" id="prev-photos">
+                      <div class="a4-photo-box" style="border-right:0.5px solid #ddd;border-bottom:0.5px solid #ddd;"><span>사진1</span></div>
+                      <div class="a4-photo-box" style="border-bottom:0.5px solid #ddd;"><span>사진2</span></div>
+                      <div class="a4-photo-box" style="border-right:0.5px solid #ddd;background:#f0f0f0;"><span>도면</span></div>
+                      <div class="a4-photo-box" style="background:#f0f0f0;"><span>추가</span></div>
+                    </div>
+                    <div class="a4-right-content" style="flex:1;">
+                      <div class="a4-right-title">1. 공사 위치</div>
+                      <div id="prev-location2" style="margin-bottom:3px;color:#555;">—</div>
+                      <div class="a4-right-title">2. 공사 개요</div>
+                      <div id="prev-problem2" style="margin-bottom:3px;color:#555;">—</div>
+                      <div class="a4-right-title">3. 요청사항</div>
+                      <div id="prev-request2" style="color:#555;">—</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr><td class="a4-th" style="font-size:clamp(4px,0.6vw,6px);">비고</td><td id="prev-bigo" style="color:#aaa;font-size:clamp(4px,0.65vw,7px);">완료 요청일 자동 입력</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 추가 페이지 컨테이너 -->
+      <div id="extraPagesContainer"></div>
+
+      <!-- 페이지 추가 버튼 -->
+      <button class="add-page-btn" onclick="addExtraPage()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        페이지 추가하기 (A4 가로 1페이지)
+      </button>
+    </div>
+
+    <!-- 첨부 파일 (페이지 1용) -->
+    <div class="form-section">
+      <p class="form-section-title">첨부 파일 (페이지 1)</p>
+      <div class="file-upload-row">
+        <div class="file-upload-box" id="photoUploadBox">
+          <input type="file" accept="image/*" id="photoInput">
+          <button class="file-remove" id="photoRemove">×</button>
+          <div class="file-upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <p class="file-upload-label">현장 사진</p><p class="file-upload-hint">클릭하여 이미지 첨부</p>
+          <img class="file-preview" id="photoPreview" alt="">
+        </div>
+        <div class="file-upload-box" id="drawingUploadBox">
+          <input type="file" accept="image/*,.pdf" id="drawingInput">
+          <button class="file-remove" id="drawingRemove">×</button>
+          <div class="file-upload-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <p class="file-upload-label">도면</p><p class="file-upload-hint">클릭하여 파일 첨부</p>
+          <img class="file-preview" id="drawingPreview" alt="">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn-modal btn-modal-secondary" id="modalCancel">취소</button>
+    <button class="btn-modal btn-modal-primary" id="btnNextStep">
+      다음 단계 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</div>
 
     <div id="modalStep2" style="display:none">
       <div class="modal-header">
@@ -1004,33 +1155,217 @@ function renderContacts(){document.getElementById("contactGrid").innerHTML=CONTA
 function setupScrollReveal(){const o=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");o.unobserve(e.target);}});},{threshold:0.1});document.querySelectorAll(".reveal").forEach(el=>o.observe(el));}
 function getTodayFormatted(){const t=new Date();return`${t.getFullYear()}년 ${String(t.getMonth()+1).padStart(2,'0')}월 ${String(t.getDate()).padStart(2,'0')}일`;}
 
+// ═══════════════════════════════════════════════════════════
+// 작업요청서 모달 기능
+// ═══════════════════════════════════════════════════════════
+let currentStep = 1;
+let selectedDisciplines = [];
+let generatedPptBlob = null;
+let photoDataUrl = null;
+let drawingDataUrl = null;
+let extraPages = []; // 추가 페이지 데이터
+let aiSummary = ""; // AI 핵심요약
+
+function getTodayFormatted(){const t=new Date();return`${t.getFullYear()}년 ${String(t.getMonth()+1).padStart(2,'0')}월 ${String(t.getDate()).padStart(2,'0')}일`;}
+
 function openRequestModal(){
   if(!selectedBuilding)return;
-  currentStep=1;selectedDisciplines=[];generatedPptBlob=null;photoDataUrl=null;drawingDataUrl=null;
+  currentStep=1;selectedDisciplines=[];generatedPptBlob=null;
+  photoDataUrl=null;drawingDataUrl=null;extraPages=[];aiSummary="";
   document.getElementById("modalStep1").style.display="block";
   document.getElementById("modalStep2").style.display="none";
   document.getElementById("modalSubtitle").textContent=`${selectedBuilding.code} ${selectedBuilding.name}`;
   document.getElementById("formBuilding").value=`${selectedBuilding.code} ${selectedBuilding.name}`;
   document.getElementById("formDate").value=getTodayFormatted();
-  ["formFloor","formLocation","formProblem","formRequest","formProjectName"].forEach(id=>document.getElementById(id).value="");
+  ["formFloor","formLocation","formProblem","formRequest","formProjectName","formRequester","formDeadline"].forEach(id=>{document.getElementById(id).value="";});
   resetFileUpload("photo");resetFileUpload("drawing");
-  document.querySelectorAll(".checkbox-item").forEach(item=>{item.classList.remove("checked","ai-recommended");item.querySelector("input").checked=false;});
+  document.querySelectorAll(".disc-chip-btn").forEach(b=>b.className="disc-chip-btn");
   document.getElementById("aiResult").style.display="none";
+  document.getElementById("pptFilenamePreview").textContent="AI 분석 후 자동 생성됩니다";
+  document.getElementById("extraPagesContainer").innerHTML="";
+  updateSlideCount();
+  updatePreview();
   document.getElementById("requestModal").classList.add("active");
   document.body.style.overflow="hidden";
 }
+
 function closeRequestModal(){document.getElementById("requestModal").classList.remove("active");document.body.style.overflow="";}
-function resetFileUpload(type){const box=document.getElementById(`${type}UploadBox`),input=document.getElementById(`${type}Input`),preview=document.getElementById(`${type}Preview`);box.classList.remove("has-file");input.value="";preview.src="";if(type==="photo")photoDataUrl=null;if(type==="drawing")drawingDataUrl=null;}
-function handleFileUpload(type,file){if(!file)return;const box=document.getElementById(`${type}UploadBox`),preview=document.getElementById(`${type}Preview`);if(file.type.startsWith("image/")){const r=new FileReader();r.onload=e=>{preview.src=e.target.result;box.classList.add("has-file");if(type==="photo")photoDataUrl=e.target.result;if(type==="drawing")drawingDataUrl=e.target.result;};r.readAsDataURL(file);}else{box.classList.add("has-file");}}
+
+function resetFileUpload(type){
+  const box=document.getElementById(`${type}UploadBox`),input=document.getElementById(`${type}Input`),preview=document.getElementById(`${type}Preview`);
+  box.classList.remove("has-file");input.value="";preview.src="";
+  if(type==="photo")photoDataUrl=null;if(type==="drawing")drawingDataUrl=null;
+}
+
+function handleFileUpload(type,file){
+  if(!file)return;
+  const box=document.getElementById(`${type}UploadBox`),preview=document.getElementById(`${type}Preview`);
+  if(file.type.startsWith("image/")){
+    const r=new FileReader();
+    r.onload=e=>{preview.src=e.target.result;box.classList.add("has-file");if(type==="photo")photoDataUrl=e.target.result;if(type==="drawing")drawingDataUrl=e.target.result;};
+    r.readAsDataURL(file);
+  }else{box.classList.add("has-file");}
+}
+
+// 담당 공종 칩 토글
+const discClassMap={건축:"active-arch",전기:"active-elec",설비:"active-mech",토목:"active-civil"};
+function toggleDiscChip(btn){
+  const disc=btn.dataset.disc;
+  const isActive=btn.classList.contains(discClassMap[disc]);
+  if(isActive){btn.className="disc-chip-btn";}
+  else{btn.className=`disc-chip-btn ${discClassMap[disc]}`;}
+  updateSelectedDisciplines();
+}
+function updateSelectedDisciplines(){
+  selectedDisciplines=[];
+  document.querySelectorAll(".disc-chip-btn").forEach(b=>{
+    const d=b.dataset.disc;
+    if(d&&b.classList.length>1)selectedDisciplines.push(d);
+  });
+}
+
+// 미리보기 실시간 업데이트
+function updatePreview(){
+  const b=selectedBuilding;
+  const floor=document.getElementById("formFloor")?.value||"";
+  const loc=document.getElementById("formLocation")?.value||"";
+  const req=document.getElementById("formRequester")?.value||"";
+  const dl=document.getElementById("formDeadline")?.value||"";
+  const proj=document.getElementById("formProjectName")?.value||"";
+  const prob=document.getElementById("formProblem")?.value||"";
+  const request=document.getElementById("formRequest")?.value||"";
+  const locFull=`${floor} ${loc}`.trim();
+  const setText=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v||"—";};
+  setText("prev-requester",req);
+  setText("prev-deadline",dl);
+  setText("prev-building",b?`${b.code} ${b.name}`:"");
+  setText("prev-location",locFull);
+  setText("prev-project",proj);
+  setText("prev-problem",prob);
+  setText("prev-request",request);
+  setText("prev-location2",locFull);
+  setText("prev-problem2",prob);
+  setText("prev-request2",request);
+  setText("prev-bigo",dl?`완료 요청일: ${dl}`:"완료 요청일 자동 입력");
+  // 파일명 업데이트
+  if(b&&floor&&proj){
+    const summary=aiSummary||proj.replace("[시설물 공사 의뢰]","").trim();
+    const fname=`${b.name}_${floor}_${loc||"전체"}_${summary}.pptx`.replace(/\s+/g,"_");
+    document.getElementById("pptFilenamePreview").textContent=fname;
+  }
+}
+
+// 추가 페이지
+function updateSlideCount(){
+  const total=1+extraPages.length;
+  document.getElementById("slideCountBadge").textContent=`${total} 페이지`;
+  document.getElementById("a4page1").textContent=`1/${total}`;
+}
+
+function addExtraPage(){
+  const idx=extraPages.length;
+  extraPages.push({photos:[],note:""});
+  const total=1+extraPages.length;
+  const container=document.getElementById("extraPagesContainer");
+  const pageNum=idx+2;
+  const div=document.createElement("div");
+  div.style.marginBottom="14px";
+  div.id=`extraPage_${idx}`;
+  div.innerHTML=`
+    <div class="slide-page-label">
+      페이지 ${pageNum}
+      <button class="page-remove-btn" onclick="removeExtraPage(${idx})">삭제</button>
+    </div>
+    <div class="a4-preview">
+      <div class="a4-header-bar">
+        <div class="a4-header-title">■ 시설물 작업 요청서</div>
+        <div class="a4-header-page">${pageNum}/${total}</div>
+      </div>
+      <div class="a4-accent"></div>
+      <div class="a4-body">
+        <table class="a4-table" style="flex:1;">
+          <tr><td class="a4-th" style="width:7%;">구분</td><td class="a4-th">공사내용 상세 참조</td></tr>
+          <tr style="height:100%;">
+            <td class="a4-th" style="font-size:clamp(4px,0.55vw,6px);">사진<br>첨부</td>
+            <td style="padding:0;">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;height:100%;">
+                <div class="a4-photo-box" style="border-right:0.5px solid #ddd;">
+                  <label style="cursor:pointer;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                    <input type="file" accept="image/*" style="display:none" onchange="handleExtraPhoto(${idx},0,this)">
+                    <span style="font-size:clamp(4px,0.65vw,6px);color:#aaa;" id="exPhotoLabel_${idx}_0">사진 추가</span>
+                  </label>
+                </div>
+                <div class="a4-photo-box" style="border-right:0.5px solid #ddd;">
+                  <label style="cursor:pointer;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                    <input type="file" accept="image/*" style="display:none" onchange="handleExtraPhoto(${idx},1,this)">
+                    <span style="font-size:clamp(4px,0.65vw,6px);color:#aaa;" id="exPhotoLabel_${idx}_1">사진 추가</span>
+                  </label>
+                </div>
+                <div class="a4-photo-box">
+                  <label style="cursor:pointer;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                    <input type="file" accept="image/*" style="display:none" onchange="handleExtraPhoto(${idx},2,this)">
+                    <span style="font-size:clamp(4px,0.65vw,6px);color:#aaa;" id="exPhotoLabel_${idx}_2">사진 추가</span>
+                  </label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="a4-th" style="font-size:clamp(4px,0.6vw,6px);">비고</td>
+            <td><input type="text" style="width:100%;border:none;outline:none;font-size:clamp(4px,0.7vw,8px);padding:0.5% 1%;font-family:inherit;background:transparent;" placeholder="비고 입력" oninput="extraPages[${idx}].note=this.value"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  `;
+  container.appendChild(div);
+  updateSlideCount();
+}
+
+function removeExtraPage(idx){
+  extraPages.splice(idx,1);
+  document.getElementById(`extraPage_${idx}`)?.remove();
+  // 페이지 번호 재정렬
+  document.getElementById("extraPagesContainer").innerHTML="";
+  const tmp=[...extraPages];extraPages=[];
+  tmp.forEach(()=>addExtraPage());
+  updateSlideCount();
+}
+
+function handleExtraPhoto(pageIdx,photoIdx,input){
+  if(!input.files[0])return;
+  const r=new FileReader();
+  r.onload=e=>{
+    extraPages[pageIdx].photos[photoIdx]=e.target.result;
+    const label=document.getElementById(`exPhotoLabel_${pageIdx}_${photoIdx}`);
+    if(label)label.textContent="✓ 첨부됨";
+  };
+  r.readAsDataURL(input.files[0]);
+}
+
+// ═══ Gemini AI API ═══
+const GEMINI_API_KEY = "YOUR_API_KEY_HERE";
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 async function runAiRecommendation(){
-  const problem=document.getElementById("formProblem").value,request=document.getElementById("formRequest").value;
-  const floor=document.getElementById("formFloor").value,location=document.getElementById("formLocation").value;
+  const problem=document.getElementById("formProblem").value;
+  const request=document.getElementById("formRequest").value;
+  const floor=document.getElementById("formFloor").value;
+  const location=document.getElementById("formLocation").value;
   const building=selectedBuilding?`${selectedBuilding.code} ${selectedBuilding.name}`:"";
   if(!problem.trim()&&!request.trim()){alert("문제점과 요청사항을 먼저 입력해 주세요.");return;}
   const btn=document.getElementById("btnAiRecommend");
-  btn.disabled=true;btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> AI 분석 중...`;
-  const prompt=`건설/시설물 공사 분류 전문가입니다.\n건물:${building}, 위치:${floor} ${location}, 문제점:${problem}, 요청:${request}\n\n공사명(10자이내,작업내용만)과 담당공종(건축/전기/설비/토목)을 JSON으로만 출력:\n{"projectName":"공사명","disciplines":["공종"]}`;
+  btn.disabled=true;
+  btn.innerHTML=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> AI 분석 중...`;
+  const prompt=`건설/시설물 공사 분류 전문가입니다.
+건물:${building}, 위치:${floor} ${location}, 문제점:${problem}, 요청:${request}
+
+다음을 JSON으로만 출력:
+1. projectName: 공사명 (10자 이내, 작업내용만)
+2. summary: 파일명용 핵심요약 (8자 이내, 한글, 예: 조명교체, 배관수리)
+3. disciplines: 담당 공종 배열 (건축/전기/설비/토목 중 선택)
+
+{"projectName":"공사명","summary":"요약","disciplines":["공종"]}`;
   try{
     const r=await fetch(GEMINI_API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.3,maxOutputTokens:1000}})});
     if(!r.ok){const e=await r.json();throw new Error(`${r.status}-${e.error?.message}`);}
@@ -1041,13 +1376,22 @@ async function runAiRecommendation(){
     const result=JSON.parse(m[0]);
     const projectName=result.projectName||"시설물 보수 공사";
     const disciplines=result.disciplines||["건축"];
-    document.querySelectorAll(".checkbox-item").forEach(item=>{item.classList.remove("ai-recommended","checked");item.querySelector("input").checked=false;});
-    disciplines.forEach(disc=>{const item=document.querySelector(`.checkbox-item[data-disc="${disc}"]`);if(item){item.classList.add("ai-recommended","checked");item.querySelector("input").checked=true;}});
+    aiSummary=result.summary||projectName;
+    // 공사명 적용 (품목과 동일)
     const locPart=[floor,location].filter(Boolean).join(" ");
-    document.getElementById("formProjectName").value=`${building} ${locPart} ${projectName}`.trim();
-    document.getElementById("aiResultText").textContent=`AI 분석 완료! 담당 공종: ${disciplines.join(', ')}`;
-    document.getElementById("aiResult").style.display="flex";
+    const fullName=`${building} ${locPart} ${projectName}`.trim();
+    document.getElementById("formProjectName").value=fullName;
+    // 담당 공종 칩 적용
+    document.querySelectorAll(".disc-chip-btn").forEach(b=>b.className="disc-chip-btn");
+    disciplines.forEach(disc=>{
+      const btn=document.querySelector(`.disc-chip-btn[data-disc="${disc}"]`);
+      if(btn)btn.className=`disc-chip-btn ${discClassMap[disc]}`;
+    });
     updateSelectedDisciplines();
+    // AI 결과 표시
+    document.getElementById("aiResultText").textContent=`AI 분석 완료! 공사명·파일명·담당 공종(${disciplines.join(', ')})이 설정되었습니다.`;
+    document.getElementById("aiResult").style.display="flex";
+    updatePreview();
   }catch(e){
     alert(`API 오류: ${e.message}`);
     fallbackAnalysis(problem,request,floor,location,building);
@@ -1062,42 +1406,137 @@ function fallbackAnalysis(problem,request,floor,location,building){
   const kw={건축:['벽','천장','바닥','문','창문','타일','페인트'],전기:['전기','조명','콘센트','스위치','LED'],설비:['냉방','난방','에어컨','배관','수도'],토목:['도로','포장','주차장','배수로']};
   const rec=Object.entries(kw).filter(([,v])=>v.some(k=>text.includes(k))).map(([k])=>k);
   if(rec.length===0)rec.push("건축");
-  document.querySelectorAll(".checkbox-item").forEach(item=>{item.classList.remove("ai-recommended","checked");item.querySelector("input").checked=false;});
-  rec.forEach(disc=>{const item=document.querySelector(`.checkbox-item[data-disc="${disc}"]`);if(item){item.classList.add("ai-recommended","checked");item.querySelector("input").checked=true;}});
+  document.querySelectorAll(".disc-chip-btn").forEach(b=>b.className="disc-chip-btn");
+  rec.forEach(disc=>{const btn=document.querySelector(`.disc-chip-btn[data-disc="${disc}"]`);if(btn)btn.className=`disc-chip-btn ${discClassMap[disc]}`;});
+  updateSelectedDisciplines();
   const locPart=[floor,location].filter(Boolean).join(" ");
   document.getElementById("formProjectName").value=`${building||''} ${locPart} 시설물 보수 공사`.trim();
   document.getElementById("aiResultText").textContent=`분석 완료! (오프라인) 담당 공종: ${rec.join(', ')}`;
   document.getElementById("aiResult").style.display="flex";
-  updateSelectedDisciplines();
+  updatePreview();
 }
-function updateSelectedDisciplines(){selectedDisciplines=[];document.querySelectorAll(".checkbox-item input:checked").forEach(i=>{selectedDisciplines.push(i.value);});}
 
+// ═══ PPT 생성 (A4 가로, 원본 양식) ═══
 async function generatePPT(){
-  const b=selectedBuilding,floor=document.getElementById("formFloor").value,location=document.getElementById("formLocation").value;
-  const problem=document.getElementById("formProblem").value,request=document.getElementById("formRequest").value,date=getTodayFormatted();
-  const pptx=new PptxGenJS();pptx.layout="LAYOUT_16x9";
-  const s1=pptx.addSlide();s1.background={color:"002C5F"};
-  s1.addText("HYUNDAI",{x:0.5,y:0.4,w:3,h:0.4,fontSize:14,color:"FFFFFF",fontFace:"Arial",bold:true,letterSpacing:3});
-  s1.addText("시설물 작업요청서",{x:0.5,y:2.5,w:9,h:1,fontSize:44,color:"FFFFFF",fontFace:"맑은 고딕",bold:true});
-  s1.addText(`${b.code} ${b.name}`,{x:0.5,y:3.6,w:9,h:0.6,fontSize:24,color:"00AAD2",fontFace:"맑은 고딕"});
-  s1.addText(date,{x:0.5,y:4.8,w:9,h:0.4,fontSize:16,color:"AAAAAA",fontFace:"맑은 고딕"});
-  const s2=pptx.addSlide();s2.background={color:"FFFFFF"};
-  s2.addShape("rect",{x:0,y:0,w:13.33,h:1,fill:{color:"002C5F"}});
-  s2.addText("작업 요청 내용",{x:0.5,y:0.25,w:5,h:0.5,fontSize:20,color:"FFFFFF",fontFace:"맑은 고딕",bold:true});
-  s2.addText("■ 기본 정보",{x:0.5,y:1.3,w:12,h:0.4,fontSize:16,color:"002C5F",fontFace:"맑은 고딕",bold:true});
-  s2.addTable([["건물명",`${b.code} ${b.name}`],["상세 위치",`${floor} ${location}`],["요청일자",date],["담당 공종",selectedDisciplines.join(", ")||"미지정"]],{x:0.5,y:1.8,w:12,h:1.6,fontSize:12,fontFace:"맑은 고딕",border:{pt:0.5,color:"CCCCCC"},fill:{color:"F8F9FB"},colW:[2.5,9.5],valign:"middle"});
-  s2.addText("■ 문제점",{x:0.5,y:3.6,w:12,h:0.4,fontSize:16,color:"002C5F",fontFace:"맑은 고딕",bold:true});
-  s2.addText(problem||"(내용 없음)",{x:0.5,y:4.1,w:12,h:1,fontSize:12,color:"333333",fontFace:"맑은 고딕",valign:"top"});
-  s2.addText("■ 요청사항",{x:0.5,y:5.2,w:12,h:0.4,fontSize:16,color:"002C5F",fontFace:"맑은 고딕",bold:true});
-  s2.addText(request||"(내용 없음)",{x:0.5,y:5.7,w:12,h:1,fontSize:12,color:"333333",fontFace:"맑은 고딕",valign:"top"});
+  const b=selectedBuilding;
+  const floor=document.getElementById("formFloor").value;
+  const location=document.getElementById("formLocation").value;
+  const problem=document.getElementById("formProblem").value;
+  const request=document.getElementById("formRequest").value;
+  const projectName=document.getElementById("formProjectName").value;
+  const requester=document.getElementById("formRequester").value;
+  const deadline=document.getElementById("formDeadline").value;
+  const date=getTodayFormatted();
+  const locFull=`${floor} ${location}`.trim();
+  const totalPages=1+extraPages.length;
+
+  const pptx=new PptxGenJS();
+  // A4 가로: 297mm x 210mm = 11.69 x 8.27 inches
+  pptx.defineLayout({name:"A4_LAND",width:11.69,height:8.27});
+  pptx.layout="A4_LAND";
+
+  // ── 슬라이드 1 ──
+  const s1=pptx.addSlide();
+  s1.background={color:"FFFFFF"};
+
+  // 상단 헤더
+  s1.addShape("rect",{x:0,y:0,w:11.69,h:0.45,fill:{color:"002C5F"}});
+  s1.addShape("rect",{x:0,y:0.45,w:11.69,h:0.04,fill:{color:"00AAD2"}});
+  s1.addText("■ 시설물 작업 요청서",{x:0.2,y:0.08,w:7,h:0.3,fontSize:14,color:"FFFFFF",fontFace:"맑은 고딕",bold:true});
+  s1.addText(`${1}/${totalPages}`,{x:10.5,y:0.08,w:1,h:0.3,fontSize:12,color:"7ABFDD",fontFace:"맑은 고딕",align:"right"});
+
+  // 1. 내용 섹션 제목
+  s1.addText("1. 내 용",{x:0.2,y:0.6,w:5,h:0.25,fontSize:11,color:"111111",fontFace:"맑은 고딕",bold:true});
+
+  // 내용 테이블
+  const contentData=[
+    [{text:"의뢰자",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:requester||"—",options:{fontSize:10,fontFace:"맑은 고딕"}},{text:"완료 요청날짜",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:deadline||"—",options:{fontSize:10,fontFace:"맑은 고딕"}}],
+    [{text:"건물명",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:`${b.code} ${b.name}`,options:{fontSize:10,fontFace:"맑은 고딕"}},{text:"상세 위치",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:locFull||"—",options:{fontSize:10,fontFace:"맑은 고딕"}}],
+    [{text:"작\n업\n내\n용",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:9,fontFace:"맑은 고딕",rowspan:3}},{text:"품 목",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕",colspan:1}},{text:projectName||"—",options:{fontSize:10,fontFace:"맑은 고딕",colspan:2}}],
+    [{text:"문제점",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:problem||"—",options:{fontSize:10,fontFace:"맑은 고딕",colspan:2}}],
+    [{text:"요청사항",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:request||"—",options:{fontSize:10,fontFace:"맑은 고딕",colspan:2}}],
+  ];
+  s1.addTable(contentData,{x:0.2,y:0.9,w:11.29,colW:[1.0,2.5,1.3,6.49],fontSize:10,fontFace:"맑은 고딕",border:{pt:0.5,color:"BBBBBB"},valign:"middle",rowH:0.32});
+
+  // 2. 현장사진 섹션 제목
+  s1.addText("2. 현장사진 및 위치",{x:0.2,y:2.65,w:6,h:0.25,fontSize:11,color:"111111",fontFace:"맑은 고딕",bold:true});
+
+  // 사진 테이블 헤더
+  s1.addTable([[{text:"구분",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:"현장 사진 및 공사 내용",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}}]],{x:0.2,y:2.93,w:11.29,colW:[0.85,10.44],border:{pt:0.5,color:"BBBBBB"},rowH:0.28,fontFace:"맑은 고딕"});
+
+  // 사진 영역 (좌측)
+  const photoY=3.24;const photoH=4.4;
+  s1.addShape("rect",{x:0.2,y:photoY,w:0.85,h:photoH,fill:{color:"E8E8E8"},line:{color:"BBBBBB",pt:0.5}});
+  s1.addText("사진\n첨부",{x:0.2,y:photoY,w:0.85,h:photoH,fontSize:9,color:"111111",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
+
+  // 사진 그리드 (좌측 절반)
+  const imgX=1.08;const imgW=4.8;const imgH=photoH/2;
+  if(photoDataUrl){s1.addImage({data:photoDataUrl,x:imgX,y:photoY,w:imgW,h:imgH,sizing:{type:"contain",w:imgW,h:imgH}});}
+  else{s1.addShape("rect",{x:imgX,y:photoY,w:imgW,h:imgH,fill:{color:"F5F5F5"},line:{color:"DDDDDD",pt:0.5}});s1.addText("현장 사진",{x:imgX,y:photoY,w:imgW,h:imgH,fontSize:9,color:"AAAAAA",fontFace:"맑은 고딕",align:"center",valign:"middle"});}
+  if(drawingDataUrl){s1.addImage({data:drawingDataUrl,x:imgX,y:photoY+imgH,w:imgW,h:imgH,sizing:{type:"contain",w:imgW,h:imgH}});}
+  else{s1.addShape("rect",{x:imgX,y:photoY+imgH,w:imgW,h:imgH,fill:{color:"F0F0F0"},line:{color:"DDDDDD",pt:0.5}});s1.addText("도면",{x:imgX,y:photoY+imgH,w:imgW,h:imgH,fontSize:9,color:"AAAAAA",fontFace:"맑은 고딕",align:"center",valign:"middle"});}
+  s1.addShape("rect",{x:imgX,y:photoY,w:imgW,h:photoH,fill:{type:"none"},line:{color:"BBBBBB",pt:0.5}});
+  s1.addShape("line",{x:imgX,y:photoY+imgH,w:imgW,h:0,line:{color:"DDDDDD",pt:0.5}});
+
+  // 우측 내용
+  const rightX=6.0;const rightW=5.49;
+  s1.addShape("rect",{x:rightX,y:photoY,w:rightW,h:photoH,fill:{color:"FFFFFF"},line:{color:"BBBBBB",pt:0.5}});
+  s1.addText("1. 공사 위치",{x:rightX+0.15,y:photoY+0.1,w:rightW-0.3,h:0.25,fontSize:10,color:"002C5F",fontFace:"맑은 고딕",bold:true});
+  s1.addText(locFull||"—",{x:rightX+0.15,y:photoY+0.35,w:rightW-0.3,h:0.28,fontSize:10,color:"333333",fontFace:"맑은 고딕"});
+  s1.addText("2. 공사 개요",{x:rightX+0.15,y:photoY+0.7,w:rightW-0.3,h:0.25,fontSize:10,color:"002C5F",fontFace:"맑은 고딕",bold:true});
+  s1.addText(`- ${problem||"내용 없음"}`,{x:rightX+0.15,y:photoY+0.95,w:rightW-0.3,h:0.6,fontSize:9,color:"333333",fontFace:"맑은 고딕",valign:"top"});
+  s1.addText("3. 요청사항",{x:rightX+0.15,y:photoY+1.65,w:rightW-0.3,h:0.25,fontSize:10,color:"002C5F",fontFace:"맑은 고딕",bold:true});
+  s1.addText(`- ${request||"내용 없음"}`,{x:rightX+0.15,y:photoY+1.9,w:rightW-0.3,h:0.8,fontSize:9,color:"333333",fontFace:"맑은 고딕",valign:"top"});
+
+  // 비고 행
+  s1.addTable([[{text:"비고",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:deadline?`완료 요청일: ${deadline}`:"",options:{fontSize:9,color:"666666",fontFace:"맑은 고딕"}}]],{x:0.2,y:photoY+photoH,w:11.29,colW:[0.85,10.44],border:{pt:0.5,color:"BBBBBB"},rowH:0.28,fontFace:"맑은 고딕"});
+
+  // ── 추가 페이지 슬라이드 ──
+  extraPages.forEach((page,idx)=>{
+    const sN=pptx.addSlide();
+    sN.background={color:"FFFFFF"};
+    sN.addShape("rect",{x:0,y:0,w:11.69,h:0.45,fill:{color:"002C5F"}});
+    sN.addShape("rect",{x:0,y:0.45,w:11.69,h:0.04,fill:{color:"00AAD2"}});
+    sN.addText("■ 시설물 작업 요청서",{x:0.2,y:0.08,w:7,h:0.3,fontSize:14,color:"FFFFFF",fontFace:"맑은 고딕",bold:true});
+    sN.addText(`${idx+2}/${totalPages}`,{x:10.5,y:0.08,w:1,h:0.3,fontSize:12,color:"7ABFDD",fontFace:"맑은 고딕",align:"right"});
+    sN.addTable([[{text:"구분",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:"공사내용 상세 참조",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}}]],{x:0.2,y:0.6,w:11.29,colW:[0.85,10.44],border:{pt:0.5,color:"BBBBBB"},rowH:0.28});
+    const pY=0.91;const pH=6.9;
+    sN.addShape("rect",{x:0.2,y:pY,w:0.85,h:pH,fill:{color:"E8E8E8"},line:{color:"BBBBBB",pt:0.5}});
+    sN.addText("사진\n첨부",{x:0.2,y:pY,w:0.85,h:pH,fontSize:9,color:"111111",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
+    const colW=11.29/3;
+    [0,1,2].forEach(pi=>{
+      const px=1.08+(pi*colW);
+      if(page.photos[pi]){sN.addImage({data:page.photos[pi],x:px,y:pY,w:colW-0.02,h:pH,sizing:{type:"contain",w:colW-0.02,h:pH}});}
+      else{sN.addShape("rect",{x:px,y:pY,w:colW-0.02,h:pH,fill:{color:"F5F5F5"},line:{color:"DDDDDD",pt:0.5}});sN.addText("사진 추가",{x:px,y:pY,w:colW-0.02,h:pH,fontSize:9,color:"AAAAAA",fontFace:"맑은 고딕",align:"center",valign:"middle"});}
+    });
+    sN.addShape("rect",{x:1.08,y:pY,w:11.29-0.88,h:pH,fill:{type:"none"},line:{color:"BBBBBB",pt:0.5}});
+    sN.addTable([[{text:"비고",options:{bold:true,color:"111111",fill:"E8E8E8",align:"center",fontSize:10,fontFace:"맑은 고딕"}},{text:page.note||"",options:{fontSize:9,fontFace:"맑은 고딕"}}]],{x:0.2,y:pY+pH,w:11.29,colW:[0.85,10.44],border:{pt:0.5,color:"BBBBBB"},rowH:0.28});
+  });
+
   generatedPptBlob=await pptx.write({outputType:"blob"});
-  return`시설물_작업요청서_${b.code}_${b.name}.pptx`;
+
+  // 파일명 생성
+  const summary=aiSummary||projectName.replace("[시설물 공사 의뢰]","").trim().substring(0,10);
+  const fname=`${b.name}_${floor}_${location||"전체"}_${summary}`.replace(/\s+/g,"_").replace(/[\\/:*?"<>|]/g,"");
+  return`${fname}.pptx`;
 }
 
-function downloadPPT(){if(!generatedPptBlob){alert("PPT가 생성되지 않았습니다.");return;}const url=URL.createObjectURL(generatedPptBlob),a=document.createElement("a");a.href=url;a.download=`시설물_작업요청서_${selectedBuilding.code}_${selectedBuilding.name}.pptx`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+function downloadPPT(){
+  if(!generatedPptBlob){alert("PPT가 생성되지 않았습니다.");return;}
+  const b=selectedBuilding;
+  const summary=aiSummary||(document.getElementById("formProjectName")?.value||"작업요청서").substring(0,10);
+  const floor=document.getElementById("formFloor")?.value||"";
+  const loc=document.getElementById("formLocation")?.value||"";
+  const fname=`${b.name}_${floor}_${loc||"전체"}_${summary}`.replace(/\s+/g,"_");
+  const url=URL.createObjectURL(generatedPptBlob),a=document.createElement("a");
+  a.href=url;a.download=`${fname}.pptx`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
 
 async function goToStep2(){
-  const floor=document.getElementById("formFloor").value,problem=document.getElementById("formProblem").value,request=document.getElementById("formRequest").value;
+  const floor=document.getElementById("formFloor").value;
+  const problem=document.getElementById("formProblem").value;
+  const request=document.getElementById("formRequest").value;
   if(!floor){alert("층을 선택해 주세요.");return;}
   if(!problem.trim()){alert("문제점을 입력해 주세요.");return;}
   if(!request.trim()){alert("요청사항을 입력해 주세요.");return;}
@@ -1113,246 +1552,35 @@ async function goToStep2(){
     document.getElementById("emailSubject").value=`[시설물 공사 의뢰] ${document.getElementById("formProjectName").value}`;
     document.getElementById("emailBody").value="";
     currentStep=2;
-  }catch(e){alert("PPT 생성 중 오류가 발생했습니다.");}
+  }catch(e){console.error(e);alert("PPT 생성 중 오류가 발생했습니다.");}
   finally{btn.disabled=false;btn.innerHTML='다음 단계 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';}
 }
 
 function goToStep1(){document.getElementById("modalStep1").style.display="block";document.getElementById("modalStep2").style.display="none";currentStep=1;}
-function renderRecipients(){document.getElementById("recipientsList").innerHTML=selectedDisciplines.map(disc=>{const m=selectedBuilding.managers[disc],cls=DISC_CLASS[disc];return`<div class="recipient-chip"><div class="recipient-avatar ${cls}">${m.name.charAt(0)}</div><div class="recipient-info"><span class="recipient-name">${m.name}</span><span class="recipient-disc">(${disc})</span></div></div>`;}).join("");}
-
+function renderRecipients(){
+  document.getElementById("recipientsList").innerHTML=selectedDisciplines.map(disc=>{
+    const m=selectedBuilding.managers[disc],cls=DISC_CLASS[disc];
+    return`<div class="recipient-chip"><div class="recipient-avatar ${cls}">${m.name.charAt(0)}</div><div class="recipient-info"><span class="recipient-name">${m.name}</span><span class="recipient-disc">(${disc})</span></div></div>`;
+  }).join("");
+}
 function sendEmail(){
   const b=selectedBuilding,subject=document.getElementById("emailSubject").value,body=document.getElementById("emailBody").value;
   if(!body.trim()){alert("이메일 내용을 작성해 주세요.");return;}
   const emails=selectedDisciplines.map(disc=>b.managers[disc].email).join(",");
-
-  // ★ 인프라관리 페이지에 자동 기록
   const now=new Date();
-  const floor=document.getElementById("formFloor").value;
-  const location=document.getElementById("formLocation").value;
-  const projectName=document.getElementById("formProjectName").value;
-  const newOrder={
-    id: `order_${Date.now()}`,
-    buildingCode: b.code, buildingName: b.name,
-    projectName: projectName,
-    floor: floor, location: location,
-    problem: document.getElementById("formProblem").value,
-    request: document.getElementById("formRequest").value,
-    disciplines: [...selectedDisciplines],
-    managers: selectedDisciplines.map(disc=>({name:b.managers[disc].name, disc:disc})),
-    year: now.getFullYear(), month: now.getMonth()+1,
-    dateStr: getTodayFormatted(),
-    status: "의뢰"
-  };
-  addWorkOrder(newOrder);
-  renderMgmtFilters();
-  renderMgmtDashboard();
-
+  addWorkOrder({
+    id:`order_${Date.now()}`,buildingCode:b.code,buildingName:b.name,
+    projectName:document.getElementById("formProjectName").value,
+    floor:document.getElementById("formFloor").value,
+    location:document.getElementById("formLocation").value,
+    disciplines:[...selectedDisciplines],
+    managers:selectedDisciplines.map(disc=>({name:b.managers[disc].name,disc:disc})),
+    year:now.getFullYear(),month:now.getMonth()+1,dateStr:getTodayFormatted(),status:"의뢰"
+  });
+  renderMgmtFilters();renderMgmtDashboard();
   downloadPPT();
   setTimeout(()=>{window.location.href=`mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body+"\n\n---\n※ 첨부: 시설물 작업요청서 PPT 파일")}`;closeRequestModal();},500);
 }
-// ═══════════════════════════════════════════════════════════
-// 로그인 / 회원가입
-// ═══════════════════════════════════════════════════════════
-function getUsers(){try{return JSON.parse(localStorage.getItem('infraUsers')||'[]');}catch{return[];}}
-function saveUsers(u){localStorage.setItem('infraUsers',JSON.stringify(u));}
-function getCurrentUser(){try{return JSON.parse(sessionStorage.getItem('infraCurrentUser')||'null');}catch{return null;}}
-
-function checkAuth(){
-  const user=getCurrentUser();
-  if(!user){
-    document.getElementById('authOverlay').style.display='flex';
-    document.body.style.overflow='hidden';
-  } else {
-    document.getElementById('authOverlay').style.display='none';
-    document.body.style.overflow='';
-    document.getElementById('userInfo').style.display='flex';
-    document.getElementById('userName').textContent=user.name;
-    document.getElementById('userAvatar').textContent=user.name.charAt(0);
-  }
-}
-
-function showLogin(){
-  document.getElementById('loginForm').style.display='block';
-  document.getElementById('signupForm').style.display='none';
-  document.getElementById('loginError').classList.remove('show');
-}
-
-function showSignup(){
-  document.getElementById('loginForm').style.display='none';
-  document.getElementById('signupForm').style.display='block';
-  document.getElementById('signupError').classList.remove('show');
-}
-
-function doLogin() {
-  const id = document.getElementById('loginId').value.trim();
-  const pw = document.getElementById('loginPw').value;
-
-  // 관리자 계정 먼저 확인
-  const adminUser = ADMIN_ACCOUNTS.find(a => a.id === id && a.pw === pw);
-  if (adminUser) {
-    sessionStorage.setItem('infraCurrentUser', JSON.stringify({ name: adminUser.name, id: adminUser.id }));
-    checkAuth();
-    return;
-  }
-
-  // 일반 사용자 확인
-  const users = getUsers();
-  const user = users.find(u => u.id === id && u.pw === pw);
-  if (!user) {
-    document.getElementById('loginError').classList.add('show');
-    return;
-  }
-  sessionStorage.setItem('infraCurrentUser', JSON.stringify(user));
-  checkAuth();
-}
-
-function doSignup(){
-  const name=document.getElementById('signupName').value.trim();
-  const id=document.getElementById('signupId').value.trim();
-  const pw=document.getElementById('signupPw').value;
-  const errEl=document.getElementById('signupError');
-  if(!name||!id||!pw){errEl.textContent='모든 항목을 입력해 주세요.';errEl.classList.add('show');return;}
-  if(pw.length<6){errEl.textContent='비밀번호는 6자 이상이어야 합니다.';errEl.classList.add('show');return;}
-  const users=getUsers();
-  if(users.find(u=>u.id===id)){errEl.textContent='이미 사용 중인 아이디입니다.';errEl.classList.add('show');return;}
-  users.push({name,id,pw});
-  saveUsers(users);
-  sessionStorage.setItem('infraCurrentUser',JSON.stringify({name,id}));
-  checkAuth();
-}
-
-function doLogout(){
-  sessionStorage.removeItem('infraCurrentUser');
-  document.getElementById('userInfo').style.display='none';
-  checkAuth();
-}
-// ═══════════════════════════════════════════════════════════
-// 권한 관리 시스템
-// ═══════════════════════════════════════════════════════════
-
-// 최초 관리자 계정 (코드에 고정)
-const ADMIN_ACCOUNTS = [
-  { id: "admin", pw: "hyundai1234", name: "관리자" }
-];
-
-// 섹션 목록
-const SECTIONS = [
-  { key: "section_services", label: "공사의뢰", id: "services" },
-  { key: "section_about",    label: "소개",     id: "about" },
-  { key: "section_contact",  label: "연락처",   id: "contact" },
-  { key: "section_infra",    label: "인프라관리", id: "infra-manage" },
-];
-
-// 권한 저장/불러오기
-function getAllPermissions() {
-  try { return JSON.parse(localStorage.getItem('infraPermissions') || '{}'); } catch { return {}; }
-}
-function savePermissions(p) { localStorage.setItem('infraPermissions', JSON.stringify(p)); }
-
-function getUserPermissions(userId) {
-  const all = getAllPermissions();
-  // 기본 권한: 공사의뢰, 소개, 연락처는 기본 허용 / 인프라관리는 관리자만
-  if (!all[userId]) {
-    return ["section_services", "section_about", "section_contact"];
-  }
-  return all[userId];
-}
-
-function setUserPermission(userId, sectionKey, allow) {
-  const all = getAllPermissions();
-  if (!all[userId]) all[userId] = ["section_services", "section_about", "section_contact"];
-  if (allow) {
-    if (!all[userId].includes(sectionKey)) all[userId].push(sectionKey);
-  } else {
-    all[userId] = all[userId].filter(k => k !== sectionKey);
-  }
-  savePermissions(all);
-  applySectionPermissions();
-}
-
-// 섹션 잠금/해제 적용
-function applySectionPermissions() {
-  const user = getCurrentUser();
-  if (!user) return;
-
-  const isAdmin = ADMIN_ACCOUNTS.some(a => a.id === user.id);
-  const perms = isAdmin
-    ? SECTIONS.map(s => s.key) // 관리자는 전체 허용
-    : getUserPermissions(user.id);
-
-  SECTIONS.forEach(section => {
-    const el = document.getElementById(section.id);
-    if (!el) return;
-
-    // 기존 잠금 오버레이 제거
-    const existing = el.querySelector('.section-lock-overlay');
-    if (existing) existing.remove();
-    el.classList.remove('section-locked');
-
-    if (!perms.includes(section.key)) {
-      // 잠금 적용
-      el.classList.add('section-locked');
-      el.style.position = 'relative';
-      const overlay = document.createElement('div');
-      overlay.className = 'section-lock-overlay';
-      overlay.innerHTML = `
-        <div class="section-lock-icon">🔒</div>
-        <div class="section-lock-text">${section.label} 섹션</div>
-        <div class="section-lock-sub">열람 권한이 없습니다. 관리자에게 문의하세요.</div>
-      `;
-      el.appendChild(overlay);
-    }
-  });
-}
-
-// 관리자 패널 열기/닫기
-function openAdminPanel() {
-  renderAdminUserList();
-  document.getElementById('adminPanel').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-function closeAdminPanel() {
-  document.getElementById('adminPanel').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// 관리자 패널 사용자 목록 렌더링
-function renderAdminUserList() {
-  const users = getUsers().filter(u => !ADMIN_ACCOUNTS.some(a => a.id === u.id));
-  const container = document.getElementById('adminUserList');
-
-  if (users.length === 0) {
-    container.innerHTML = `<div class="admin-empty">👤 등록된 일반 사용자가 없습니다.<br><small>회원가입한 사용자가 여기에 표시됩니다.</small></div>`;
-    return;
-  }
-
-  container.innerHTML = users.map(user => {
-    const perms = getUserPermissions(user.id);
-    return `
-      <div class="admin-user-row">
-        <div class="admin-user-avatar">${user.name.charAt(0)}</div>
-        <div>
-          <div class="admin-user-name">${user.name}</div>
-          <div class="admin-user-id">@${user.id}</div>
-        </div>
-        <div class="admin-perms">
-          ${SECTIONS.map(s => `
-            <button class="perm-toggle ${perms.includes(s.key) ? 'active' : ''}"
-              onclick="togglePerm('${user.id}', '${s.key}', this)">
-              <span class="perm-dot"></span>${s.label}
-            </button>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function togglePerm(userId, sectionKey, btn) {
-  const isActive = btn.classList.contains('active');
-  setUserPermission(userId, sectionKey, !isActive);
-  btn.classList.toggle('active');
-  btn.querySelector('.perm-dot').style.background = !isActive ? 'var(--primary)' : 'var(--gray300)';
 }
 // Initialize
 document.addEventListener("DOMContentLoaded",()=>{
@@ -1366,20 +1594,24 @@ document.addEventListener("DOMContentLoaded",()=>{
   sc.addEventListener("click",()=>{si.value="";sc.classList.remove("visible");si.focus();selectedBuilding=null;hideBuildingDetail();renderBuildingGrid();});
   renderZoneFilter();renderBuildingGrid();renderStats();renderContacts();
   setTimeout(setupScrollReveal,100);
-  document.getElementById("modalClose").addEventListener("click",closeRequestModal);
-  document.getElementById("modalCancel").addEventListener("click",closeRequestModal);
-  document.getElementById("modalClose2").addEventListener("click",closeRequestModal);
-  document.getElementById("btnNextStep").addEventListener("click",goToStep2);
-  document.getElementById("btnPrevStep").addEventListener("click",goToStep1);
-  document.getElementById("btnAiRecommend").addEventListener("click",runAiRecommendation);
-  document.querySelectorAll(".checkbox-item").forEach(item=>{item.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();const cb=item.querySelector("input");cb.checked=!cb.checked;item.classList.toggle("checked",cb.checked);updateSelectedDisciplines();});});
-  document.getElementById("btnDownloadPpt").addEventListener("click",downloadPPT);
-  document.getElementById("btnSendEmail").addEventListener("click",sendEmail);
-  document.getElementById("photoInput").addEventListener("change",e=>handleFileUpload("photo",e.target.files[0]));
-  document.getElementById("photoRemove").addEventListener("click",e=>{e.stopPropagation();resetFileUpload("photo");});
-  document.getElementById("drawingInput").addEventListener("change",e=>handleFileUpload("drawing",e.target.files[0]));
-  document.getElementById("drawingRemove").addEventListener("click",e=>{e.stopPropagation();resetFileUpload("drawing");});
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRequestModal();});
+document.getElementById("modalClose").addEventListener("click",closeRequestModal);
+      document.getElementById("modalCancel").addEventListener("click",closeRequestModal);
+      document.getElementById("modalClose2").addEventListener("click",closeRequestModal);
+      document.getElementById("btnNextStep").addEventListener("click",goToStep2);
+      document.getElementById("btnPrevStep").addEventListener("click",goToStep1);
+      document.getElementById("btnAiRecommend").addEventListener("click",runAiRecommendation);
+      document.getElementById("btnDownloadPpt").addEventListener("click",downloadPPT);
+      document.getElementById("btnSendEmail").addEventListener("click",sendEmail);
+      document.getElementById("photoInput").addEventListener("change",e=>handleFileUpload("photo",e.target.files[0]));
+      document.getElementById("photoRemove").addEventListener("click",e=>{e.stopPropagation();resetFileUpload("photo");});
+      document.getElementById("drawingInput").addEventListener("change",e=>handleFileUpload("drawing",e.target.files[0]));
+      document.getElementById("drawingRemove").addEventListener("click",e=>{e.stopPropagation();resetFileUpload("drawing");});
+      // 실시간 미리보기
+      ["formFloor","formLocation","formProblem","formRequest","formProjectName","formRequester","formDeadline"].forEach(id=>{
+        document.getElementById(id)?.addEventListener("input",updatePreview);
+        document.getElementById(id)?.addEventListener("change",updatePreview);
+      });
+      document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRequestModal();});
 
   // 인프라관리 초기화
   renderMgmtFilters();
