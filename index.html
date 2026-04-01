@@ -1618,10 +1618,13 @@ document.getElementById("modalClose").addEventListener("click",closeRequestModal
       document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRequestModal();});
 
   // 인프라관리 초기화
-  renderMgmtFilters();
+renderMgmtFilters();
   renderMgmtDashboard();
-  checkAuth();
+  // checkAuth();  ← 주석 처리
+  document.getElementById('authOverlay').style.display='none';
+  document.body.style.overflow='';
 });
+
 </script>
 <!-- 관리자 권한 패널 -->
 <div class="admin-panel" id="adminPanel">
