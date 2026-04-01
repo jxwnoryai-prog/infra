@@ -946,8 +946,7 @@ const CONTACTS=[{icon:"mail",label:"이메일",value:"infra-support@hyundai.com"
 const GEMINI_API_KEY = "AIzaSyCgjnR8w9GdoTF_4p6s5xlhup5iSPHO1AY";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-let activeZone="전체", selectedBuilding=null, currentStep=1, selectedDisciplines=[];
-let generatedPptBlob=null, photoDataUrl=null, drawingDataUrl=null;
+let activeZone="전체", selectedBuilding=null;
 
 // ═══════════════════════════════════════════════════════════
 // 인프라관리 데이터 (localStorage)
