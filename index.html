@@ -1011,28 +1011,9 @@ function renderMgmtFilters() {
 }
 
 function setYearFilter(y) { mgmtFilterYear=y; renderMgmtFilters(); renderMgmtDashboard(); }
-function setMonthFilter(m) { mgmtFilterMonth=m===0?null:m; renderMgmtFilters(); renderMgmtDashboard(); 
+function setMonthFilter(m) { mgmtFilterMonth=m===0?null:m; renderMgmtFilters(); renderMgmtDashboard(); }
+
 // ─── 인증 초기화 ───
-  function checkAuth() {
-  const user = getCurrentUser();
-  if (!user) {
-    document.getElementById('authOverlay').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.getElementById('authOverlay').style.display = 'none';
-    document.body.style.overflow = '';
-    document.getElementById('userInfo').style.display = 'flex';
-    document.getElementById('userName').textContent = user.name;
-    document.getElementById('userAvatar').textContent = user.name.charAt(0);
-
-    // 관리자 버튼 표시
-    const isAdmin = ADMIN_ACCOUNTS.some(a => a.id === user.id);
-    document.getElementById('adminNavBtn').style.display = isAdmin ? 'block' : 'none';
-
-    // 섹션 권한 적용
-    applySectionPermissions();
-  }
-}}
 
 // ─── 대시보드 렌더링 ───
 function renderMgmtDashboard() {
