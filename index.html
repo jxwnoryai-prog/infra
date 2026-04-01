@@ -1147,7 +1147,6 @@ let drawingDataUrl = null;
 let extraPages = []; // 추가 페이지 데이터
 let aiSummary = ""; // AI 핵심요약
 
-function getTodayFormatted(){const t=new Date();return`${t.getFullYear()}년 ${String(t.getMonth()+1).padStart(2,'0')}월 ${String(t.getDate()).padStart(2,'0')}일`;}
 
 function openRequestModal(){
   if(!selectedBuilding)return;
@@ -1324,9 +1323,6 @@ function handleExtraPhoto(pageIdx,photoIdx,input){
   r.readAsDataURL(input.files[0]);
 }
 
-// ═══ Gemini AI API ═══
-const GEMINI_API_KEY = "YOUR_API_KEY_HERE";
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 async function runAiRecommendation(){
   const problem=document.getElementById("formProblem").value;
