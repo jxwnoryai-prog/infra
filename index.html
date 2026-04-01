@@ -1561,8 +1561,34 @@ function sendEmail(){
   renderMgmtFilters();renderMgmtDashboard();
   downloadPPT();
   setTimeout(()=>{window.location.href=`mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body+"\n\n---\n※ 첨부: 시설물 작업요청서 PPT 파일")}`;closeRequestModal();},500);
-}
-}
+// ═══════════════════════════════════════════════════════════
+// 로그인 / 회원가입 / 권한관리
+// ═══════════════════════════════════════════════════════════
+const ADMIN_ACCOUNTS=[{id:"admin",pw:"hyundai1234",name:"관리자"}];
+const SECTIONS=[
+  {key:"section_services",label:"공사의뢰",id:"services"},
+  {key:"section_about",label:"소개",id:"about"},
+  {key:"section_contact",label:"연락처",id:"contact"},
+  {key:"section_infra",label:"인프라관리",id:"infra-manage"},
+];
+function getUsers(){try{return JSON.parse(localStorage.getItem('infraUsers')||'[]');}catch{return[];}}
+function saveUsers(u){localStorage.setItem('infraUsers',JSON.stringify(u));}
+function getCurrentUser(){try{return JSON.parse(sessionStorage.getItem('infraCurrentUser')||'null');}catch{return null;}}
+function getAllPermissions(){try{return JSON.parse(localStorage.getItem('infraPermissions')||'{}');}catch{return {};}}
+function savePermissions(p){localStorage.setItem('infraPermissions',JSON.stringify(p));}
+function getUserPermissions(userId){const all=getAllPermissions();if(!all[userId])return["section_services","section_about","section_contact"];return all[userId];}
+function setUserPermission(userId,sectionKey,allow){const all=getAllPermissions();if(!all[userId])all[userId]=["section_services","section_about","section_contact"];if(allow){if(!all[userId].includes(sectionKey))all[userId].push(sectionKey);}else{all[userId]=all[userId].filter(k=>k!==sectionKey);}savePermissions(all);applySectionPermissions();}
+function applySectionPermissions(){const user=getCurrentUser();if(!user)return;const isAdmin=ADMIN_ACCOUNTS.some(a=>a.id===user.id);const perms=isAdmin?SECTIONS.map(s=>s.key):getUserPermissions(user.id);SECTIONS.forEach(section=>{const el=document.getElementById(section.id);if(!el)return;const existing=el.querySelector('.section-lock-overlay');if(existing)existing.remove();el.classList.remove('section-locked');if(!perms.includes(section.key)){el.classList.add('section-locked');el.style.position='relative';const overlay=document.createElement('div');overlay.className='section-lock-overlay';overlay.innerHTML=`<div class="section-lock-icon">🔒</div><div class="section-lock-text">${section.label} 섹션</div><div class="section-lock-sub">열람 권한이 없습니다. 관리자에게 문의하세요.</div>`;el.appendChild(overlay);}});}
+function checkAuth(){const user=getCurrentUser();if(!user){document.getElementById('authOverlay').style.display='flex';document.body.style.overflow='hidden';}else{document.getElementById('authOverlay').style.display='none';document.body.style.overflow='';document.getElementById('userInfo').style.display='flex';document.getElementById('userName').textContent=user.name;document.getElementById('userAvatar').textContent=user.name.charAt(0);const isAdmin=ADMIN_ACCOUNTS.some(a=>a.id===user.id);document.getElementById('adminNavBtn').style.display=isAdmin?'block':'none';applySectionPermissions();}}
+function showLogin(){document.getElementById('loginForm').style.display='block';document.getElementById('signupForm').style.display='none';document.getElementById('loginError').classList.remove('show');}
+function showSignup(){document.getElementById('loginForm').style.display='none';document.getElementById('signupForm').style.display='block';document.getElementById('signupError').classList.remove('show');}
+function doLogin(){const id=document.getElementById('loginId').value.trim();const pw=document.getElementById('loginPw').value;const adminUser=ADMIN_ACCOUNTS.find(a=>a.id===id&&a.pw===pw);if(adminUser){sessionStorage.setItem('infraCurrentUser',JSON.stringify({name:adminUser.name,id:adminUser.id}));checkAuth();return;}const users=getUsers();const user=users.find(u=>u.id===id&&u.pw===pw);if(!user){document.getElementById('loginError').classList.add('show');return;}sessionStorage.setItem('infraCurrentUser',JSON.stringify(user));checkAuth();}
+function doSignup(){const name=document.getElementById('signupName').value.trim();const id=document.getElementById('signupId').value.trim();const pw=document.getElementById('signupPw').value;const errEl=document.getElementById('signupError');if(!name||!id||!pw){errEl.textContent='모든 항목을 입력해 주세요.';errEl.classList.add('show');return;}if(pw.length<6){errEl.textContent='비밀번호는 6자 이상이어야 합니다.';errEl.classList.add('show');return;}const users=getUsers();if(users.find(u=>u.id===id)){errEl.textContent='이미 사용 중인 아이디입니다.';errEl.classList.add('show');return;}users.push({name,id,pw});saveUsers(users);sessionStorage.setItem('infraCurrentUser',JSON.stringify({name,id}));checkAuth();}
+function doLogout(){sessionStorage.removeItem('infraCurrentUser');document.getElementById('userInfo').style.display='none';checkAuth();}
+function openAdminPanel(){renderAdminUserList();document.getElementById('adminPanel').classList.add('active');document.body.style.overflow='hidden';}
+function closeAdminPanel(){document.getElementById('adminPanel').classList.remove('active');document.body.style.overflow='';}
+function renderAdminUserList(){const users=getUsers().filter(u=>!ADMIN_ACCOUNTS.some(a=>a.id===u.id));const container=document.getElementById('adminUserList');if(users.length===0){container.innerHTML=`<div class="admin-empty">👤 등록된 일반 사용자가 없습니다.<br><small>회원가입한 사용자가 여기에 표시됩니다.</small></div>`;return;}container.innerHTML=users.map(user=>{const perms=getUserPermissions(user.id);return`<div class="admin-user-row"><div class="admin-user-avatar">${user.name.charAt(0)}</div><div><div class="admin-user-name">${user.name}</div><div class="admin-user-id">@${user.id}</div></div><div class="admin-perms">${SECTIONS.map(s=>`<button class="perm-toggle ${perms.includes(s.key)?'active':''}" onclick="togglePerm('${user.id}','${s.key}',this)"><span class="perm-dot"></span>${s.label}</button>`).join('')}</div></div>`;}).join('');}
+function togglePerm(userId,sectionKey,btn){const isActive=btn.classList.contains('active');setUserPermission(userId,sectionKey,!isActive);btn.classList.toggle('active');btn.querySelector('.perm-dot').style.background=!isActive?'var(--primary)':'var(--gray300)';}}
 // Initialize
 document.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>document.getElementById("hero").classList.add("loaded"),100);
@@ -1597,6 +1623,7 @@ document.getElementById("modalClose").addEventListener("click",closeRequestModal
   // 인프라관리 초기화
   renderMgmtFilters();
   renderMgmtDashboard();
+  checkAuth();
 });
 </script>
 <!-- 관리자 권한 패널 -->
