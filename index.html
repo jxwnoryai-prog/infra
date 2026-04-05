@@ -288,11 +288,20 @@ a.contact-value:hover{color:var(--primary)}
 .ttd{border:0.5px solid #bbb;vertical-align:middle;color:#111;outline:none;cursor:text;transition:background 0.15s}
 .ttd:focus,[contenteditable="true"]:focus{background:rgba(0,44,95,0.04)!important;outline:none}
 .ttd[contenteditable="true"]:hover{background:rgba(0,44,95,0.02)}
-.pgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;border-right:0.5px solid #bbb}
-.psl{display:flex;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid #ddd;background:#f7f7f7;overflow:hidden;position:relative;transition:background 0.15s}
-.psl:hover{background:#e8f0ff}
-.psl span{color:#bbb;pointer-events:none;text-align:center}
-.psl img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.cv-el{position:absolute;box-sizing:border-box}
+.cv-el.cv-sel{outline:1.5px solid #002C5F!important}
+.cv-rh{position:absolute;width:10px;height:10px;background:#fff;border:1.5px solid #002C5F;border-radius:50%;z-index:20}
+.cv-replace-btn{position:absolute;top:3px;right:3px;padding:1px 6px;font-size:9px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:3px;cursor:pointer;display:none}
+.cv-el.cv-sel .cv-replace-btn{display:block}
+.cv-toolbar{display:flex;align-items:center;gap:3px;padding:5px 10px;border-bottom:1px solid var(--gray100);background:var(--white);flex-shrink:0;flex-wrap:wrap}
+.cv-tb-btn{padding:4px 9px;border:1px solid var(--gray100);border-radius:7px;background:var(--white);font-size:11px;cursor:pointer;color:var(--dark);font-family:inherit;white-space:nowrap;transition:all 0.15s}
+.cv-tb-btn:hover{background:var(--gray50);border-color:var(--gray300)}
+.cv-tb-btn.cv-active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.cv-sep{width:1px;height:16px;background:var(--gray100);margin:0 2px;flex-shrink:0}
+.photo-canvas-wrap{flex:1;display:flex;min-height:0;overflow:hidden;border:0.5px solid #bbb;border-top:none}
+.sj-label-col{width:5.5%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-right:0.5px solid #bbb;background:#e8e8e8;font-size:7px;color:#444;font-weight:600;letter-spacing:2px;writing-mode:vertical-rl;text-orientation:mixed}
+#photo-canvas{position:relative;flex:1;overflow:hidden;background:#fafafa;cursor:default;user-select:none}
+.cv-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;flex-direction:column;gap:6px}
 .rpanel{flex:1;overflow-y:auto;display:flex;flex-direction:column;padding:0.8% 1.2%}
 .rcl{font-weight:700;color:#002C5F;flex-shrink:0;display:block;margin-top:0.5%}
 .rct{color:#333;outline:none;min-height:0.9em;border-bottom:0.5px dashed #ddd;margin-bottom:0.3%;word-break:break-all;transition:background 0.15s}
@@ -581,7 +590,7 @@ a.contact-value:hover{color:var(--primary)}
 <button class="etb" onclick="backToStep1()" style="color:var(--primary)">‹ 이전</button>
 <div class="esep"></div>
 <span style="font-size:12px;font-weight:600;color:var(--dark)">■ 시설물 작업요청서 편집</span>
-<span style="font-size:11px;color:var(--gray500);margin-left:4px">· 셀을 클릭하여 내용 입력 / 사진 슬롯 클릭하여 이미지 첨부</span>
+<span style="font-size:11px;color:var(--gray500);margin-left:4px">· 셀 클릭으로 텍스트 입력 / 사진 추가 버튼 또는 도구 선택 후 캔버스 드래그</span>
 <div class="esep"></div>
 <button class="etb" id="edb" onclick="fmtCmd('bold')" style="font-weight:600;padding:3px 9px" title="굵게 (Ctrl+B)">B</button>
 <button class="etb" id="eib" onclick="fmtCmd('italic')" style="font-style:italic;padding:3px 9px" title="기울임 (Ctrl+I)">I</button>
@@ -639,31 +648,46 @@ a.contact-value:hover{color:var(--primary)}
 <td class="ttd" contenteditable="true" colspan="2" id="tf-re" spellcheck="false"></td>
 </tr>
 </table>
-<div class="tmpl-lbl" id="lbl-s2" style="margin-top:0.3%">2. 현장사진 및 위치</div>
+<div class="tmpl-lbl" id="lbl-s2" style="margin-top:0.3%">2. 현장사진 및 공사 내용</div>
 <div id="tmpl-sec2" style="flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden">
+<!-- Canvas toolbar -->
+<div class="cv-toolbar">
+  <button class="cv-tb-btn" id="cv-btn-photo" onclick="cvSetTool('photo')">🖼 사진 추가</button>
+  <div class="cv-sep"></div>
+  <button class="cv-tb-btn" id="cv-btn-rect" onclick="cvSetTool('rect')" title="드래그하여 사각형 그리기">□ 사각형</button>
+  <button class="cv-tb-btn" id="cv-btn-ellipse" onclick="cvSetTool('ellipse')" title="드래그하여 원 그리기">○ 원</button>
+  <button class="cv-tb-btn" id="cv-btn-arrow" onclick="cvSetTool('arrow')" title="드래그하여 화살표 그리기">→ 화살표</button>
+  <button class="cv-tb-btn" id="cv-btn-text" onclick="cvSetTool('text')" title="드래그하여 텍스트 박스 추가">T 텍스트</button>
+  <div class="cv-sep"></div>
+  <label style="font-size:10px;color:var(--gray500)">색상</label>
+  <input type="color" id="cv-color-pick" value="#C0392B" oninput="cvSetColor(this.value)" style="width:22px;height:22px;padding:1px;border:1px solid var(--gray100);border-radius:4px;cursor:pointer">
+  <div class="cv-sep"></div>
+  <button class="cv-tb-btn" onclick="cvBringFwd()" title="앞으로">↑앞</button>
+  <button class="cv-tb-btn" onclick="cvSendBk()" title="뒤로">↓뒤</button>
+  <button class="cv-tb-btn" id="cv-btn-del" onclick="cvDelSel()" style="color:#c53030" title="선택 삭제 (Del)">✕ 삭제</button>
+  <div class="cv-sep"></div>
+  <span style="font-size:10px;color:var(--gray500)" id="cv-hint-txt">선택 또는 도구 클릭 후 캔버스에서 작업</span>
+</div>
 <table id="tmpl-t2" style="width:100%;border-collapse:collapse;table-layout:fixed;flex-shrink:0">
-<colgroup><col style="width:5.5%"><col></colgroup>
-<tr><td class="tth">구분</td><td class="tth">현장 사진 및 공사 내용</td></tr>
+<colgroup><col style="width:5.5%"><col style="width:56%"><col></colgroup>
+<tr><td class="tth">구분</td><td class="tth">현장 사진</td><td class="tth">공사 내용</td></tr>
 </table>
-<div style="flex:1;display:flex;min-height:0;border:0.5px solid #bbb;border-top:none">
-<div class="tth" id="sj-label" style="width:5.5%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-right:0.5px solid #bbb">사<br>진<br>첨<br>부</div>
-<div style="flex:1;display:flex;min-width:0">
-<div class="pgrid" id="photo-grid-main" style="height:100%">
-<div class="psl" id="ps0" onclick="tmplPhotoClick(0,0)"><span id="psl0">사진 1</span><img id="pi0" style="display:none"></div>
-<div class="psl" id="ps1" onclick="tmplPhotoClick(0,1)"><span id="psl1">사진 2</span><img id="pi1" style="display:none"></div>
-<div class="psl" id="ps2" onclick="tmplPhotoClick(0,2)"><span id="psl2">도면</span><img id="pi2" style="display:none"></div>
-<div class="psl" id="ps3" onclick="tmplPhotoClick(0,3)"><span id="psl3">추가</span><img id="pi3" style="display:none"></div>
+<div class="photo-canvas-wrap">
+<div class="sj-label-col">사<br>진<br>첨<br>부</div>
+<div id="photo-canvas" onmousedown="cvCanvasDown(event)">
+  <div class="cv-hint" id="cv-hint">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <span>🖼 사진 추가 버튼을 클릭하거나</span>
+    <span>도구 선택 후 드래그하세요</span>
+  </div>
 </div>
 <div class="rpanel">
-<b class="rcl" id="rcl1">1. 공사 위치</b>
-<div class="rct" contenteditable="true" id="tf-lod" spellcheck="false"></div>
-<b class="rcl" id="rcl2">2. 공사 개요</b>
+<b class="rcl">1. 공사 개요</b>
 <div class="rct" contenteditable="true" id="tf-ov" spellcheck="false"></div>
-<b class="rcl" id="rcl3">3. 공사 내용</b>
+<b class="rcl">2. 공사 내용</b>
 <div class="rct" contenteditable="true" id="tf-ct" spellcheck="false" style="flex:1;min-height:1.5em"></div>
-<b class="rcl" id="rcl4">4. 기타</b>
+<b class="rcl">3. 기타</b>
 <div class="rct" contenteditable="true" id="tf-etc" spellcheck="false"></div>
-</div>
 </div>
 </div>
 <table id="tmpl-t3" style="width:100%;border-collapse:collapse;table-layout:fixed;flex-shrink:0">
@@ -678,21 +702,16 @@ a.contact-value:hover{color:var(--primary)}
 <div id="tmpl-wrap-ex">
 <table style="width:100%;border-collapse:collapse;table-layout:fixed;flex-shrink:0">
 <colgroup><col style="width:5.5%"><col></colgroup>
-<tr><td class="tth">구분</td><td class="tth">공사내용 상세 참조</td></tr>
+<tr><td class="tth">구분</td><td class="tth">현장 사진 (추가 페이지)</td></tr>
 </table>
 <div style="flex:1;display:flex;min-height:0;border:0.5px solid #bbb;border-top:none;overflow:hidden">
 <div class="tth" style="width:5.5%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-right:0.5px solid #bbb">사<br>진<br>첨<br>부</div>
-<div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;height:100%">
-<div class="psl" id="xps0" onclick="tmplPhotoClick(-1,0)"><span id="xpsl0">사진 추가</span><img id="xpi0" style="display:none"></div>
-<div class="psl" id="xps1" onclick="tmplPhotoClick(-1,1)"><span id="xpsl1">사진 추가</span><img id="xpi1" style="display:none"></div>
-<div class="psl" id="xps2" onclick="tmplPhotoClick(-1,2)"><span id="xpsl2">사진 추가</span><img id="xpi2" style="display:none"></div>
-</div>
+<div id="photo-canvas-ex" style="position:relative;flex:1;overflow:hidden;background:#fafafa;user-select:none"></div>
 </div>
 <table style="width:100%;border-collapse:collapse;table-layout:fixed;flex-shrink:0">
 <colgroup><col style="width:5.5%"><col></colgroup>
 <tr><td class="tth">비고</td><td class="ttd" contenteditable="true" id="tf-ex-note" spellcheck="false" style="color:#666"></td></tr>
 </table>
-</div>
 </div>
 </div>
 </div>
@@ -778,12 +797,26 @@ let activeZone="전체",selectedBuilding=null,selectedDisciplines=[],aiSummary="
 let mgmtFilterYear=null,mgmtFilterMonth=null,generatedPptBlob=null;
 
 // ══════════ TEMPLATE STATE ══════════
-let tmplPages=[]; // [{type:'main',fields:{},photos:[null,null,null,null]},{type:'extra',photos:[null,null,null],note:''}]
+let tmplPages=[];
 let curTmplPage=0;
-let pgTarget=null; // {page,slot}
+
+// ══════════ CANVAS STATE ══════════
+let cvTool=null; // 'photo'|'rect'|'ellipse'|'arrow'|'text'|null
+let cvColor='#C0392B';
+let cvSelId=null;
+let cvIdCnt=1;
+let cvDragState=null; // {type,el,sx,sy,ex0,ey0,ew0,eh0,cw,ch} or arrow variant
+let cvDrawState=null; // {type,startX,startY,el}
+let cvImgTargetId=null;
+let cvTextEditId=null;
 
 // ══════════ UTILS ══════════
 function getTodayFormatted(){const t=new Date();return`${t.getFullYear()}년 ${String(t.getMonth()+1).padStart(2,'0')}월 ${String(t.getDate()).padStart(2,'0')}일`}
+function pct(px,tot){return px/tot*100}
+function cvGetCanvas(){return document.getElementById('photo-canvas')}
+function cvGetCurEls(){const p=tmplPages[curTmplPage];if(!p)return[];if(!p.elements)p.elements=[];return p.elements}
+function cvGetEl(id){return cvGetCurEls().find(e=>e.id===id)||null}
+function cvMkId(){return cvIdCnt++}
 
 // ══════════ SITE FUNCTIONS ══════════
 function scrollToSection(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});closeMobileMenu()}
@@ -887,7 +920,7 @@ async function runAiRecommendation(){
   }
 }
 
-// ══════════ STEP 2: TEMPLATE EDITOR ══════════
+// ══════════ STEP 2: TEMPLATE + CANVAS EDITOR ══════════
 function goToEditor(){
   updateSelectedDisciplines();
   const floor=document.getElementById("formFloor").value;
@@ -902,16 +935,16 @@ function goToEditor(){
     pr:document.getElementById("formProblem").value,re:document.getElementById("formRequest").value
   };
   initTmpl(fd);showStep(2);
-  setTimeout(()=>{tmplSizeCanvas();},60);
+  setTimeout(()=>{tmplSizeCanvas();cvRender();},80);
 }
 function backToStep1(){showStep(1)}
-function backToEditor(){showStep(2);setTimeout(()=>{tmplSizeCanvas()},60)}
+function backToEditor(){showStep(2);setTimeout(()=>{tmplSizeCanvas();cvRender()},60)}
 
 function initTmpl(fd){
   const loc=[fd.fl,fd.lo].filter(Boolean).join(' ');
   const prj=fd.pj?`[시설물 공사 의뢰] ${fd.pj}`:'[시설물 공사 의뢰]';
-  tmplPages=[{type:'main',fields:{rq:fd.rq,dl:fd.dl,b:fd.b,lo:loc,pj:prj,pr:fd.pr||'-',re:fd.re||'-',lod:loc,ov:fd.pr||'',ct:'',etc:'',note:fd.dl?`완료 요청일: ${fd.dl}`:''},photos:[null,null,null,null]}];
-  curTmplPage=0;
+  tmplPages=[{type:'main',fields:{rq:fd.rq,dl:fd.dl,b:fd.b,lo:loc,pj:prj,pr:fd.pr||'-',re:fd.re||'-',ov:fd.pr||'',ct:'',etc:'',note:fd.dl?`완료 요청일: ${fd.dl}`:''},elements:[]}];
+  curTmplPage=0;cvSelId=null;cvTool=null;cvIdCnt=1;
   tmplLoadPage(0);
   tmplRenderSidebar();
 }
@@ -926,29 +959,26 @@ function tmplSizeCanvas(){
   if(h>ah){h=ah;w=h/rat}
   w=Math.floor(w);h=Math.floor(h);
   sl.style.width=w+"px";sl.style.height=h+"px";
-  // Set header font sizes
   const hs=Math.max(6,Math.floor(w*0.024));
   const st=document.getElementById("slide-title-text");
   const pn=document.getElementById("slide-page-num");
   if(st)st.style.fontSize=hs+"px";
   if(pn)pn.style.fontSize=Math.max(5,Math.floor(hs*0.82))+"px";
-  // Header height % for tmpl-wrap top
   const hdH=document.querySelector(".slide-hd-layer");
   const hdPct=hdH?((hdH.offsetHeight/h)*100)+0.5:11;
   const wrap=document.getElementById("tmpl-wrap");
   const wrapEx=document.getElementById("tmpl-wrap-ex");
   if(wrap){wrap.style.top=hdPct+"%";wrap.style.fontSize=Math.max(5,Math.floor(w*0.012))+"px"}
   if(wrapEx){wrapEx.style.top=hdPct+"%";wrapEx.style.fontSize=Math.max(5,Math.floor(w*0.012))+"px"}
-  // Update page num
   const pnum=document.getElementById("slide-page-num");
   if(pnum)pnum.textContent=`${curTmplPage+1}/${tmplPages.length}`;
 }
-window.addEventListener("resize",()=>{if(document.getElementById("modalStep2").style.display!=="none")tmplSizeCanvas()});
+window.addEventListener("resize",()=>{if(document.getElementById("modalStep2").style.display!=="none"){tmplSizeCanvas();cvRender()}});
 
 function tmplSaveCurPage(){
   const p=tmplPages[curTmplPage];if(!p)return;
   if(p.type==='main'){
-    ['rq','dl','b','lo','pj','pr','re','lod','ov','ct','etc','note'].forEach(f=>{
+    ['rq','dl','b','lo','pj','pr','re','ov','ct','etc','note'].forEach(f=>{
       const el=document.getElementById('tf-'+f);
       if(el)p.fields[f]=el.innerText||el.textContent||'';
     });
@@ -959,33 +989,25 @@ function tmplSaveCurPage(){
 }
 
 function tmplLoadPage(idx){
-  curTmplPage=idx;
+  curTmplPage=idx;cvSelId=null;
   const p=tmplPages[idx];if(!p)return;
   const mainEl=document.getElementById('tmpl-main');
   const extraEl=document.getElementById('tmpl-extra');
   if(p.type==='main'){
     mainEl.style.display='flex';extraEl.style.display='none';
-    ['rq','dl','b','lo','pj','pr','re','lod','ov','ct','etc','note'].forEach(f=>{
+    ['rq','dl','b','lo','pj','pr','re','ov','ct','etc','note'].forEach(f=>{
       const el=document.getElementById('tf-'+f);if(el)el.innerText=p.fields[f]||'';
     });
-    p.photos.forEach((src,i)=>{
-      const img=document.getElementById('pi'+i);
-      const sp=document.getElementById('psl'+i);
-      if(img){img.src=src||'';img.style.display=src?'block':'none'}
-      if(sp)sp.style.display=src?'none':'';
-    });
+    // toolbar visibility
+    document.querySelector('.cv-toolbar').style.display='flex';
   }else{
     mainEl.style.display='none';extraEl.style.display='flex';
     const el=document.getElementById('tf-ex-note');if(el)el.innerText=p.note||'';
-    p.photos.forEach((src,i)=>{
-      const img=document.getElementById('xpi'+i);
-      const sp=document.getElementById('xpsl'+i);
-      if(img){img.src=src||'';img.style.display=src?'block':'none'}
-      if(sp)sp.style.display=src?'none':'';
-    });
+    document.querySelector('.cv-toolbar').style.display='flex';
   }
   const pn=document.getElementById("slide-page-num");
   if(pn)pn.textContent=`${idx+1}/${tmplPages.length}`;
+  cvRender();
 }
 
 function tmplRenderSidebar(){
@@ -1007,7 +1029,7 @@ function tmplRenderSidebar(){
 
 function tmplAddPage(){
   tmplSaveCurPage();
-  tmplPages.push({type:'extra',photos:[null,null,null],note:''});
+  tmplPages.push({type:'extra',elements:[],note:''});
   curTmplPage=tmplPages.length-1;
   tmplLoadPage(curTmplPage);
   tmplRenderSidebar();
@@ -1021,38 +1043,366 @@ function tmplDelPage(idx){
   tmplRenderSidebar();
 }
 
-// PHOTO CLICK
-function tmplPhotoClick(pageIdx, slotIdx){
-  // pageIdx=-1 means current extra page
-  const realPage = pageIdx===-1 ? curTmplPage : pageIdx;
-  pgTarget={page:realPage,slot:slotIdx};
+// ══════════ CANVAS TOOL ══════════
+function cvSetTool(tool){
+  cvTool=cvTool===tool?null:tool;
+  ['photo','rect','ellipse','arrow','text'].forEach(t=>{
+    const b=document.getElementById('cv-btn-'+t);
+    if(b)b.classList.toggle('cv-active',cvTool===t);
+  });
+  const cv=cvGetCanvas();
+  if(cv)cv.style.cursor=cvTool?'crosshair':'default';
+  const hint=document.getElementById('cv-hint-txt');
+  if(hint){
+    const msgs={photo:'사진을 불러옵니다',rect:'드래그하여 사각형 그리기',ellipse:'드래그하여 원 그리기',arrow:'드래그하여 화살표 그리기',text:'드래그하여 텍스트 박스 추가'};
+    hint.textContent=cvTool?(msgs[cvTool]||''):'클릭으로 선택 / 드래그로 이동 / 핸들로 크기 조절';
+  }
+  if(cvTool==='photo'){
+    document.getElementById('tmplImgInput').click();
+    // tool will be reset after photo added
+  }
+}
+
+function cvSetColor(v){
+  cvColor=v;
+  const el=cvSelId?cvGetEl(cvSelId):null;
+  if(el&&el.type!=='photo'){el.color=v;cvRender()}
+}
+
+function cvSelect(id){
+  cvSelId=id;
+  cvTextEditId=null;
+  cvRender();
+}
+
+function cvDelSel(){
+  if(!cvSelId)return;
+  const p=tmplPages[curTmplPage];if(!p||!p.elements)return;
+  p.elements=p.elements.filter(e=>e.id!==cvSelId);
+  cvSelId=null;cvRender();
+}
+
+function cvBringFwd(){
+  const els=cvGetCurEls();const el=cvGetEl(cvSelId);if(!el)return;
+  const idx=els.indexOf(el);
+  if(idx<els.length-1){els.splice(idx,1);els.splice(idx+1,0,el);cvRender()}
+}
+
+function cvSendBk(){
+  const els=cvGetCurEls();const el=cvGetEl(cvSelId);if(!el)return;
+  const idx=els.indexOf(el);
+  if(idx>0){els.splice(idx,1);els.splice(idx-1,0,el);cvRender()}
+}
+
+function cvPhotoReplace(id){
+  cvImgTargetId=id;
   document.getElementById('tmplImgInput').click();
 }
+
+// ══════════ CANVAS RENDER ══════════
+function cvRender(){
+  const canvasId = curTmplPage===0?'photo-canvas':'photo-canvas-ex';
+  // For extra pages, use photo-canvas-ex if visible
+  const pg=tmplPages[curTmplPage];
+  const mainVisible=document.getElementById('tmpl-main').style.display!=='none';
+  const canvas=document.getElementById(mainVisible?'photo-canvas':'photo-canvas-ex');
+  if(!canvas)return;
+
+  // Clear old elements
+  canvas.querySelectorAll('.cv-el').forEach(e=>e.remove());
+
+  const els=cvGetCurEls();
+  const hint=document.getElementById('cv-hint');
+  if(hint)hint.style.display=els.length===0?'flex':'none';
+
+  const cw=canvas.offsetWidth,ch=canvas.offsetHeight;
+  if(cw===0||ch===0)return;
+
+  els.forEach(el=>{
+    const isSel=el.id===cvSelId;
+    const div=document.createElement('div');
+    div.className='cv-el'+(isSel?' cv-sel':'');
+    div.dataset.id=el.id;
+
+    if(el.type==='arrow'){
+      const x1=el.x1/100*cw,y1=el.y1/100*ch,x2=el.x2/100*cw,y2=el.y2/100*ch;
+      const pad=12;
+      const minX=Math.min(x1,x2)-pad,minY=Math.min(y1,y2)-pad;
+      const bw=Math.max(Math.abs(x2-x1)+pad*2,pad*2);
+      const bh=Math.max(Math.abs(y2-y1)+pad*2,pad*2);
+      div.style.cssText=`position:absolute;left:${minX}px;top:${minY}px;width:${bw}px;height:${bh}px;pointer-events:none;z-index:10;`;
+      const ns='http://www.w3.org/2000/svg';
+      const svg=document.createElementNS(ns,'svg');
+      svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;overflow:visible;';
+      const defs=document.createElementNS(ns,'defs');
+      const mk=document.createElementNS(ns,'marker');
+      mk.setAttribute('id',`am${el.id}`);mk.setAttribute('viewBox','0 0 10 10');
+      mk.setAttribute('refX','9');mk.setAttribute('refY','5');
+      mk.setAttribute('markerWidth','5');mk.setAttribute('markerHeight','5');
+      mk.setAttribute('orient','auto');
+      const mkp=document.createElementNS(ns,'path');mkp.setAttribute('d','M 0 0 L 10 5 L 0 10 z');
+      mkp.setAttribute('fill',el.color||'#C0392B');
+      mk.appendChild(mkp);defs.appendChild(mk);svg.appendChild(defs);
+      const ln=document.createElementNS(ns,'line');
+      ln.setAttribute('x1',x1-minX);ln.setAttribute('y1',y1-minY);
+      ln.setAttribute('x2',x2-minX);ln.setAttribute('y2',y2-minY);
+      ln.setAttribute('stroke',el.color||'#C0392B');ln.setAttribute('stroke-width','2.5');
+      ln.setAttribute('marker-end',`url(#am${el.id})`);
+      svg.appendChild(ln);div.appendChild(svg);
+      // Click target
+      const ct=document.createElement('div');
+      ct.style.cssText='position:absolute;inset:0;pointer-events:auto;';
+      ct.onmousedown=e=>{e.stopPropagation();cvSelect(el.id);};
+      div.appendChild(ct);
+      // Endpoint handles
+      if(isSel){
+        [{px:x1-minX,py:y1-minY,end:'1'},{px:x2-minX,py:y2-minY,end:'2'}].forEach(ep=>{
+          const h=document.createElement('div');
+          h.className='cv-rh';h.style.cssText=`left:${ep.px-5}px;top:${ep.py-5}px;cursor:crosshair;pointer-events:auto;z-index:20;`;
+          h.dataset.arrowId=el.id;h.dataset.end=ep.end;
+          h.onmousedown=e=>{
+            e.preventDefault();e.stopPropagation();
+            cvDragState={type:'arrow-end',id:el.id,end:ep.end,cw,ch};
+          };
+          div.appendChild(h);
+        });
+      }
+    } else {
+      // Photo / Rect / Ellipse / Text
+      const x=el.x/100*cw,y=el.y/100*ch,w=el.w/100*cw,h=el.h/100*ch;
+      div.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;cursor:move;`;
+
+      if(el.type==='photo'){
+        if(el.src){
+          const img=document.createElement('img');
+          img.src=el.src;img.draggable=false;
+          img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;';
+          div.appendChild(img);
+          const rb=document.createElement('button');
+          rb.className='cv-replace-btn';rb.textContent='사진 교체';
+          rb.onmousedown=e=>e.stopPropagation();
+          rb.onclick=e=>{e.stopPropagation();cvPhotoReplace(el.id)};
+          div.appendChild(rb);
+          div.style.background='#eee';
+        } else {
+          div.style.cssText+=`background:#f0f0f0;border:1.5px dashed #bbb;display:flex;align-items:center;justify-content:center;`;
+          div.innerHTML='<span style="font-size:9px;color:#aaa;pointer-events:none">클릭하여 사진 추가</span>';
+        }
+      } else if(el.type==='rect'){
+        div.style.border=`2.5px solid ${el.color||'#002C5F'}`;
+        div.style.background='transparent';
+        div.style.pointerEvents='auto';
+      } else if(el.type==='ellipse'){
+        div.style.border=`2.5px solid ${el.color||'#002C5F'}`;
+        div.style.borderRadius='50%';
+        div.style.background='transparent';
+      } else if(el.type==='text'){
+        div.style.cssText+=`background:rgba(255,255,190,0.92);border:1.5px solid #d4b800;padding:3px 6px;overflow:hidden;`;
+        if(isSel){
+          div.style.cursor='text';
+          const ta=document.createElement('div');
+          ta.contentEditable='true';
+          ta.spellcheck=false;
+          ta.style.cssText=`outline:none;width:100%;height:100%;font-size:${el.fontSize||10}px;color:${el.textColor||'#333'};word-break:break-word;min-height:1em;`;
+          ta.innerText=el.text||'';
+          ta.oninput=()=>{el.text=ta.innerText};
+          ta.onmousedown=e=>e.stopPropagation();
+          div.appendChild(ta);
+          setTimeout(()=>ta.focus(),10);
+        } else {
+          div.style.cssText+=`font-size:${el.fontSize||10}px;color:${el.textColor||'#333'};cursor:move;`;
+          div.textContent=el.text||'텍스트 입력';
+        }
+      }
+
+      // Resize handles (for selected non-arrow elements)
+      if(isSel){
+        const handles=[
+          {name:'nw',style:'left:-5px;top:-5px;cursor:nw-resize'},
+          {name:'n',style:'left:calc(50% - 5px);top:-5px;cursor:n-resize'},
+          {name:'ne',style:'right:-5px;top:-5px;cursor:ne-resize'},
+          {name:'w',style:'left:-5px;top:calc(50% - 5px);cursor:w-resize'},
+          {name:'e',style:'right:-5px;top:calc(50% - 5px);cursor:e-resize'},
+          {name:'sw',style:'left:-5px;bottom:-5px;cursor:sw-resize'},
+          {name:'s',style:'left:calc(50% - 5px);bottom:-5px;cursor:s-resize'},
+          {name:'se',style:'right:-5px;bottom:-5px;cursor:se-resize'},
+        ];
+        handles.forEach(({name,style})=>{
+          const h=document.createElement('div');
+          h.className='cv-rh';
+          h.style.cssText=style;
+          h.dataset.pos=name;h.dataset.id=el.id;
+          h.onmousedown=e=>{
+            e.preventDefault();e.stopPropagation();
+            cvDragState={type:'resize',id:el.id,pos:name,sx:e.clientX,sy:e.clientY,
+              ex0:el.x,ey0:el.y,ew0:el.w,eh0:el.h,cw,ch};
+          };
+          div.appendChild(h);
+        });
+      }
+    }
+
+    // Mousedown for drag/select
+    div.onmousedown=e=>{
+      if(e.target.dataset.pos||e.target.dataset.arrowId||e.target.dataset.end)return;
+      if(e.target.contentEditable==='true')return;
+      e.preventDefault();e.stopPropagation();
+      cvSelId=el.id;
+      if(el.type!=='arrow'){
+        cvDragState={type:'move',id:el.id,sx:e.clientX,sy:e.clientY,ex0:el.x,ey0:el.y,cw,ch};
+      }
+      cvRender();
+    };
+
+    canvas.appendChild(div);
+  });
+}
+
+// ══════════ CANVAS MOUSE EVENTS ══════════
+function cvCanvasDown(e){
+  if(e.target.closest('.cv-rh')||e.target.closest('.cv-el'))return;
+  if(!cvTool){cvSelId=null;cvRender();return}
+  if(cvTool==='photo')return;
+  const canvas=cvGetCanvas();if(!canvas)return;
+  const r=canvas.getBoundingClientRect();
+  const cw=canvas.offsetWidth,ch=canvas.offsetHeight;
+  const sx=pct(e.clientX-r.left,cw),sy=pct(e.clientY-r.top,ch);
+  const newEl={id:cvMkId(),type:cvTool,x:sx,y:sy,w:0.5,h:0.5,color:cvColor};
+  if(cvTool==='text'){newEl.text='텍스트 입력';newEl.fontSize=10;newEl.textColor='#333'}
+  if(cvTool==='arrow'){newEl.x1=sx;newEl.y1=sy;newEl.x2=sx+1;newEl.y2=sy+1;delete newEl.x;delete newEl.y;delete newEl.w;delete newEl.h}
+  cvGetCurEls().push(newEl);
+  cvSelId=newEl.id;
+  if(cvTool==='arrow'){
+    cvDrawState={type:'arrow',id:newEl.id,cw,ch,r};
+  } else {
+    cvDrawState={type:'rect-like',id:newEl.id,sx,sy,cw,ch,r};
+  }
+}
+
+document.addEventListener('mousemove',e=>{
+  // Active draw
+  if(cvDrawState){
+    const canvas=cvGetCanvas();if(!canvas)return;
+    const r=cvDrawState.r;
+    const cw=cvDrawState.cw,ch=cvDrawState.ch;
+    const cx=pct(e.clientX-r.left,cw),cy=pct(e.clientY-r.top,ch);
+    const el=cvGetEl(cvDrawState.id);if(!el)return;
+    if(cvDrawState.type==='arrow'){
+      el.x2=Math.max(0,Math.min(100,cx));
+      el.y2=Math.max(0,Math.min(100,cy));
+    } else {
+      const sx=cvDrawState.sx,sy=cvDrawState.sy;
+      el.x=Math.min(sx,cx);el.y=Math.min(sy,cy);
+      el.w=Math.max(1,Math.abs(cx-sx));el.h=Math.max(1,Math.abs(cy-sy));
+    }
+    cvRender();return;
+  }
+  // Drag move
+  if(cvDragState){
+    if(cvDragState.type==='move'){
+      const el=cvGetEl(cvDragState.id);if(!el)return;
+      const cw=cvDragState.cw,ch=cvDragState.ch;
+      const dx=pct(e.clientX-cvDragState.sx,cw);
+      const dy=pct(e.clientY-cvDragState.sy,ch);
+      el.x=Math.max(0,Math.min(100-el.w,cvDragState.ex0+dx));
+      el.y=Math.max(0,Math.min(100-el.h,cvDragState.ey0+dy));
+      // Live update without full re-render for smoothness
+      const canvas=cvGetCanvas();
+      const div=canvas?.querySelector(`.cv-el[data-id="${el.id}"]`);
+      if(div){const cw2=canvas.offsetWidth,ch2=canvas.offsetHeight;div.style.left=(el.x/100*cw2)+'px';div.style.top=(el.y/100*ch2)+'px'}
+    } else if(cvDragState.type==='resize'){
+      const el=cvGetEl(cvDragState.id);if(!el)return;
+      const cw=cvDragState.cw,ch=cvDragState.ch;
+      const dx=pct(e.clientX-cvDragState.sx,cw);
+      const dy=pct(e.clientY-cvDragState.sy,ch);
+      const pos=cvDragState.pos,mn=2;
+      if(pos.includes('e'))el.w=Math.max(mn,cvDragState.ew0+dx);
+      if(pos.includes('s'))el.h=Math.max(mn,cvDragState.eh0+dy);
+      if(pos.includes('w')){const nw=Math.max(mn,cvDragState.ew0-dx);el.x=cvDragState.ex0+cvDragState.ew0-nw;el.w=nw}
+      if(pos.includes('n')){const nh=Math.max(mn,cvDragState.eh0-dy);el.y=cvDragState.ey0+cvDragState.eh0-nh;el.h=nh}
+      cvRender();
+    } else if(cvDragState.type==='arrow-end'){
+      const el=cvGetEl(cvDragState.id);if(!el)return;
+      const canvas=cvGetCanvas();if(!canvas)return;
+      const r=canvas.getBoundingClientRect();
+      const cw=canvas.offsetWidth,ch=canvas.offsetHeight;
+      const nx=pct(e.clientX-r.left,cw),ny=pct(e.clientY-r.top,ch);
+      if(cvDragState.end==='1'){el.x1=Math.max(0,Math.min(100,nx));el.y1=Math.max(0,Math.min(100,ny))}
+      else{el.x2=Math.max(0,Math.min(100,nx));el.y2=Math.max(0,Math.min(100,ny))}
+      cvRender();
+    }
+  }
+});
+
+document.addEventListener('mouseup',e=>{
+  if(cvDrawState){
+    const el=cvGetEl(cvDrawState.id);
+    // Remove trivially small shapes
+    if(el&&el.type!=='arrow'&&el.w<2&&el.h<2){
+      const p=tmplPages[curTmplPage];
+      if(p&&p.elements)p.elements=p.elements.filter(e=>e.id!==el.id);
+      cvSelId=null;
+    }
+    cvDrawState=null;
+    cvTool=null;
+    ['photo','rect','ellipse','arrow','text'].forEach(t=>{
+      const b=document.getElementById('cv-btn-'+t);if(b)b.classList.remove('cv-active');
+    });
+    const canvas=cvGetCanvas();if(canvas)canvas.style.cursor='default';
+    cvRender();return;
+  }
+  if(cvDragState){cvDragState=null;cvRender()}
+});
+
+// Keyboard: Delete
+document.addEventListener('keydown',e=>{
+  if(e.key==='Delete'||e.key==='Backspace'){
+    const ae=document.activeElement;
+    if(ae&&(ae.contentEditable==='true'||ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'))return;
+    if(cvSelId&&document.getElementById('modalStep2').style.display!=='none'){e.preventDefault();cvDelSel()}
+  }
+  if((e.ctrlKey||e.metaKey)&&e.key==='b'){const ae=document.activeElement;if(ae&&ae.contentEditable==='true'){e.preventDefault();document.execCommand('bold',false,null)}}
+  if((e.ctrlKey||e.metaKey)&&e.key==='i'){const ae=document.activeElement;if(ae&&ae.contentEditable==='true'){e.preventDefault();document.execCommand('italic',false,null)}}
+});
+
+// ══════════ PHOTO INPUT ══════════
 function onTmplImg(ev){
-  const f=ev.target.files[0];if(!f||!pgTarget)return;
+  const f=ev.target.files[0];if(!f)return;
   const rd=new FileReader();
   rd.onload=e2=>{
-    const p=tmplPages[pgTarget.page];if(!p)return;
-    if(!p.photos)p.photos=[];
-    p.photos[pgTarget.slot]=e2.target.result;
-    // Update displayed img
-    if(p.type==='main'){
-      const img=document.getElementById('pi'+pgTarget.slot);
-      const sp=document.getElementById('psl'+pgTarget.slot);
-      if(img){img.src=e2.target.result;img.style.display='block'}
-      if(sp)sp.style.display='none';
-    }else{
-      const img=document.getElementById('xpi'+pgTarget.slot);
-      const sp=document.getElementById('xpsl'+pgTarget.slot);
-      if(img){img.src=e2.target.result;img.style.display='block'}
-      if(sp)sp.style.display='none';
+    const src=e2.target.result;
+    if(cvImgTargetId!==null){
+      // Replace existing photo
+      const el=cvGetEl(cvImgTargetId);
+      if(el&&el.type==='photo'){el.src=src}
+      cvImgTargetId=null;
+      cvRender();
+    } else {
+      // Add new photo element
+      const canvas=cvGetCanvas();
+      const cw=canvas?canvas.offsetWidth:300,ch=canvas?canvas.offsetHeight:200;
+      const els=cvGetCurEls();
+      // Auto-tile: place next to existing photos
+      const photos=els.filter(e=>e.type==='photo');
+      const idx=photos.length;
+      const cols=2,rows=2,maxPhotos=4;
+      const col=idx%cols,row=Math.floor(idx/cols);
+      const pw=48,ph=48;
+      const el={id:cvMkId(),type:'photo',x:col*(pw+2)+1,y:row*(ph+2)+1,w:pw,h:ph,src};
+      els.push(el);
+      cvSelId=el.id;
+      cvTool=null;
+      ['photo','rect','ellipse','arrow','text'].forEach(t=>{
+        const b=document.getElementById('cv-btn-'+t);if(b)b.classList.remove('cv-active');
+      });
+      if(canvas)canvas.style.cursor='default';
+      cvRender();
     }
-    pgTarget=null;
   };
   rd.readAsDataURL(f);ev.target.value='';
 }
 
-// TOOLBAR FORMATTING
+// TOOLBAR FORMATTING (for text cells in table)
 function fmtCmd(cmd){document.execCommand(cmd,false,null)}
 function fmtSize(v){if(v)document.execCommand('fontSize',false,v)}
 
@@ -1116,16 +1466,41 @@ async function buildPPTFromTemplate(){
       const pY=3.0,pH=4.5;
       s.addShape("rect",{x:0.2,y:pY,w:0.65,h:pH,fill:{color:"E8E8E8"},line:{color:"BBBBBB",pt:0.5}});
       s.addText("사\n진\n첨\n부",{x:0.2,y:pY,w:0.65,h:pH,fontSize:8,color:"444444",fontFace:"맑은 고딕",align:"center",valign:"middle"});
-      const iX=0.87,iW=5.0,iH=pH/2;
-      // 2x2 photos
-      [[0,0,0],[1,1,0],[2,0,1],[3,1,1]].forEach(([idx,col,row])=>{
-        const px=iX+col*(iW/2),py=pY+row*iH;
-        if(pg.photos[idx]){try{s.addImage({data:pg.photos[idx],x:px,y:py,w:iW/2,h:iH,sizing:{type:"contain",w:iW/2,h:iH}})}catch(e){}}
-        else{s.addShape("rect",{x:px,y:py,w:iW/2,h:iH,fill:{color:"F5F5F5"},line:{color:"CCCCCC",pt:0.5,dashType:"dash"}})}
-      });
+      const iX=0.87,iW=5.3,totalW=11.69,totalH=8.27;
+      // Draw canvas elements (photos, shapes)
+      const canvasEls=pg.elements||[];
+      // Photo canvas occupies iX to iX+iW, pY to pY+pH (in inches)
+      for(const cel of canvasEls){
+        if(cel.type==='photo'&&cel.src){
+          const ex=(cel.x/100)*iW+iX,ey=(cel.y/100)*pH+pY;
+          const ew=(cel.w/100)*iW,eh=(cel.h/100)*pH;
+          try{s.addImage({data:cel.src,x:ex,y:ey,w:ew,h:eh,sizing:{type:"contain",w:ew,h:eh}})}catch(imgErr){}
+        } else if(cel.type==='rect'){
+          const ex=(cel.x/100)*iW+iX,ey=(cel.y/100)*pH+pY;
+          const ew=(cel.w/100)*iW,eh=(cel.h/100)*pH;
+          const cc=(cel.color||'#002C5F').replace('#','');
+          s.addShape("rect",{x:ex,y:ey,w:ew,h:eh,fill:{type:"none"},line:{color:cc,pt:2}});
+        } else if(cel.type==='ellipse'){
+          const ex=(cel.x/100)*iW+iX,ey=(cel.y/100)*pH+pY;
+          const ew=(cel.w/100)*iW,eh=(cel.h/100)*pH;
+          const cc=(cel.color||'#002C5F').replace('#','');
+          s.addShape("ellipse",{x:ex,y:ey,w:ew,h:eh,fill:{type:"none"},line:{color:cc,pt:2}});
+        } else if(cel.type==='text'){
+          const ex=(cel.x/100)*iW+iX,ey=(cel.y/100)*pH+pY;
+          const ew=(cel.w/100)*iW,eh=(cel.h/100)*pH;
+          s.addShape("rect",{x:ex,y:ey,w:ew,h:eh,fill:{color:"FFFFBE"},line:{color:"D4B800",pt:0.5}});
+          s.addText(cel.text||'',{x:ex,y:ey,w:ew,h:eh,fontSize:cel.fontSize||8,color:"333333",fontFace:"맑은 고딕",valign:"top",wrap:true});
+        } else if(cel.type==='arrow'){
+          const ax1=(cel.x1/100)*iW+iX,ay1=(cel.y1/100)*pH+pY;
+          const ax2=(cel.x2/100)*iW+iX,ay2=(cel.y2/100)*pH+pY;
+          const cc=(cel.color||'#C0392B').replace('#','');
+          const angle=Math.atan2(ay2-ay1,ax2-ax1)*180/Math.PI;
+          const len=Math.sqrt((ax2-ax1)**2+(ay2-ay1)**2);
+          s.addShape("line",{x:ax1,y:ay1,w:len,h:0,rotate:angle,line:{color:cc,pt:2,endArrowType:"arrow"}});
+        }
+      }
+      // Border around photo area
       s.addShape("rect",{x:iX,y:pY,w:iW,h:pH,fill:{type:"none"},line:{color:"BBBBBB",pt:0.5}});
-      s.addShape("line",{x:iX,y:pY+iH,w:iW,h:0,line:{color:"CCCCCC",pt:0.5}});
-      s.addShape("line",{x:iX+iW/2,y:pY,w:0,h:pH,line:{color:"CCCCCC",pt:0.5}});
       // Right panel
       const rX=5.94,rW=5.55;
       s.addShape("rect",{x:rX,y:pY,w:rW,h:pH,fill:{color:"FFFFFF"},line:{color:"BBBBBB",pt:0.5}});
@@ -1133,10 +1508,9 @@ async function buildPPTFromTemplate(){
         s.addText(label,{x:rX+0.1,y,w:rW-0.2,h:0.24,fontSize:9,color:"002C5F",fontFace:"맑은 고딕",bold:true});
         s.addText(text||"",{x:rX+0.1,y:y+0.24,w:rW-0.2,h:h2,fontSize:8,color:"333333",fontFace:"맑은 고딕",valign:"top",wrap:true});
       };
-      addRC("1. 공사 위치",f.lod,pY+0.08,0.55);
-      addRC("2. 공사 개요",f.ov,pY+0.9,0.85);
-      addRC("3. 공사 내용",f.ct,pY+1.9,1.55);
-      addRC("4. 기타",f.etc,pY+3.6,0.7);
+      addRC("1. 공사 개요",f.ov,pY+0.08,1.2);
+      addRC("2. 공사 내용",f.ct,pY+1.4,2.5);
+      addRC("3. 기타",f.etc,pY+4.0,0.8);
       // Bigo
       s.addTable([[{text:"비고",options:{bold:true,fill:"E8E8E8",align:"center",fontSize:8,fontFace:"맑은 고딕",color:"444444"}},{text:f.note||"",options:{fontSize:8,fontFace:"맑은 고딕",color:"777777"}}]],{x:0.2,y:pY+pH,w:11.29,colW:[0.65,10.64],rowH:0.27,border:{pt:0.5,color:"BBBBBB"}});
     }else{
@@ -1146,11 +1520,14 @@ async function buildPPTFromTemplate(){
       s.addShape("rect",{x:0.2,y:pY,w:0.65,h:pH,fill:{color:"E8E8E8"},line:{color:"BBBBBB",pt:0.5}});
       s.addText("사\n진\n첨\n부",{x:0.2,y:pY,w:0.65,h:pH,fontSize:8,color:"444444",fontFace:"맑은 고딕",align:"center",valign:"middle"});
       const cW=(11.29-0.65)/3;
-      pg.photos.forEach((src,i)=>{
-        const px=0.87+i*cW;
-        if(src){try{s.addImage({data:src,x:px,y:pY,w:cW,h:pH,sizing:{type:"contain",w:cW,h:pH}})}catch(e){}}
-        else{s.addShape("rect",{x:px,y:pY,w:cW,h:pH,fill:{color:"F5F5F5"},line:{color:"CCCCCC",pt:0.5,dashType:"dash"}})}
-      });
+      const exEls=pg.elements||[];
+      for(const cel of exEls){
+        if(cel.type==='photo'&&cel.src){
+          const ex=(cel.x/100)*(11.29-0.65)+0.87,ey=(cel.y/100)*pH+pY;
+          const ew=(cel.w/100)*(11.29-0.65),eh=(cel.h/100)*pH;
+          try{s.addImage({data:cel.src,x:ex,y:ey,w:ew,h:eh,sizing:{type:"contain",w:ew,h:eh}})}catch(imgErr){}
+        }
+      }
       s.addShape("rect",{x:0.87,y:pY,w:11.29-0.65,h:pH,fill:{type:"none"},line:{color:"BBBBBB",pt:0.5}});
       s.addTable([[{text:"비고",options:{bold:true,fill:"E8E8E8",align:"center",fontSize:8,fontFace:"맑은 고딕",color:"444444"}},{text:pg.note||"",options:{fontSize:8,fontFace:"맑은 고딕",color:"777777"}}]],{x:0.2,y:pY+pH,w:11.29,colW:[0.65,10.64],rowH:0.27,border:{pt:0.5,color:"BBBBBB"}});
     }
@@ -1177,7 +1554,7 @@ function sendEmail3(){
   addWorkOrder({
     id:`order_${Date.now()}`,buildingCode:b?b.code:"",buildingName:b?b.name:"",
     projectName:tmplPages[0]?.fields?.pj||'',
-    floor:tmplPages[0]?.fields?.fl||document.getElementById("formFloor").value,
+    floor:document.getElementById("formFloor").value,
     location:tmplPages[0]?.fields?.lo||'',
     disciplines:[...selectedDisciplines],
     managers:selectedDisciplines.map(disc=>({name:b?b.managers[disc].name:"",disc})),
