@@ -115,7 +115,12 @@ body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystem
 .manager-contacts{display:flex;flex-direction:column;gap:8px}
 .manager-contact{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray700);text-decoration:none}
 .manager-contact svg{width:13px;height:13px}
-.unified-cta{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:28px;padding:16px 32px;border-radius:14px;font-size:16px;font-weight:600;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;transition:all 0.3s;box-shadow:0 4px 16px rgba(0,44,95,0.2);border:none;cursor:pointer;font-family:inherit;width:100%}
+.action-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.action-btns.single{grid-template-columns:1fr}
+.cta-ppt{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 20px;border-radius:14px;font-size:15px;font-weight:600;background:var(--white);color:var(--primary);border:2px solid var(--primary);transition:all 0.3s;cursor:pointer;font-family:inherit;width:100%}
+.cta-ppt:hover{background:var(--primary);color:#fff;box-shadow:0 6px 24px rgba(0,44,95,0.25);transform:translateY(-2px)}
+.unified-cta{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 20px;border-radius:14px;font-size:15px;font-weight:600;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;transition:all 0.3s;box-shadow:0 4px 16px rgba(0,44,95,0.2);border:none;cursor:pointer;font-family:inherit;width:100%}
+.unified-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,44,95,0.3)}
 .unified-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,44,95,0.3)}
 .about{padding:120px 32px;background:linear-gradient(180deg,var(--gray50) 0%,var(--white) 100%)}
 .about-inner{max-width:1100px;margin:0 auto}
@@ -691,7 +696,7 @@ const icons={
 function getFilteredBuildings(){const q=document.getElementById("searchInput").value.trim().toLowerCase();let l=BUILDINGS;if(activeZone!=="전체")l=l.filter(b=>b.zone===activeZone);if(q)l=l.filter(b=>b.code.toLowerCase().includes(q)||b.name.toLowerCase().includes(q)||Object.values(b.managers).some(m=>m.name.includes(q)));return l}
 function renderZoneFilter(){const c=document.getElementById("zoneFilter");c.innerHTML=ZONES.map(z=>`<button class="zone-btn ${z===activeZone?'active':''}" data-zone="${z}">${z}</button>`).join("")+`<span class="zone-count">${getFilteredBuildings().length}개 건물</span>`;c.querySelectorAll(".zone-btn").forEach(btn=>{btn.addEventListener("click",()=>{activeZone=btn.dataset.zone;selectedBuilding=null;renderZoneFilter();renderBuildingGrid();hideBuildingDetail()})})}
 function renderBuildingGrid(){const c=document.getElementById("buildingGrid"),f=getFilteredBuildings(),cnt=document.querySelector(".zone-count");if(cnt)cnt.textContent=`${f.length}개 건물`;if(f.length===0){c.innerHTML=`<div class="no-results">${icons.search}<h4>검색 결과가 없습니다</h4><p>건물 코드 또는 건물명으로 다시 검색해 주세요.</p></div>`;return}c.innerHTML=f.map(b=>`<div class="building-card" data-code="${b.code}"><div class="building-header"><span class="building-code">${b.code}</span><span class="building-zone">${b.zone}</span></div><h4 class="building-name">${b.name}</h4><div class="building-tags">${DISCIPLINES.map(d=>`<span class="disc-tag ${DISC_CLASS[d]}">${d}</span>`).join("")}</div></div>`).join("");c.querySelectorAll(".building-card").forEach(card=>{card.addEventListener("click",()=>{selectedBuilding=BUILDINGS.find(b=>b.code===card.dataset.code);showBuildingDetail()})})}
-function showBuildingDetail(){if(!selectedBuilding)return;const b=selectedBuilding,c=document.getElementById("buildingDetail");c.innerHTML=`<div class="detail-header"><div><div class="detail-badges"><span class="detail-code">${b.code}</span><span class="detail-zone">${b.zone}</span></div><h3 class="detail-name">${b.name}</h3></div><button class="detail-back" id="detailBack">${icons.arrowLeft} 목록으로</button></div><div class="detail-body"><p class="detail-label">공종별 담당자 정보</p><div class="managers-grid">${DISCIPLINES.map(disc=>{const m=b.managers[disc],cls=DISC_CLASS[disc];return`<div class="manager-card"><div class="manager-header"><div class="manager-icon ${cls}">${DISC_ICONS[disc]}</div><span class="manager-disc ${cls}">${disc}</span></div><div class="manager-body"><div class="manager-info"><div class="manager-avatar ${cls}">${m.name.charAt(0)}</div><div><p class="manager-name">${m.name}</p><p class="manager-team">인프라건설팀</p></div></div><div class="manager-contacts"><a href="tel:${m.phone}" class="manager-contact">${icons.phoneSmall} ${m.phone}</a><a href="mailto:${m.email}" class="manager-contact" style="word-break:break-all">${icons.mailSmall} ${m.email}</a></div></div></div>`}).join("")}</div><button class="unified-cta" id="openRequestModal">${icons.mailSmall} 공사 의뢰하기</button></div>`;c.classList.add("visible");document.getElementById("buildingGrid").style.display="none";document.getElementById("detailBack").addEventListener("click",hideBuildingDetail);document.getElementById("openRequestModal").addEventListener("click",openRequestModal)}
+function showBuildingDetail(){if(!selectedBuilding)return;const b=selectedBuilding,c=document.getElementById("buildingDetail");c.innerHTML=`<div class="detail-header"><div><div class="detail-badges"><span class="detail-code">${b.code}</span><span class="detail-zone">${b.zone}</span></div><h3 class="detail-name">${b.name}</h3></div><button class="detail-back" id="detailBack">${icons.arrowLeft} 목록으로</button></div><div class="detail-body"><p class="detail-label">공종별 담당자 정보</p><div class="managers-grid">${DISCIPLINES.map(disc=>{const m=b.managers[disc],cls=DISC_CLASS[disc];return`<div class="manager-card"><div class="manager-header"><div class="manager-icon ${cls}">${DISC_ICONS[disc]}</div><span class="manager-disc ${cls}">${disc}</span></div><div class="manager-body"><div class="manager-info"><div class="manager-avatar ${cls}">${m.name.charAt(0)}</div><div><p class="manager-name">${m.name}</p><p class="manager-team">인프라건설팀</p></div></div><div class="manager-contacts"><a href="tel:${m.phone}" class="manager-contact">${icons.phoneSmall} ${m.phone}</a><a href="mailto:${m.email}" class="manager-contact" style="word-break:break-all">${icons.mailSmall} ${m.email}</a></div></div></div>`}).join("")}</div><div class="action-btns"><button class="cta-ppt" id="btnOpenPPT"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6" rx="1"/></svg> 시설물 작업의뢰서 작성</button><button class="unified-cta" id="btnDirectMail"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> 공사 의뢰하기 (아웃룩)</button></div></div>`;c.classList.add("visible");document.getElementById("buildingGrid").style.display="none";document.getElementById("detailBack").addEventListener("click",hideBuildingDetail);document.getElementById("btnOpenPPT").addEventListener("click",openRequestModal);document.getElementById("btnDirectMail").addEventListener("click",openDirectOutlook)}
 function hideBuildingDetail(){selectedBuilding=null;document.getElementById("buildingDetail").classList.remove("visible");document.getElementById("buildingGrid").style.display="grid"}
 function renderStats(){document.getElementById("statsGrid").innerHTML=STATS_DATA.map((s,i)=>`<div class="stat-card reveal" style="transition-delay:${i*0.08}s"><p class="stat-num">${s.num}</p><p class="stat-label">${s.label}</p></div>`).join("")}
 function renderContacts(){document.getElementById("contactGrid").innerHTML=CONTACTS.map((c,i)=>`<div class="contact-card reveal" style="transition-delay:${i*0.1}s"><div class="contact-icon">${icons[c.icon]}</div><p class="contact-label">${c.label}</p>${c.href?`<a href="${c.href}" class="contact-value">${c.value}</a>`:`<p class="contact-value">${c.value}</p>`}</div>`).join("")}
@@ -712,6 +717,21 @@ function moveCard(id,s){updateWorkOrderStatus(id,s);renderMgmtDashboard()}
 function removeCard(id){if(confirm('삭제하시겠습니까?')){deleteWorkOrder(id);renderMgmtFilters();renderMgmtDashboard()}}
 
 // ══════════ STEP 1 MODAL ══════════
+function openDirectOutlook(){
+  if(!selectedBuilding)return;
+  const b=selectedBuilding;
+  const allEmails=DISCIPLINES.map(d=>b.managers[d].email).join(';');
+  const subject=encodeURIComponent(`[시설물 공사 의뢰] ${b.code} ${b.name}`);
+  const body=encodeURIComponent(`안녕하세요.
+
+${b.name} 관련 시설물 공사 의뢰 드립니다.
+
+작업요청서를 별도 첨부하여 발송 드리오니 검토 부탁드립니다.
+
+감사합니다.`);
+  window.location.href=`mailto:${allEmails}?subject=${subject}&body=${body}`;
+}
+
 function openRequestModal(){
   if(!selectedBuilding)return;
   selectedDisciplines=[];aiSummary="";generatedPptBlob=null;
@@ -800,8 +820,10 @@ async function generateAndDownloadPPT(){
   };
 
   try{
-    await buildAndDownloadPPT(fd);
-    // Fill email step
+    // ① 블롭만 생성 (다운로드 X)
+    generatedPptBlob = await buildPPTBlob(fd);
+
+    // ② 이메일 페이지 채우기
     const b=selectedBuilding;
     const pj=fd.pj||'작업요청서';
     const fname=`${b?b.name:'시설물'}_작업요청서.pptx`;
@@ -816,10 +838,16 @@ async function generateAndDownloadPPT(){
     document.getElementById("btnDownloadPpt3").onclick=()=>{
       if(generatedPptBlob) downloadBlob(generatedPptBlob, fname);
     };
+
+    // ③ 이메일 페이지 먼저 표시
     showStep(2);
+
+    // ④ 짧은 딜레이 후 다운로드 (UI 업데이트 보장)
+    setTimeout(()=>{ if(generatedPptBlob) downloadBlob(generatedPptBlob, fname); }, 300);
+
   }catch(ex){
-    console.error(ex);
-    alert("PPT 생성 중 오류가 발생했습니다: "+ex.message);
+    console.error("PPT 생성 오류:", ex);
+    alert("PPT 생성 중 오류가 발생했습니다.\n"+ex.message);
   }finally{
     btn.disabled=false;
     btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PPT 생성 & 다운로드`;
@@ -833,7 +861,7 @@ function downloadBlob(blob, filename){
   URL.revokeObjectURL(url);
 }
 
-async function buildAndDownloadPPT(fd){
+async function buildPPTBlob(fd){
   const loc=[fd.fl,fd.lo].filter(Boolean).join(' ');
   const prj=fd.pj?`[시설물 공사 의뢰] ${fd.pj}`:'[시설물 공사 의뢰]';
 
@@ -842,256 +870,163 @@ async function buildAndDownloadPPT(fd){
   pptx.layout="A4_LAND";
   pptx.title="시설물 작업 요청서";
 
-  // ═══════════════════════════════════════════════
-  // SLIDE 1 — 기본 정보 (깔끔한 흰 배경)
-  // ═══════════════════════════════════════════════
+  const LM=0.28, CW=11.13;
+
+  // ── 공통 헬퍼 ──────────────────────────────────────────
+  function addHdr(sl,pg,tot){
+    sl.background={color:"FFFFFF"};
+    sl.addText("■  시설물 작업 요청서",{x:LM,y:0.14,w:7.5,h:0.34,fontSize:16,color:"111111",fontFace:"맑은 고딕",bold:true});
+    sl.addText(`${pg} / ${tot}   ${fd.dt||""}`,{x:7.8,y:0.18,w:3.61,h:0.26,fontSize:8.5,color:"888888",fontFace:"맑은 고딕",align:"right"});
+    sl.addShape("line",{x:LM,y:0.52,w:CW,h:0,line:{color:"CCCCCC",pt:0.8}});
+    sl.addShape("line",{x:LM,y:0.56,w:CW,h:0,line:{color:"00AAD2",pt:1.5}});
+  }
+  function cell(sl,x,y,w,h,txt,hd,fSz,tc){
+    sl.addShape("rect",{x,y,w,h,fill:{color:hd?"EEEEEE":"FFFFFF"},line:{color:"CCCCCC",pt:0.5}});
+    if(txt!=null) sl.addText(String(txt),{x:x+0.05,y,w:w-0.08,h,fontSize:fSz||8.5,color:tc||"111111",fontFace:"맑은 고딕",bold:hd,align:hd?"center":"left",valign:"middle",wrap:true});
+  }
+  function photoSlot(sl,x,y,w,h,label,bgHex){
+    sl.addShape("rect",{x,y,w,h,fill:{color:bgHex||"F4F6FA"},line:{color:"C0C8D8",pt:1,dashType:"dash"}});
+    sl.addShape("rect",{x:x+0.09,y:y+0.09,w:w-0.18,h:h-0.18,fill:{type:"none"},line:{color:"D5DCE8",pt:0.5,dashType:"dash"}});
+    sl.addText("사진을 삽입하세요",{x:x+0.1,y:y+h/2-0.14,w:w-0.2,h:0.24,fontSize:9,color:"8899BB",fontFace:"맑은 고딕",align:"center"});
+    sl.addText("삽입  >  그림  >  파일에서",{x:x+0.1,y:y+h/2+0.08,w:w-0.2,h:0.2,fontSize:7.5,color:"AABBCC",fontFace:"맑은 고딕",align:"center",italic:true});
+    if(label){
+      sl.addShape("rect",{x:x+0.07,y:y+0.07,w:0.9,h:0.21,fill:{color:"E8EEF8"},line:{color:"B0C4E0",pt:0.5}});
+      sl.addText(label,{x:x+0.07,y:y+0.07,w:0.9,h:0.21,fontSize:7.5,color:"334488",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
+    }
+  }
+  function vjLabel(sl,x,y,w,h){
+    sl.addShape("rect",{x,y,w,h,fill:{color:"EEEEEE"},line:{color:"CCCCCC",pt:0.5}});
+    sl.addText("사\n진\n첨\n부",{x,y,w,h,fontSize:7.5,color:"555555",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle",paraSpaceBefore:1,paraSpaceAfter:1});
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // SLIDE 1 — 기본 정보
+  // ══════════════════════════════════════════════════════════
   {
     const s=pptx.addSlide();
-    s.background={color:"FFFFFF"};
-    const LM=0.28, CW=11.13;
+    addHdr(s,1,2);
 
-    // 헤더 (흰 배경, 텍스트만)
-    const totalSlides2=1;
-    s.addText("■  시설물 작업 요청서",{x:LM,y:0.14,w:7.5,h:0.34,fontSize:16,color:"111111",fontFace:"맑은 고딕",bold:true});
-    s.addText(`1 / ${totalSlides2}   ${fd.dt||""}`,{x:7.8,y:0.18,w:3.61,h:0.26,fontSize:8.5,color:"888888",fontFace:"맑은 고딕",align:"right"});
-    // 얇은 구분선
-    s.addShape("line",{x:LM,y:0.52,w:CW,h:0,line:{color:"CCCCCC",pt:0.8}});
-    s.addShape("line",{x:LM,y:0.56,w:CW,h:0,line:{color:"00AAD2",pt:1.5}});
-
-    // ─ 섹션1 제목
+    // 1. 내용
     const TY=0.70;
     s.addText("1.  내  용",{x:LM,y:TY,w:CW,h:0.24,fontSize:10,color:"002C5F",fontFace:"맑은 고딕",bold:true});
 
-    // ─ 테이블 (심플 — 회전 없음)
-    const tY=TY+0.27;
-    const rH=0.30; // row height
-    const draw=(x,y,w,h,txt,isHd,fSz,txtColor)=>{
-      s.addShape("rect",{x,y,w,h,fill:{color:isHd?"EEEEEE":"FFFFFF"},line:{color:"CCCCCC",pt:0.5}});
-      if(txt!==null&&txt!==undefined)
-        s.addText(String(txt),{x:x+0.05,y,w:w-0.08,h,fontSize:fSz||8.5,color:txtColor||"111111",fontFace:"맑은 고딕",bold:isHd,align:isHd?"center":"left",valign:"middle",wrap:true});
-    };
-    // 컬럼 비율
-    const cA=LM, wA=0.88; // 라벨
-    const cB=LM+0.88, wB=2.7; // 값
-    const cC=LM+3.58, wC=1.42; // 라벨
-    const cD=LM+5.00, wD=CW-5.00+LM-LM; // 값 (나머지)
-    const wD2=LM+CW-cD;
+    const tY=TY+0.27, rH=0.30;
+    const cA=LM, wA=0.88, cB=LM+0.88, wB=2.7, cC=LM+3.58, wC=1.42, cD=LM+5.00, wD2=LM+CW-LM-5.00;
 
-    // Row 0: 의뢰자 / 완료 요청날짜
-    draw(cA,tY,wA,rH,"의뢰자",true);
-    draw(cB,tY,wB,rH,fd.rq||"",false);
-    draw(cC,tY,wC,rH,"완료 요청날짜",true,7.5);
-    draw(cD,tY,wD2,rH,fd.dl||"",false);
+    cell(s,cA,tY,wA,rH,"의뢰자",true);
+    cell(s,cB,tY,wB,rH,fd.rq||"",false);
+    cell(s,cC,tY,wC,rH,"완료 요청날짜",true,7.5);
+    cell(s,cD,tY,wD2,rH,fd.dl||"",false);
 
-    // Row 1: 건물명 / 상세위치
-    draw(cA,tY+rH,wA,rH,"건물명",true);
-    draw(cB,tY+rH,wB,rH,fd.b||"",false);
-    draw(cC,tY+rH,wC,rH,"상세 위치",true,7.5);
-    draw(cD,tY+rH,wD2,rH,loc||"",false);
+    cell(s,cA,tY+rH,wA,rH,"건물명",true);
+    cell(s,cB,tY+rH,wB,rH,fd.b||"",false);
+    cell(s,cC,tY+rH,wC,rH,"상세 위치",true,7.5);
+    cell(s,cD,tY+rH,wD2,rH,loc||"",false);
 
-    // Row 2: 품목 (full width value)
-    draw(cA,tY+rH*2,wA,rH,"품  목",true);
-    draw(cB,tY+rH*2,wD2+wC+wB,rH,prj,false,8,prj?"002C5F":"AAAAAA");
+    cell(s,cA,tY+rH*2,wA,rH,"품  목",true);
+    cell(s,cB,tY+rH*2,wD2+wC+wB,rH,prj,false,8,prj?"002C5F":"AAAAAA");
 
-    // Row 3: 문제점
-    const prH=rH*1.4;
-    draw(cA,tY+rH*3,wA,prH,"문제점",true);
-    draw(cB,tY+rH*3,wD2+wC+wB,prH,fd.pr||"",false,8);
+    const prH=rH*1.4, rrH=rH*1.4;
+    cell(s,cA,tY+rH*3,wA,prH,"문제점",true);
+    cell(s,cB,tY+rH*3,wD2+wC+wB,prH,fd.pr||"",false,8);
 
-    // Row 4: 요청사항
-    const rrH=rH*1.4;
-    draw(cA,tY+rH*3+prH,wA,rrH,"요청사항",true,7.5);
-    draw(cB,tY+rH*3+prH,wD2+wC+wB,rrH,fd.re||"",false,8);
+    cell(s,cA,tY+rH*3+prH,wA,rrH,"요청사항",true,7.5);
+    cell(s,cB,tY+rH*3+prH,wD2+wC+wB,rrH,fd.re||"",false,8);
 
-    const tableBottom=tY+rH*3+prH+rrH;
+    const tableBot=tY+rH*3+prH+rrH;
 
-    // ─ 섹션2 제목
-    const S2Y=tableBottom+0.14;
+    // 2. 현장사진 및 위치
+    const S2Y=tableBot+0.14;
     s.addText("2.  현장사진 및 위치",{x:LM,y:S2Y,w:CW,h:0.24,fontSize:10,color:"002C5F",fontFace:"맑은 고딕",bold:true});
 
-    // ─ 사진+텍스트 영역
-    const aY=S2Y+0.27;
-    const aH=8.27-aY-0.36; // 비고 공간 확보
-    const photoW=6.6;
-    const textX=LM+photoW+0.12;
-    const textW=LM+CW-textX;
+    const aY=S2Y+0.27, aH=8.27-aY-0.36;
+    const pW=6.6, tX=LM+pW+0.12, tW=LM+CW-tX;
+    const lbW=0.36, slX=LM+lbW+0.02, slW=pW-lbW-0.02, slH=aH/2;
 
-    // 사진 컬럼 헤더
-    const labelW=0.36;
-    s.addShape("rect",{x:LM,y:aY,w:labelW,h:aH,fill:{color:"EEEEEE"},line:{color:"CCCCCC",pt:0.5}});
-    s.addText("사  진  첨  부",{x:LM,y:aY,w:labelW,h:aH,fontSize:7,color:"555555",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle",rotate:270});
+    vjLabel(s,LM,aY,lbW,aH);
+    photoSlot(s,slX,aY,slW,slH-0.02,"사진");
+    photoSlot(s,slX,aY+slH,slW,slH,"도면","F0F4F0");
+    s.addShape("line",{x:slX,y:aY+slH,w:slW,h:0,line:{color:"CCCCCC",pt:0.5}});
 
-    // 사진 슬롯 (상/하 분할)
-    const slotX=LM+labelW+0.02;
-    const slotW=photoW-labelW-0.02;
-    const slotH=aH/2;
+    function panel(label,hint,y,h,nc){
+      s.addShape("rect",{x:tX,y,w:tW,h:0.22,fill:{color:"EFF2F8"},line:{color:"CCCCCC",pt:0.5}});
+      s.addText(label,{x:tX+0.08,y,w:tW-0.1,h:0.22,fontSize:8,color:nc||"002C5F",fontFace:"맑은 고딕",bold:true,valign:"middle"});
+      s.addShape("rect",{x:tX,y:y+0.22,w:tW,h:h-0.22,fill:{color:"FFFFFF"},line:{color:"DDDDDD",pt:0.5}});
+      s.addText(hint,{x:tX+0.08,y:y+0.26,w:tW-0.12,h:h-0.30,fontSize:7.5,color:"CCCCCC",fontFace:"맑은 고딕",italic:true,valign:"top"});
+    }
+    panel("1. 공사 개요","공사 개요를 입력하세요",aY,aH*0.3,"002C5F");
+    panel("2. 공사 내용","공사 내용을 상세히 입력하세요",aY+aH*0.3,aH*0.44,"002C5F");
+    panel("3. 기타","기타 사항을 입력하세요",aY+aH*0.74,aH*0.26,"34855E");
 
-    const addPhotoSlot=(src,x,y,w,h,label,labelColor)=>{
-      if(src){
-        try{s.addImage({data:src,x,y,w,h,sizing:{type:"contain",w,h}})}catch(e){}
-        s.addShape("rect",{x,y,w,h,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
-      }else{
-        // 파워포인트에서 직접 사진 삽입할 수 있는 placeholder 스타일
-        s.addShape("rect",{x,y,w,h,fill:{color:"F4F6FA"},line:{color:"C0C8D8",pt:1,dashType:"dash"}});
-        // 내부 여백선
-        s.addShape("rect",{x:x+0.12,y:y+0.12,w:w-0.24,h:h-0.24,fill:{type:"none"},line:{color:"D0D8E8",pt:0.5,dashType:"dash"}});
-        // 이미지 아이콘 (중앙 위)
-        const iconY=y+h/2-0.45;
-        s.addShape("rect",{x:x+w/2-0.25,y:iconY,w:0.5,h:0.38,fill:{color:"D8E0F0"},line:{color:"B0BCD8",pt:0.5},rectRadius:0.04});
-        s.addText("🖼",{x:x+w/2-0.2,y:iconY+0.02,w:0.4,h:0.34,fontSize:16,align:"center",valign:"middle"});
-        // 안내 텍스트
-        s.addText("사진을 삽입하세요",{x:x+0.1,y:y+h/2+0.02,w:w-0.2,h:0.24,fontSize:9,color:"8899BB",fontFace:"맑은 고딕",align:"center",bold:false});
-        s.addText("삽입 → 그림 → 파일에서",{x:x+0.1,y:y+h/2+0.25,w:w-0.2,h:0.2,fontSize:7.5,color:"AABBCC",fontFace:"맑은 고딕",align:"center",italic:true});
-      }
-      // 슬롯 라벨 (좌상단 뱃지)
-      s.addShape("rect",{x:x+0.07,y:y+0.07,w:0.7,h:0.19,fill:{color:labelColor==="34855E"?"E8F5EE":"E8EEF8"},line:{color:labelColor==="34855E"?"B0D8BE":"B0C4E0",pt:0.5},rectRadius:0.04});
-      s.addText(label,{x:x+0.07,y:y+0.07,w:0.7,h:0.19,fontSize:7.5,color:labelColor||"3355AA",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
-    };
+    s.addShape("rect",{x:LM,y:aY,w:pW,h:aH,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
+    s.addShape("rect",{x:tX,y:aY,w:tW,h:aH,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
 
-    addPhotoSlot(null,slotX,aY,slotW,slotH-0.02,"📷  사진","002C5F");
-    addPhotoSlot(null,slotX,aY+slotH,slotW,slotH,"📐  도면","34855E");
-    s.addShape("line",{x:slotX,y:aY+slotH,w:slotW,h:0,line:{color:"CCCCCC",pt:0.5}});
-
-    // 우측 텍스트 패널
-    const drawPanel=(label,hint,y,h,numColor)=>{
-      s.addShape("rect",{x:textX,y,w:textW,h:0.22,fill:{color:"EFF2F8"},line:{color:"CCCCCC",pt:0.5}});
-      s.addText(label,{x:textX+0.08,y,w:textW-0.1,h:0.22,fontSize:8,color:numColor||"002C5F",fontFace:"맑은 고딕",bold:true,valign:"middle"});
-      s.addShape("rect",{x:textX,y:y+0.22,w:textW,h:h-0.22,fill:{color:"FFFFFF"},line:{color:"DDDDDD",pt:0.5}});
-      s.addText(hint,{x:textX+0.08,y:y+0.26,w:textW-0.12,h:h-0.30,fontSize:7.5,color:"CCCCCC",fontFace:"맑은 고딕",italic:true,valign:"top"});
-    };
-    drawPanel("1. 공사 개요","공사 개요를 입력하세요",aY,aH*0.3,"002C5F");
-    drawPanel("2. 공사 내용","공사 내용을 상세히 입력하세요",aY+aH*0.3,aH*0.44,"002C5F");
-    drawPanel("3. 기타","기타 사항을 입력하세요",aY+aH*0.74,aH*0.26,"34855E");
-
-    // 사진/텍스트 외곽 보더
-    s.addShape("rect",{x:LM,y:aY,w:photoW,h:aH,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
-    s.addShape("rect",{x:textX,y:aY,w:textW,h:aH,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
-
-    // 비고
-    const bigoY=aY+aH+0.06;
-    draw(LM,bigoY,0.6,0.26,"비  고",true,8);
-    draw(LM+0.6,bigoY,LM+CW-LM-0.6,0.26,fd.dl?`완료 요청일: ${fd.dl}`:"",false,8,"777777");
-
-    // 페이지 번호
+    const bgY=aY+aH+0.06;
+    cell(s,LM,bgY,0.6,0.26,"비  고",true,8);
+    cell(s,LM+0.6,bgY,LM+CW-LM-0.6,0.26,fd.dl?`완료 요청일: ${fd.dl}`:"",false,8,"777777");
   }
 
-  // ═══════════════════════════════════════════════
-  // SLIDE 2 — 추가 사진 (사진 2, 3 있을 때만)
-  // ═══════════════════════════════════════════════
-  const extraPhotos=[];
-  if(extraPhotos.length>0){
+  // ══════════════════════════════════════════════════════════
+  // SLIDE 2 — 공사내용 상세 참조 (사진 3장 + 메모)
+  // ══════════════════════════════════════════════════════════
+  {
     const s=pptx.addSlide();
-    s.background={color:"FFFFFF"};
-    const LM=0.28,CW=11.13;
-
-    s.addText("■  시설물 작업 요청서",{x:LM,y:0.14,w:8,h:0.34,fontSize:16,color:"111111",fontFace:"맑은 고딕",bold:true});
-    s.addText("2 / 2",{x:9.0,y:0.16,w:2.41,h:0.28,fontSize:9,color:"888888",fontFace:"맑은 고딕",align:"right"});
-    s.addShape("line",{x:LM,y:0.52,w:CW,h:0,line:{color:"CCCCCC",pt:0.8}});
-    s.addShape("line",{x:LM,y:0.56,w:CW,h:0,line:{color:"00AAD2",pt:1.5}});
+    addHdr(s,2,2);
 
     // 헤더 행
-    const hY=0.68;
-    s.addShape("rect",{x:LM,y:hY,w:0.6,h:0.26,fill:{color:"EEEEEE"},line:{color:"CCCCCC",pt:0.5}});
-    s.addText("구분",{x:LM,y:hY,w:0.6,h:0.26,fontSize:8,color:"555555",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
-    s.addShape("rect",{x:LM+0.6,y:hY,w:CW-0.6,h:0.26,fill:{color:"EEEEEE"},line:{color:"CCCCCC",pt:0.5}});
-    s.addText("공사내용 상세 참조",{x:LM+0.6,y:hY,w:CW-0.6,h:0.26,fontSize:8,color:"555555",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
+    const hY=0.66;
+    cell(s,LM,hY,0.72,0.27,"구분",true,8.5,"555555");
+    cell(s,LM+0.72,hY,CW-0.72,0.27,"공사내용 상세 참조",true,8.5,"555555");
 
-    // 사진 영역
-    const labelW=0.36;
-    const aY=hY+0.26;
-    const aH=8.27-aY-0.36;
-    s.addShape("rect",{x:LM,y:aY,w:labelW,h:aH,fill:{color:"EEEEEE"},line:{color:"CCCCCC",pt:0.5}});
-    s.addText("사  진  첨  부",{x:LM,y:aY,w:labelW,h:aH,fontSize:7,color:"555555",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle",rotate:270});
+    const lbW=0.36, aY=hY+0.27, bigoH=0.27;
+    const aH=8.27-aY-0.06-bigoH;
 
-    const photoAreaX=LM+labelW+0.02;
-    const photoAreaW=CW-labelW-0.02;
-    const cols=extraPhotos.length===1?1:2;
-    const colW=photoAreaW/cols;
+    vjLabel(s,LM,aY,lbW,aH);
 
-    extraPhotos.forEach((src,i)=>{
-      const col=i%cols,row=Math.floor(i/cols);
-      const rH=extraPhotos.length<=2?aH:aH/2;
-      const px=photoAreaX+col*colW, py=aY+row*rH;
-      try{s.addImage({data:src,x:px,y:py,w:colW,h:rH,sizing:{type:"contain",w:colW,h:rH}})}catch(e){}
-      s.addShape("rect",{x:px,y:py,w:colW,h:rH,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
-    });
+    const cX=LM+lbW+0.02, cW2=LM+CW-cX;
+    // 좌(58%) / 우(42%)
+    const lW=parseFloat((cW2*0.58).toFixed(3));
+    const rX=parseFloat((cX+lW).toFixed(3));
+    const rW=parseFloat((cW2-lW).toFixed(3));
 
+    // 좌 상단 (55%) — 대형 사진/도면
+    const lTopH=parseFloat((aH*0.56).toFixed(3));
+    const lBotH=parseFloat((aH-lTopH).toFixed(3));
+
+    // 우 상단 (58%) — 현장사진
+    const rTopH=parseFloat((aH*0.58).toFixed(3));
+    const rBotH=parseFloat((aH-rTopH).toFixed(3));
+
+    photoSlot(s,cX,aY,lW,lTopH,"사진 1  /  도면");
+    photoSlot(s,cX,aY+lTopH,lW,lBotH,"사진 2","F0F4F0");
+    s.addShape("line",{x:cX,y:aY+lTopH,w:lW,h:0,line:{color:"CCCCCC",pt:0.5}});
+
+    photoSlot(s,rX,aY,rW,rTopH,"현장 사진");
+
+    // 우 하단 — 공사 내용 메모란
+    const nY=aY+rTopH;
+    s.addShape("rect",{x:rX,y:nY,w:rW,h:0.23,fill:{color:"EFF2F8"},line:{color:"CCCCCC",pt:0.5}});
+    s.addText("공사 내용 및 특이사항",{x:rX+0.08,y:nY,w:rW-0.1,h:0.23,fontSize:8,color:"002C5F",fontFace:"맑은 고딕",bold:true,valign:"middle"});
+    s.addShape("rect",{x:rX,y:nY+0.23,w:rW,h:rBotH-0.23,fill:{color:"FFFFFF"},line:{color:"DDDDDD",pt:0.5}});
+    const lineGap=(rBotH-0.23)/7;
+    for(let i=1;i<=6;i++){
+      s.addText(`${i})`,{x:rX+0.08,y:nY+0.23+(i-1)*lineGap,w:rW-0.12,h:lineGap,fontSize:8,color:"CCCCCC",fontFace:"맑은 고딕",valign:"middle"});
+      if(i<6) s.addShape("line",{x:rX+0.1,y:nY+0.23+i*lineGap,w:rW-0.16,h:0,line:{color:"EEEEEE",pt:0.3}});
+    }
+
+    // 외곽 보더
     s.addShape("rect",{x:LM,y:aY,w:CW,h:aH,fill:{type:"none"},line:{color:"CCCCCC",pt:0.5}});
+    s.addShape("line",{x:rX,y:aY,w:0,h:aH,line:{color:"CCCCCC",pt:0.5}});
 
     // 비고
-    const bigoY=aY+aH+0.06;
-    s.addShape("rect",{x:LM,y:bigoY,w:0.6,h:0.26,fill:{color:"EEEEEE"},line:{color:"CCCCCC",pt:0.5}});
-    s.addText("비  고",{x:LM,y:bigoY,w:0.6,h:0.26,fontSize:8,color:"555555",fontFace:"맑은 고딕",bold:true,align:"center",valign:"middle"});
-    s.addShape("rect",{x:LM+0.6,y:bigoY,w:CW-0.6,h:0.26,fill:{color:"FFFFFF"},line:{color:"CCCCCC",pt:0.5}});
+    const bgY=aY+aH+0.06;
+    cell(s,LM,bgY,0.72,bigoH,"비  고",true,8,"555555");
+    cell(s,LM+0.72,bgY,CW-0.72,bigoH,"",false,8,"777777");
   }
 
-  // 저장
-  const blob=await pptx.write({outputType:"blob"});
-  generatedPptBlob=blob;
-  const safeName=`${selectedBuilding?selectedBuilding.name:'시설물'}_${(fd.pj||'작업요청서').substring(0,15)}`
-    .replace(/\s+/g,"_").replace(/[\\/:*?"<>|]/g,"");
-  downloadBlob(blob, safeName+".pptx");
+  return await pptx.write({outputType:"blob"});
 }
 
-
-function openOutlook(){
-  const subject = document.getElementById('emailSubject3').value;
-  const body = document.getElementById('emailBody3').value;
-  const b = selectedBuilding;
-  const emails = selectedDisciplines.map(disc => b ? b.managers[disc].email : '').join(';');
-  if(!body.trim()){alert("이메일 본문을 입력해 주세요.");return}
-
-  // Register work order
-  const now = new Date();
-  addWorkOrder({
-    id:`order_${Date.now()}`,
-    buildingCode:b?b.code:"",buildingName:b?b.name:"",
-    projectName:document.getElementById("formProjectName").value,
-    floor:document.getElementById("formFloor").value,
-    location:document.getElementById("formLocation").value,
-    disciplines:[...selectedDisciplines],
-    managers:selectedDisciplines.map(disc=>({name:b?b.managers[disc].name:"",disc})),
-    year:now.getFullYear(),month:now.getMonth()+1,dateStr:getTodayFormatted(),status:"의뢰"
-  });
-  renderMgmtFilters();renderMgmtDashboard();
-
-  // Open Outlook via mailto
-  const mailtoUrl = `mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailtoUrl;
-
-  // Show success tip after short delay
-  setTimeout(()=>{
-    const btn = document.getElementById('btnCopyBody');
-    if(btn){
-      btn.style.background='#dcfce7';btn.style.color='#166534';
-      btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 아웃룩 열림';
-    }
-  }, 800);
-}
-
-function copyEmailBody(){
-  const body = document.getElementById('emailBody3').value;
-  const subject = document.getElementById('emailSubject3').value;
-  const text = `제목: ${subject}
-
-${body}`;
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn = document.getElementById('btnCopyBody');
-    const orig = btn.innerHTML;
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 복사됨';
-    btn.style.background='#dcfce7';btn.style.color='#166534';
-    setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';btn.style.color='';},2000);
-  }).catch(()=>{
-    // Fallback
-    const ta = document.createElement('textarea');
-    ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');
-    document.body.removeChild(ta);
-    const btn=document.getElementById('btnCopyBody');
-    const orig=btn.innerHTML;
-    btn.innerHTML='복사됨 ✓';
-    setTimeout(()=>{btn.innerHTML=orig;},2000);
-  });
-}
 
 // ══════════ AUTH ══════════
 const ADMIN_ACCOUNTS=[{id:"admin",pw:"hyundai1234",name:"관리자"}];
