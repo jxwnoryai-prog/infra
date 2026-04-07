@@ -394,6 +394,70 @@ a.contact-value:hover{color:var(--primary)}
 .admin-nav-btn:hover{background:var(--primary);color:#fff}
 @media(max-width:768px){.desktop-nav{display:none!important}.mobile-menu-btn{display:block!important}.about-grid{grid-template-columns:1fr!important}.stats-grid{grid-template-columns:repeat(2,1fr)!important}.mgmt-summary{grid-template-columns:repeat(2,1fr)!important}.mgmt-kanban{grid-template-columns:1fr!important}}
 @media(min-width:769px){.mobile-menu-btn{display:none!important}}
+
+/* ── SAFETY SECTION ── */
+.safety-sec{padding:120px 32px;background:var(--white)}
+.safety-inner{max-width:1200px;margin:0 auto}
+@keyframes pulse-orange{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes pulse-red{0%,100%{opacity:1}50%{opacity:.38}}
+@keyframes ring-orange{0%{transform:scale(1);opacity:.85}100%{transform:scale(2.6);opacity:0}}
+@keyframes ring-red{0%{transform:scale(1);opacity:.85}100%{transform:scale(2.6);opacity:0}}
+@keyframes sfade{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
+.sf-stats{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--gray100);border-radius:16px;overflow:hidden;margin-bottom:24px;background:var(--white)}
+.sf-stat{padding:20px 16px;text-align:center;border-right:1px solid var(--gray100)}
+.sf-stat:last-child{border-right:none}
+.sf-stat-num{font-size:32px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px}
+.sf-stat-label{font-size:12px;color:var(--gray500)}
+.sf-map-wrap{display:flex;border:1px solid var(--gray100);border-radius:20px;overflow:hidden;min-height:480px;transition:all .38s ease}
+.sf-map-panel{flex:1;min-width:0;position:relative;background:#1e2f20;transition:flex .38s ease}
+.sf-map-panel.sf-narrow{flex:0 0 46%}
+.sf-detail-panel{flex:0 0 0;overflow:hidden;background:var(--white);border-left:1px solid var(--gray100);transition:flex .38s ease}
+.sf-detail-panel.sf-open{flex:0 0 54%;overflow-y:auto;animation:sfade .32s ease}
+.sf-hl{position:absolute;inset:0;pointer-events:none}
+.sf-hs{position:absolute;border-radius:4px;transition:transform .15s;pointer-events:none;background:rgba(0,44,95,.08);border:1.5px solid rgba(0,44,95,.25)}
+.sf-hs.sf-clickable{pointer-events:auto;cursor:pointer}
+.sf-hs.sf-active-orange{animation:pulse-orange 2.1s ease-in-out infinite;border:2px solid rgba(251,146,60,.9)!important;background:rgba(251,146,60,.12)!important}
+.sf-hs.sf-active-red{animation:pulse-red 2s ease-in-out infinite;border:2px solid rgba(239,68,68,.9)!important;background:rgba(239,68,68,.12)!important}
+.sf-hs.sf-active-orange:hover,.sf-hs.sf-active-red:hover{transform:scale(1.07);z-index:8}
+.sf-hs.sf-selected{animation:none!important;border:2px solid #00AAD2!important;background:rgba(0,170,210,.15)!important;transform:scale(1.06);z-index:8}
+.sf-ring{position:absolute;border-radius:50%;pointer-events:none;z-index:4}
+.sf-ring.sf-ro{border:2px solid #FB923C;animation:ring-orange 2.2s ease-out infinite}
+.sf-ring.sf-rr{border:2px solid #EF4444;animation:ring-red 2s ease-out infinite}
+.sf-badge-a{position:absolute;top:-7px;left:-7px;width:16px;height:16px;border-radius:50%;background:#EF4444;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:12}
+.sf-badge-n{position:absolute;top:-7px;right:-7px;width:17px;height:17px;border-radius:50%;background:#F59E0B;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:12}
+.sf-back{position:absolute;top:10px;left:10px;z-index:20;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;display:none}
+.sf-back.sf-vis{display:block}
+.sf-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.48);color:#fff;font-size:11px;padding:4px 14px;border-radius:20px;pointer-events:none;white-space:nowrap;transition:opacity .3s}
+.sf-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.sf-leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray500)}
+.sf-leg-dot{width:10px;height:10px;border-radius:2px}
+.sfd-hd{padding:16px 18px;border-bottom:1px solid var(--gray100);display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.sfd-bname{font-size:17px;font-weight:600;color:var(--dark)}
+.sfd-code{font-size:11px;color:var(--gray500);margin-top:2px}
+.sfd-close{background:var(--gray100);border:none;border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--gray700)}
+.sfd-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.sfd-sec-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--gray500);margin-bottom:8px}
+.sfd-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.sfd-pill{padding:5px 13px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid var(--gray300);background:var(--white);color:var(--gray500);font-family:inherit;transition:all .13s}
+.sfd-pill.sfd-on{border-color:var(--primary);background:rgba(0,44,95,.06);color:var(--primary)}
+.sfd-work-card{background:var(--gray50);border-radius:12px;padding:14px 16px}
+.sfd-work-title{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sfd-work-desc{font-size:12px;color:var(--gray500);line-height:1.6}
+.sfd-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.sfd-tag{font-size:10px;padding:2px 8px;border-radius:4px}
+.sfd-meta{display:flex;border:1px solid var(--gray100);border-radius:12px;overflow:hidden}
+.sfd-mc{flex:1;padding:10px 12px;text-align:center;border-right:1px solid var(--gray100)}
+.sfd-mc:last-child{border-right:none}
+.sfd-mv{font-size:13px;font-weight:600;color:var(--dark)}
+.sfd-ml{font-size:10px;color:var(--gray500);margin-top:2px}
+.sfd-person{background:var(--white);border:1px solid var(--gray100);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.sfd-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+.sfd-prl{font-size:10px;color:var(--gray500);margin-bottom:2px}
+.sfd-pn{font-size:13px;font-weight:600;color:var(--dark)}
+.sfd-pc{font-size:11px;color:var(--gray500)}
+.sfd-alert{background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.sfd-alert-dot{width:8px;height:8px;border-radius:50%;background:#EF4444;flex-shrink:0;margin-top:3px}
+
 </style>
 </head>
 <body>
@@ -428,6 +492,7 @@ a.contact-value:hover{color:var(--primary)}
 <button class="nav-link" onclick="scrollToSection('about')">소개</button>
 <button class="nav-link" onclick="scrollToSection('services')">공사 의뢰</button>
 <button class="nav-link" onclick="scrollToSection('infra-manage')">업무 지원</button>
+<button class="nav-link" onclick="scrollToSection('safety')">안전 관리</button>
 <button class="nav-cta" onclick="scrollToSection('contact')">문의하기</button>
 <div class="user-info" id="userInfo" style="display:none">
 <div class="user-avatar" id="userAvatar">?</div>
@@ -447,6 +512,7 @@ a.contact-value:hover{color:var(--primary)}
 <button class="mobile-menu-link" onclick="scrollToSection('about')">소개</button>
 <button class="mobile-menu-link" onclick="scrollToSection('services')">공사 의뢰</button>
 <button class="mobile-menu-link" onclick="scrollToSection('infra-manage')">업무 지원</button>
+<button class="mobile-menu-link" onclick="scrollToSection('safety')">안전 관리</button>
 <button class="mobile-menu-link" onclick="scrollToSection('contact')">문의하기</button>
 </div>
 
@@ -571,6 +637,80 @@ a.contact-value:hover{color:var(--primary)}
 <div class="contact-grid" id="contactGrid"></div>
 </div>
 </section>
+
+
+<section class="safety-sec" id="safety">
+<div class="safety-inner">
+<div class="reveal"><p class="section-label">Safety Management</p><h2 class="section-title">안전 관리</h2><p class="section-desc">캠퍼스 배치도에서 공사 진행 건물을 실시간으로 확인하세요. 불이 켜진 건물을 클릭하면 상세 정보를 확인할 수 있습니다.</p></div>
+
+<div class="sf-stats reveal" style="transition-delay:0.1s">
+<div class="sf-stat"><div class="sf-stat-num" id="sfTotal" style="color:var(--dark)">14</div><div class="sf-stat-label">전체 건물</div></div>
+<div class="sf-stat"><div class="sf-stat-num" id="sfActive" style="color:#F59E0B">0</div><div class="sf-stat-label">공사 진행 중</div></div>
+<div class="sf-stat"><div class="sf-stat-num" id="sfGradeA" style="color:#EF4444">0</div><div class="sf-stat-label">A급 위험 공사</div></div>
+</div>
+
+<div class="sf-map-wrap reveal" style="transition-delay:0.15s">
+<div class="sf-map-panel" id="sfMapPanel">
+  <svg viewBox="0 0 600 460" style="width:100%;height:100%;display:block" preserveAspectRatio="xMidYMid meet">
+    <rect width="600" height="460" fill="#1e2f20"/>
+    <polygon points="78,28 522,28 558,78 558,432 22,432 22,105" fill="#273d28"/>
+    <!-- Roads -->
+    <rect x="132" y="198" width="298" height="26" fill="#3a4a38" opacity=".9"/>
+    <rect x="22" y="338" width="536" height="22" fill="#3a4a38" opacity=".9"/>
+    <rect x="203" y="28" width="20" height="310" fill="#3a4a38" opacity=".8"/>
+    <rect x="438" y="28" width="20" height="200" fill="#3a4a38" opacity=".7"/>
+    <!-- Green areas -->
+    <ellipse cx="502" cy="355" rx="52" ry="48" fill="#1a3a1a" opacity=".8"/>
+    <circle cx="502" cy="355" r="30" fill="#152a15" opacity=".7"/>
+    <circle cx="108" cy="388" r="14" fill="#1a3a1a" opacity=".7"/>
+    <circle cx="430" cy="148" r="11" fill="#1a3a1a" opacity=".5"/>
+    <!-- All buildings same color: primary navy -->
+    <rect x="38" y="48" width="52" height="42" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="105" y="42" width="82" height="53" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="45" y="108" width="72" height="58" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="225" y="38" width="195" height="62" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="145" y="115" width="68" height="53" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="28" y="160" width="38" height="34" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="455" y="108" width="100" height="52" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="448" y="168" width="108" height="53" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="235" y="115" width="135" height="78" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="38" y="215" width="88" height="63" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="32" y="290" width="92" height="53" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="98" y="340" width="330" height="29" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="35" y="380" width="78" height="52" fill="#002C5F" rx="2" opacity=".85"/>
+    <rect x="275" y="366" width="118" height="62" fill="#002C5F" rx="2" opacity=".85"/>
+    <!-- Building labels -->
+    <text x="64" y="74" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">①</text>
+    <text x="146" y="74" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">②</text>
+    <text x="81" y="141" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">③</text>
+    <text x="322" y="72" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">④</text>
+    <text x="179" y="145" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑤</text>
+    <text x="47" y="181" fill="rgba(255,255,255,.7)" font-size="9" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑥</text>
+    <text x="505" y="138" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑦</text>
+    <text x="502" y="198" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑧</text>
+    <text x="302" y="158" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑨</text>
+    <text x="82" y="250" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑩</text>
+    <text x="78" y="320" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑪</text>
+    <text x="263" y="358" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑫</text>
+    <text x="74" y="410" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑬</text>
+    <text x="334" y="400" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑭</text>
+  </svg>
+  <div class="sf-hl" id="sfHl"></div>
+  <button class="sf-back" id="sfBack" onclick="sfClose()">← 전체 보기</button>
+  <div class="sf-hint" id="sfHint">공사 진행 건물을 클릭하세요</div>
+</div>
+<div class="sf-detail-panel" id="sfDetail"></div>
+</div>
+
+<div class="sf-legend reveal" style="transition-delay:0.2s">
+<div class="sf-leg-item"><div class="sf-leg-dot" style="background:#002C5F"></div>일반 (공사 없음)</div>
+<div class="sf-leg-item"><div class="sf-leg-dot" style="background:#FB923C"></div>공사 진행 중</div>
+<div class="sf-leg-item"><div class="sf-leg-dot" style="background:#EF4444"></div>A급 위험 공사</div>
+<div class="sf-leg-item"><div class="sf-leg-dot" style="background:#F59E0B;border-radius:50%"></div>복수 공사 진행</div>
+</div>
+</div>
+</section>
+
 
 <footer class="footer">
 <div class="footer-inner">
@@ -1385,6 +1525,232 @@ function renderAdminUserList(){const users=getUsers().filter(u=>!ADMIN_ACCOUNTS.
 function togglePerm(uid,sk,btn){const a=btn.classList.contains('active');setUserPermission(uid,sk,!a);btn.classList.toggle('active');btn.querySelector('.perm-dot').style.background=!a?'var(--primary)':'var(--gray300)'}
 
 // ══════════ INIT ══════════
+
+// ══════════════════════════════════════════════════════
+// 안전 관리 — 캠퍼스 배치도
+// ══════════════════════════════════════════════════════
+const SF_BLD_MAP = [
+  {code:'C5-14', name:'안전연구동',  num:'①', vx:38,  vy:48,  vw:52,  vh:42},
+  {code:'C5-15', name:'환경시험동',  num:'②', vx:105, vy:42,  vw:82,  vh:53},
+  {code:'C3-01', name:'파워트레인동',num:'③', vx:45,  vy:108, vw:72,  vh:58},
+  {code:'C3-02', name:'전자연구동',  num:'④', vx:225, vy:38,  vw:195, vh:62},
+  {code:'A1-03', name:'본관동',      num:'⑤', vx:145, vy:115, vw:68,  vh:53},
+  {code:'A1-01', name:'디자인센터',  num:'⑥', vx:28,  vy:160, vw:38,  vh:34},
+  {code:'A2-05', name:'풍동시험동',  num:'⑦', vx:455, vy:108, vw:100, vh:52},
+  {code:'B2-01', name:'충돌시험동',  num:'⑧', vx:448, vy:168, vw:108, vh:53},
+  {code:'B2-03', name:'배터리연구동',num:'⑨', vx:235, vy:115, vw:135, vh:78},
+  {code:'B3-07', name:'수소연구동',  num:'⑩', vx:38,  vy:215, vw:88,  vh:63},
+  {code:'D1-02', name:'주행시험장 관리동',num:'⑪',vx:32,vy:290,vw:92,vh:53},
+  {code:'D2-04', name:'자율주행시험동',num:'⑫',vx:98, vy:340, vw:330, vh:29},
+  {code:'ETC1',  name:'연구동 별관A',num:'⑬', vx:35,  vy:380, vw:78,  vh:52},
+  {code:'ETC2',  name:'연구동 별관B',num:'⑭', vx:275, vy:366, vw:118, vh:62},
+];
+
+const SF_WORKS = {
+  'C5-14':[
+    {id:'sf1',title:'배전반 교체',grade:'A',progress:60,start:'25.12.01',end:'26.02.28',tags:['전기'],
+     desc:'1~3층 배전반 노후화로 전면 교체. 고압 정전 작업 수반.',
+     alert:'고압반 작업 — 정전 조치 사전 확인 필요. 작업 전 잠금/태그아웃 절차 준수.',
+     mgr:{name:'이수진',role:'현대차 담당',phone:'031-368-5142',email:'sj.lee@hyundai.com'},
+     vnd:{name:'한국전력기술 김민수',role:'발주처 담당',phone:'010-1111-2222',email:'km@kep.kr'},
+     sft:{name:'박안전',role:'안전 담당',phone:'031-368-5190',email:'safe1@hyundai.com'}},
+    {id:'sf2',title:'LED 조명 전체 교체',grade:'B',progress:35,start:'26.01.10',end:'26.03.10',tags:['전기'],
+     desc:'전층 형광등 LED 교체 및 비상조명 추가 설치.',
+     alert:null,
+     mgr:{name:'이수진',role:'현대차 담당',phone:'031-368-5142',email:'sj.lee@hyundai.com'},
+     vnd:{name:'대한전기 이준서',role:'발주처 담당',phone:'010-3344-5566',email:'j@del.kr'},
+     sft:{name:'박안전',role:'안전 담당',phone:'031-368-5190',email:'safe1@hyundai.com'}},
+  ],
+  'A2-05':[
+    {id:'sf3',title:'외부 환풍기 설치',grade:'A',progress:45,start:'26.01.15',end:'26.03.15',tags:['설비','전기'],
+     desc:'옥상 환기 교체 및 외벽 관통 환풍기 8기 신규 설치. 고소작업 포함.',
+     alert:'고소작업 — 안전망·안전대 착용 현황 확인 요망 (12m 이상 작업면).',
+     mgr:{name:'임채원',role:'현대차 담당',phone:'031-368-3012',email:'cw.lim@hyundai.com'},
+     vnd:{name:'한국공조 박하늘',role:'발주처 담당',phone:'010-5555-7890',email:'p@hvac.kr'},
+     sft:{name:'김안전',role:'안전 담당',phone:'031-368-5191',email:'safe2@hyundai.com'}},
+  ],
+  'C3-01':[
+    {id:'sf4',title:'바닥 에폭시 코팅',grade:'B',progress:20,start:'26.01.20',end:'26.03.20',tags:['건축'],
+     desc:'1층 전 구역 기존 바닥 연마 후 에폭시 도장.',
+     alert:null,
+     mgr:{name:'오재혁',role:'현대차 담당',phone:'031-368-3011',email:'jh.oh@hyundai.com'},
+     vnd:{name:'에폭시코 박현준',role:'발주처 담당',phone:'010-5577-8899',email:'p@epoxy.kr'},
+     sft:{name:'김안전',role:'안전 담당',phone:'031-368-5191',email:'safe2@hyundai.com'}},
+  ],
+  'B2-03':[
+    {id:'sf5',title:'방화벽 보강',grade:'B',progress:10,start:'26.02.01',end:'26.04.30',tags:['건축'],
+     desc:'배터리 화재 대비 방화벽 보강 및 방염재 시공.',
+     alert:null,
+     mgr:{name:'안준혁',role:'현대차 담당',phone:'031-368-2031',email:'jh.ahn@hyundai.com'},
+     vnd:{name:'한화건설 정도현',role:'발주처 담당',phone:'010-7788-9900',email:'d@hw.kr'},
+     sft:{name:'박안전',role:'안전 담당',phone:'031-368-5190',email:'safe1@hyundai.com'}},
+    {id:'sf6',title:'냉방 배관 교체',grade:'B',progress:55,start:'25.11.15',end:'26.01.31',tags:['설비'],
+     desc:'노후 냉방 배관 전면 교체 및 단열 보강.',
+     alert:null,
+     mgr:{name:'복지호',role:'현대차 담당',phone:'031-368-2033',email:'jh.bok@hyundai.com'},
+     vnd:{name:'에너지텍 최수빈',role:'발주처 담당',phone:'010-2233-4455',email:'c@et.kr'},
+     sft:{name:'박안전',role:'안전 담당',phone:'031-368-5190',email:'safe1@hyundai.com'}},
+  ],
+};
+
+const DISC_TAG_COLORS = {건축:['#E6F1FB','#0C447C'],전기:['#FAEEDA','#633806'],설비:['#E1F5EE','#085041'],토목:['#EAF3DE','#27500A']};
+let sfSelCode = null, sfSelWid = null;
+const VW = 600, VH = 460;
+
+function sfPct(v, tot){ return (v / tot * 100) + '%'; }
+
+function sfRenderMap(){
+  const hl = document.getElementById('sfHl');
+  if(!hl) return;
+  hl.innerHTML = '';
+
+  let activeCount = 0, gradeACount = 0;
+
+  SF_BLD_MAP.forEach(b => {
+    const works = SF_WORKS[b.code] || [];
+    const hasWork = works.length > 0;
+    const hasA = works.some(w => w.grade === 'A');
+    const multi = works.length > 1;
+    const isSel = sfSelCode === b.code;
+    if(hasWork) activeCount++;
+    if(hasA) gradeACount++;
+
+    const div = document.createElement('div');
+    div.style.cssText = `position:absolute;left:${sfPct(b.vx,VW)};top:${sfPct(b.vy,VH)};width:${sfPct(b.vw,VW)};height:${sfPct(b.vh,VH)};border-radius:4px;transition:transform .15s`;
+
+    if(isSel){
+      div.className = 'sf-hs sf-selected sf-clickable';
+    } else if(hasWork){
+      div.className = `sf-hs sf-clickable ${hasA ? 'sf-active-red' : 'sf-active-orange'}`;
+      div.onclick = () => sfSelect(b.code);
+      // Pulse ring
+      const ring = document.createElement('div');
+      ring.className = `sf-ring ${hasA ? 'sf-rr' : 'sf-ro'}`;
+      ring.style.cssText = `left:8%;top:8%;width:84%;height:84%;animation-delay:${(Math.random()*1.6).toFixed(2)}s`;
+      div.appendChild(ring);
+    } else {
+      div.className = 'sf-hs';
+    }
+    if(isSel) div.onclick = () => sfClose();
+
+    if(hasA){
+      const ab = document.createElement('div');
+      ab.className = 'sf-badge-a';
+      ab.textContent = 'A';
+      div.appendChild(ab);
+    }
+    if(multi){
+      const nb = document.createElement('div');
+      nb.className = 'sf-badge-n';
+      nb.textContent = works.length;
+      div.appendChild(nb);
+    }
+    hl.appendChild(div);
+  });
+
+  const ac = document.getElementById('sfActive');
+  const gc = document.getElementById('sfGradeA');
+  if(ac) ac.textContent = activeCount;
+  if(gc) gc.textContent = gradeACount;
+}
+
+function sfSelect(code){
+  const b = SF_BLD_MAP.find(x => x.code === code);
+  const works = SF_WORKS[code] || [];
+  if(!b || works.length === 0) return;
+  sfSelCode = code;
+  sfSelWid = works[0].id;
+  sfRenderMap();
+  document.getElementById('sfMapPanel').classList.add('sf-narrow');
+  document.getElementById('sfDetail').classList.add('sf-open');
+  document.getElementById('sfBack').classList.add('sf-vis');
+  document.getElementById('sfHint').style.opacity = '0';
+  sfRenderDetail();
+}
+
+function sfClose(){
+  sfSelCode = null; sfSelWid = null;
+  sfRenderMap();
+  document.getElementById('sfMapPanel').classList.remove('sf-narrow');
+  document.getElementById('sfDetail').classList.remove('sf-open');
+  document.getElementById('sfDetail').innerHTML = '';
+  document.getElementById('sfBack').classList.remove('sf-vis');
+  document.getElementById('sfHint').style.opacity = '1';
+}
+
+function sfSwitchWork(wid){
+  sfSelWid = wid;
+  sfRenderDetail();
+}
+
+function sfRenderDetail(){
+  const b = SF_BLD_MAP.find(x => x.code === sfSelCode);
+  const works = SF_WORKS[sfSelCode] || [];
+  const w = works.find(x => x.id === sfSelWid) || works[0];
+  if(!b || !w) return;
+
+  const multi = works.length > 1;
+  const grColor = w.grade === 'A' ? {bg:'#FEF2F2',c:'#991B1B'} : {bg:'#EAF3DE',c:'#27500A'};
+  const PERSONS = [
+    {...w.mgr, avBg:'#E6F1FB', avC:'#0C447C'},
+    {...w.vnd, avBg:'#EAF3DE', avC:'#27500A'},
+    {...w.sft, avBg:'#FEF2F2', avC:'#991B1B'},
+  ];
+
+  const alertHtml = w.alert
+    ? `<div class="sfd-alert"><div class="sfd-alert-dot"></div><div><div style="font-size:12px;font-weight:600;color:#991B1B;margin-bottom:3px">안전 주의 사항</div><div style="font-size:11px;color:#B91C1C;line-height:1.5">${w.alert}</div></div></div>`
+    : '';
+
+  const pillsHtml = multi
+    ? `<div class="sfd-sec-lbl">공사 목록 (${works.length}건)</div><div class="sfd-pills">${works.map(x => `<button class="sfd-pill ${x.id===w.id?'sfd-on':''}" onclick="sfSwitchWork('${x.id}')">${x.title}</button>`).join('')}</div>`
+    : '';
+
+  const tagsHtml = (w.tags||[]).map(t => {
+    const [bg,fc] = DISC_TAG_COLORS[t] || ['#eee','#333'];
+    return `<span class="sfd-tag" style="background:${bg};color:${fc}">${t}</span>`;
+  }).join('');
+
+  document.getElementById('sfDetail').innerHTML = `
+<div class="sfd-hd">
+  <div>
+    <div style="font-size:10px;color:var(--gray500);margin-bottom:3px">${b.code} · ${b.num}</div>
+    <div class="sfd-bname">${b.name}</div>
+    ${multi ? `<span style="font-size:11px;background:#FAEEDA;color:#633806;border:1px solid #FAC775;border-radius:5px;padding:2px 9px;margin-top:4px;display:inline-block">공사 ${works.length}건 진행 중</span>` : ''}
+  </div>
+  <button class="sfd-close" onclick="sfClose()">닫기</button>
+</div>
+<div class="sfd-body">
+  ${alertHtml}
+  <div>
+    ${pillsHtml}
+    <div class="sfd-work-card">
+      <div class="sfd-work-title">
+        ${w.title}
+        <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:${grColor.bg};color:${grColor.c};font-weight:600">${w.grade}급</span>
+      </div>
+      <div class="sfd-work-desc">${w.desc}</div>
+      <div class="sfd-tags">${tagsHtml}</div>
+
+    </div>
+  </div>
+
+  <div>
+    <div class="sfd-sec-lbl">담당자 정보</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${PERSONS.map(p => `
+      <div class="sfd-person">
+        <div class="sfd-av" style="background:${p.avBg};color:${p.avC}">${p.name.charAt(0)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="sfd-prl">${p.role}</div>
+          <div class="sfd-pn">${p.name}</div>
+          <div class="sfd-pc">${p.phone} · <span style="color:var(--accent)">${p.email}</span></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("formDate").value=getTodayFormatted();
   setTimeout(()=>document.getElementById("hero").classList.add("loaded"),100);
@@ -1401,6 +1767,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   renderMgmtFilters();renderMgrSelectorBar();renderMgmtDashboard();
   document.getElementById('authOverlay').style.display='none';
   document.body.style.overflow='';
+  sfRenderMap();
   // Ctrl+B/I shortcuts in contenteditable
   document.addEventListener('keydown',e=>{
     const active=document.activeElement;
