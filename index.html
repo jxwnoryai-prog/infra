@@ -397,6 +397,14 @@ a.contact-value:hover{color:var(--primary)}
 
 /* ── SAFETY SECTION ── */
 .safety-sec{padding:120px 32px;background:var(--white)}
+@keyframes svg-pulse-orange{0%,100%{opacity:1}50%{opacity:.38}}
+@keyframes svg-pulse-red{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes svg-ring-orange{0%{transform:scale(1);opacity:.85}100%{transform:scale(2.2);opacity:0}}
+@keyframes svg-ring-red{0%{transform:scale(1);opacity:.85}100%{transform:scale(2.4);opacity:0}}
+.sf-svg-pulse-orange{animation:svg-pulse-orange 2.1s ease-in-out infinite}
+.sf-svg-pulse-red{animation:svg-pulse-red 1.9s ease-in-out infinite}
+.sf-svg-ring-orange{animation:svg-ring-orange 2.2s ease-out infinite}
+.sf-svg-ring-red{animation:svg-ring-red 2s ease-out infinite}
 .safety-inner{max-width:1200px;margin:0 auto}
 @keyframes pulse-orange{0%,100%{opacity:1}50%{opacity:.45}}
 @keyframes pulse-red{0%,100%{opacity:1}50%{opacity:.38}}
@@ -408,8 +416,8 @@ a.contact-value:hover{color:var(--primary)}
 .sf-stat:last-child{border-right:none}
 .sf-stat-num{font-size:32px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px}
 .sf-stat-label{font-size:12px;color:var(--gray500)}
-.sf-map-wrap{display:flex;border:1px solid var(--gray100);border-radius:20px;overflow:hidden;min-height:480px;transition:all .38s ease}
-.sf-map-panel{flex:1;min-width:0;position:relative;background:#1e2f20;transition:flex .38s ease}
+.sf-map-wrap{display:flex;border:1px solid var(--gray100);border-radius:20px;overflow:hidden;transition:all .38s ease;align-items:stretch}
+.sf-map-panel{flex:1;min-width:0;position:relative;background:#1e2f20;transition:flex .38s ease;aspect-ratio:600/460;align-self:flex-start}
 .sf-map-panel.sf-narrow{flex:0 0 46%}
 .sf-detail-panel{flex:0 0 0;overflow:hidden;background:var(--white);border-left:1px solid var(--gray100);transition:flex .38s ease}
 .sf-detail-panel.sf-open{flex:0 0 54%;overflow-y:auto;animation:sfade .32s ease}
@@ -651,7 +659,7 @@ a.contact-value:hover{color:var(--primary)}
 
 <div class="sf-map-wrap reveal" style="transition-delay:0.15s">
 <div class="sf-map-panel" id="sfMapPanel">
-  <svg viewBox="0 0 600 460" style="width:100%;height:100%;display:block" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 600 460" style="width:100%;height:100%;display:block" preserveAspectRatio="none">
     <rect width="600" height="460" fill="#1e2f20"/>
     <polygon points="78,28 522,28 558,78 558,432 22,432 22,105" fill="#273d28"/>
     <!-- Roads -->
@@ -680,22 +688,33 @@ a.contact-value:hover{color:var(--primary)}
     <rect x="35" y="380" width="78" height="52" fill="#002C5F" rx="2" opacity=".85"/>
     <rect x="275" y="366" width="118" height="62" fill="#002C5F" rx="2" opacity=".85"/>
     <!-- Building labels -->
-    <text x="64" y="74" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">①</text>
-    <text x="146" y="74" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">②</text>
-    <text x="81" y="141" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">③</text>
-    <text x="322" y="72" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">④</text>
-    <text x="179" y="145" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑤</text>
-    <text x="47" y="181" fill="rgba(255,255,255,.7)" font-size="9" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑥</text>
-    <text x="505" y="138" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑦</text>
-    <text x="502" y="198" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑧</text>
-    <text x="302" y="158" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑨</text>
-    <text x="82" y="250" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑩</text>
-    <text x="78" y="320" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑪</text>
-    <text x="263" y="358" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑫</text>
-    <text x="74" y="410" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑬</text>
-    <text x="334" y="400" fill="rgba(255,255,255,.7)" font-size="10" font-weight="600" text-anchor="middle" font-family="Pretendard Variable,sans-serif">⑭</text>
+    <text x="64" y="72.0" fill="rgba(255,255,255,.92)" font-size="8" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">C5-14</text>
+    <text x="146" y="64.5" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">C5-15</text>
+    <text x="146" y="76.5" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">환경시험동</text>
+    <text x="81" y="133.0" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">C3-01</text>
+    <text x="81" y="145.0" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">파워트레인동</text>
+    <text x="322" y="65.0" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">C3-02</text>
+    <text x="322" y="77.0" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">전자연구동</text>
+    <text x="179" y="137.5" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">A1-03</text>
+    <text x="179" y="149.5" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">본관동</text>
+    <text x="47" y="180.0" fill="rgba(255,255,255,.92)" font-size="7" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">A1-01</text>
+    <text x="505" y="130.0" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">A2-05</text>
+    <text x="505" y="142.0" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">풍동시험동</text>
+    <text x="502" y="190.5" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">B2-01</text>
+    <text x="502" y="202.5" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">충돌시험동</text>
+    <text x="302" y="150.0" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">B2-03</text>
+    <text x="302" y="162.0" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">배터리연구동</text>
+    <text x="82" y="242.5" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">B3-07</text>
+    <text x="82" y="254.5" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">수소연구동</text>
+    <text x="78" y="312.5" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">D1-02</text>
+    <text x="78" y="324.5" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">주행시험장</text>
+    <text x="263" y="357.5" fill="rgba(255,255,255,.92)" font-size="8" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">D2-04  자율주행시험동</text>
+    <text x="74" y="402.0" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">ETC1</text>
+    <text x="74" y="414.0" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">연구동 별관A</text>
+    <text x="334" y="393.0" fill="rgba(255,255,255,.92)" font-size="9" font-weight="700" text-anchor="middle" font-family="Pretendard Variable,sans-serif">ETC2</text>
+    <text x="334" y="405.0" fill="rgba(255,255,255,.62)" font-size="8" font-weight="400" text-anchor="middle" font-family="Pretendard Variable,sans-serif">연구동 별관B</text>
   </svg>
-  <div class="sf-hl" id="sfHl"></div>
+  <svg viewBox="0 0 600 460" id="sfHl" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"></svg>
   <button class="sf-back" id="sfBack" onclick="sfClose()">← 전체 보기</button>
   <div class="sf-hint" id="sfHint">공사 진행 건물을 클릭하세요</div>
 </div>
@@ -1603,6 +1622,7 @@ function sfRenderMap(){
   const hl = document.getElementById('sfHl');
   if(!hl) return;
   hl.innerHTML = '';
+  const NS = 'http://www.w3.org/2000/svg';
 
   let activeCount = 0, gradeACount = 0;
 
@@ -1615,37 +1635,85 @@ function sfRenderMap(){
     if(hasWork) activeCount++;
     if(hasA) gradeACount++;
 
-    const div = document.createElement('div');
-    div.style.cssText = `position:absolute;left:${sfPct(b.vx,VW)};top:${sfPct(b.vy,VH)};width:${sfPct(b.vw,VW)};height:${sfPct(b.vh,VH)};border-radius:4px;transition:transform .15s`;
+    const g = document.createElementNS(NS, 'g');
+    g.style.pointerEvents = hasWork ? 'auto' : 'none';
+    if(hasWork) g.style.cursor = 'pointer';
+
+    // 주 박스
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', b.vx);
+    rect.setAttribute('y', b.vy);
+    rect.setAttribute('width', b.vw);
+    rect.setAttribute('height', b.vh);
+    rect.setAttribute('rx', '4');
 
     if(isSel){
-      div.className = 'sf-hs sf-selected sf-clickable';
+      rect.setAttribute('fill', 'rgba(0,170,210,0.22)');
+      rect.setAttribute('stroke', '#00AAD2');
+      rect.setAttribute('stroke-width', '2.5');
+    } else if(hasA){
+      rect.setAttribute('fill', 'rgba(239,68,68,0.18)');
+      rect.setAttribute('stroke', 'rgba(239,68,68,0.9)');
+      rect.setAttribute('stroke-width', '2');
+      rect.setAttribute('class', 'sf-svg-pulse-red');
     } else if(hasWork){
-      div.className = `sf-hs sf-clickable ${hasA ? 'sf-active-red' : 'sf-active-orange'}`;
-      div.onclick = () => sfSelect(b.code);
-      // Pulse ring
-      const ring = document.createElement('div');
-      ring.className = `sf-ring ${hasA ? 'sf-rr' : 'sf-ro'}`;
-      ring.style.cssText = `left:8%;top:8%;width:84%;height:84%;animation-delay:${(Math.random()*1.6).toFixed(2)}s`;
-      div.appendChild(ring);
+      rect.setAttribute('fill', 'rgba(251,146,60,0.15)');
+      rect.setAttribute('stroke', 'rgba(251,146,60,0.9)');
+      rect.setAttribute('stroke-width', '2');
+      rect.setAttribute('class', 'sf-svg-pulse-orange');
     } else {
-      div.className = 'sf-hs';
+      rect.setAttribute('fill', 'rgba(0,44,95,0.08)');
+      rect.setAttribute('stroke', 'rgba(0,44,95,0.25)');
+      rect.setAttribute('stroke-width', '1.5');
     }
-    if(isSel) div.onclick = () => sfClose();
+    g.appendChild(rect);
 
+    // 링 애니메이션 (공사중만)
+    if(hasWork && !isSel){
+      const cx = b.vx + b.vw/2, cy = b.vy + b.vh/2;
+      const r1 = Math.min(b.vw, b.vh)*0.5;
+      const ring = document.createElementNS(NS, 'circle');
+      ring.setAttribute('cx', cx); ring.setAttribute('cy', cy);
+      ring.setAttribute('r', r1);
+      ring.setAttribute('fill', 'none');
+      ring.setAttribute('stroke', hasA ? 'rgba(239,68,68,0.8)' : 'rgba(251,146,60,0.8)');
+      ring.setAttribute('stroke-width', '1.5');
+      ring.setAttribute('class', hasA ? 'sf-svg-ring-red' : 'sf-svg-ring-orange');
+      ring.style.animationDelay = (Math.random()*1.6).toFixed(2)+'s';
+      ring.style.transformOrigin = cx+'px '+cy+'px';
+      g.appendChild(ring);
+    }
+
+    // A급 뱃지
     if(hasA){
-      const ab = document.createElement('div');
-      ab.className = 'sf-badge-a';
-      ab.textContent = 'A';
-      div.appendChild(ab);
+      const bc = document.createElementNS(NS, 'circle');
+      bc.setAttribute('cx', b.vx+5); bc.setAttribute('cy', b.vy+5); bc.setAttribute('r', '8');
+      bc.setAttribute('fill', '#EF4444');
+      const bt = document.createElementNS(NS, 'text');
+      bt.setAttribute('x', b.vx+5); bt.setAttribute('y', b.vy+9);
+      bt.setAttribute('text-anchor', 'middle'); bt.setAttribute('fill', 'white');
+      bt.setAttribute('font-size', '8'); bt.setAttribute('font-weight', '700');
+      bt.setAttribute('font-family', 'sans-serif');
+      bt.textContent = 'A';
+      g.appendChild(bc); g.appendChild(bt);
     }
+
+    // 복수 공사 뱃지
     if(multi){
-      const nb = document.createElement('div');
-      nb.className = 'sf-badge-n';
-      nb.textContent = works.length;
-      div.appendChild(nb);
+      const bc2 = document.createElementNS(NS, 'circle');
+      bc2.setAttribute('cx', b.vx+b.vw-5); bc2.setAttribute('cy', b.vy+5); bc2.setAttribute('r', '8');
+      bc2.setAttribute('fill', '#F59E0B');
+      const bt2 = document.createElementNS(NS, 'text');
+      bt2.setAttribute('x', b.vx+b.vw-5); bt2.setAttribute('y', b.vy+9);
+      bt2.setAttribute('text-anchor', 'middle'); bt2.setAttribute('fill', 'white');
+      bt2.setAttribute('font-size', '8'); bt2.setAttribute('font-weight', '700');
+      bt2.setAttribute('font-family', 'sans-serif');
+      bt2.textContent = works.length;
+      g.appendChild(bc2); g.appendChild(bt2);
     }
-    hl.appendChild(div);
+
+    if(hasWork) g.addEventListener('click', isSel ? sfClose : () => sfSelect(b.code));
+    hl.appendChild(g);
   });
 
   const ac = document.getElementById('sfActive');
