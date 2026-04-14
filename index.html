@@ -26,7 +26,14 @@ body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystem
 .logo-text{font-size:15px;font-weight:600;color:var(--dark);letter-spacing:-0.3px}
 .logo-text span{color:var(--gray500);font-weight:400}
 .desktop-nav{display:flex;align-items:center;gap:32px}
-.nav-link{background:none;border:none;cursor:pointer;font-size:14px;color:var(--gray700);font-weight:450;padding:4px 0;font-family:inherit;transition:color 0.2s}
+.nav-link{background:none;border:none;cursor:pointer;font-size:14px;color:var(--gray700);font-weight:450;padding:4px 0;font-family:inherit;transition:color 0.2s,border-color 0.2s;border-bottom:2px solid transparent;padding-bottom:2px}
+.nav-link:hover{color:var(--primary)}
+.nav-link.active{color:var(--primary);font-weight:600;border-bottom:2px solid var(--primary)}
+.nav-cta.active{box-shadow:0 0 0 3px rgba(0,170,210,0.3)}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page-active{animation:pageIn 0.25s ease}
+[data-page]{scroll-margin-top:0}
+[data-page] .section-label{margin-top:0}
 .nav-link:hover{color:var(--primary)}
 .nav-cta{background:var(--primary);color:#fff;border:none;padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:transform 0.2s,box-shadow 0.2s}
 .nav-cta:hover{transform:scale(1.04);box-shadow:0 4px 20px rgba(0,44,95,0.25)}
@@ -495,13 +502,13 @@ a.contact-value:hover{color:var(--primary)}
 
 <nav class="navbar" id="navbar">
 <div class="navbar-inner">
-<div class="navbar-logo"><div class="logo-icon">H</div><span class="logo-text">현대자동차 <span>인프라시스템</span></span></div>
+<div class="navbar-logo" onclick="showHome()" style="cursor:pointer"><div class="logo-icon">H</div><span class="logo-text">현대자동차 <span>인프라시스템</span></span></div>
 <div class="desktop-nav">
-<button class="nav-link" onclick="scrollToSection('about')">업무 소개</button>
-<button class="nav-link" onclick="scrollToSection('services')">공사 의뢰</button>
-<button class="nav-link" onclick="scrollToSection('infra-manage')">업무 지원</button>
-<button class="nav-link" onclick="scrollToSection('safety')">안전 관리</button>
-<button class="nav-cta" onclick="scrollToSection('contact')">기타 문의</button>
+<button class="nav-link" onclick="showPage('about')">업무 소개</button>
+<button class="nav-link" onclick="showPage('services')">공사 의뢰</button>
+<button class="nav-link" onclick="showPage('safety')">안전 관리</button>
+<button class="nav-link" onclick="showPage('infra-manage')">업무 지원</button>
+<button class="nav-cta" onclick="showPage('contact')">기타 문의</button>
 <div class="user-info" id="userInfo" style="display:none">
 <div class="user-avatar" id="userAvatar">?</div>
 <span class="user-name" id="userName"></span>
@@ -517,11 +524,11 @@ a.contact-value:hover{color:var(--primary)}
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-<button class="mobile-menu-link" onclick="scrollToSection('about')">업무 소개</button>
-<button class="mobile-menu-link" onclick="scrollToSection('services')">공사 의뢰</button>
-<button class="mobile-menu-link" onclick="scrollToSection('infra-manage')">업무 지원</button>
-<button class="mobile-menu-link" onclick="scrollToSection('safety')">안전 관리</button>
-<button class="mobile-menu-link" onclick="scrollToSection('contact')">기타 문의</button>
+<button class="mobile-menu-link" onclick="showPage('about')">업무 소개</button>
+<button class="mobile-menu-link" onclick="showPage('services')">공사 의뢰</button>
+<button class="mobile-menu-link" onclick="showPage('safety')">안전 관리</button>
+<button class="mobile-menu-link" onclick="showPage('infra-manage')">업무 지원</button>
+<button class="mobile-menu-link" onclick="showPage('contact')">기타 문의</button>
 </div>
 
 <section class="hero" id="hero">
@@ -530,13 +537,13 @@ a.contact-value:hover{color:var(--primary)}
 <h1>시설의 안전을,<br><span>시스템</span>으로 완성하다.</h1>
 <p class="hero-desc">공사 안전관리부터 자동 문서화까지,<br>현대자동차 인프라건설의 모든 프로세스를 하나로.</p>
 <div class="hero-buttons">
-<button class="btn-primary" onclick="scrollToSection('services')">공사 의뢰하기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+<button class="btn-primary" onclick="showPage('services')">공사 의뢰하기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
 </div>
 <div class="hero-scroll"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C4CAD4" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
 </section>
 
 
-<section class="about" id="about">
+<section class="about" id="about" data-page="about">
 <div class="about-inner">
 <div class="reveal"><p class="section-label">About</p><h2 class="section-title">연구개발인프라지원시스템</h2></div>
 <div class="reveal about-grid" style="transition-delay:0.1s">
@@ -549,7 +556,7 @@ a.contact-value:hover{color:var(--primary)}
 <div class="stats-grid" id="statsGrid"></div>
 </div>
 </section>
-<section class="services" id="services">
+<section class="services" id="services" data-page="services">
 <div class="services-inner">
 <div class="reveal"><p class="section-label">Construction Request</p><h2 class="section-title">공사 의뢰</h2><p class="section-desc">건물 코드 또는 건물명을 검색하여 공종별 담당자 정보를 확인하세요.</p></div>
 <div class="reveal" style="transition-delay:0.1s">
@@ -566,88 +573,7 @@ a.contact-value:hover{color:var(--primary)}
 <div class="building-grid" id="buildingGrid"></div>
 </div>
 </section>
-<section class="infra-manage" id="infra-manage">
-<div class="infra-manage-inner">
-<div class="reveal"><p class="section-label">Work Support</p><h2 class="section-title">업무 지원</h2><p class="section-desc">담당자별 업무 현황, 마감 알림, 공사 진행 상태를 한눈에 관리하세요.</p></div>
-
-<div class="mgmt-filter-bar reveal" style="transition-delay:0.1s">
-<div class="mgmt-filter-group" id="yearFilterGroup"></div>
-<div class="mgmt-filter-group" id="monthFilterGroup"></div>
-</div>
-
-<div class="mgmt-summary reveal" style="transition-delay:0.15s">
-<div class="mgmt-summary-card s-request"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>의뢰</div><div class="mgmt-summary-num" id="summaryRequest">0</div><div class="mgmt-summary-sub">접수된 보수 요청</div></div>
-<div class="mgmt-summary-card s-estimate"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>견적</div><div class="mgmt-summary-num" id="summaryEstimate">0</div><div class="mgmt-summary-sub">견적 검토 중</div></div>
-<div class="mgmt-summary-card s-order"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>발주</div><div class="mgmt-summary-num" id="summaryOrder">0</div><div class="mgmt-summary-sub">공사 발주 완료</div></div>
-<div class="mgmt-summary-card s-exec"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>집행</div><div class="mgmt-summary-num" id="summaryExec">0</div><div class="mgmt-summary-sub">공사 집행 완료</div></div>
-</div>
-
-<div id="mgr-overdue-alert" style="display:none;margin-bottom:20px"></div>
-
-<div class="reveal" style="transition-delay:0.18s">
-<p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray500);margin-bottom:12px">담당자 선택</p>
-<div class="mgr-selector-bar" id="mgrSelectorBar"></div>
-<div class="disc-tab-bar" id="discTabBar">
-<button class="disc-tab active" data-disc="전체" onclick="setDiscFilter(this,'전체')">전체</button>
-<button class="disc-tab" data-disc="건축" onclick="setDiscFilter(this,'건축')">건축</button>
-<button class="disc-tab" data-disc="전기" onclick="setDiscFilter(this,'전기')">전기</button>
-<button class="disc-tab" data-disc="설비" onclick="setDiscFilter(this,'설비')">설비</button>
-<button class="disc-tab" data-disc="토목" onclick="setDiscFilter(this,'토목')">토목</button>
-</div>
-</div>
-
-<div class="mgr-dashboard reveal" style="transition-delay:0.2s" id="mgrDashboard">
-<div class="mgr-profile-card" id="mgrProfileCard">
-<div style="padding:40px;text-align:center;color:var(--gray300);font-size:13px">
-담당자를 선택하면<br>개인 현황이 표시됩니다
-</div>
-</div>
-<div class="mgr-workload-card">
-<div class="mgr-workload-title">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-담당자별 업무 부하
-</div>
-<div id="mgrWorkloadBars"></div>
-</div>
-</div>
-
-<div class="monthly-chart-wrap reveal" style="transition-delay:0.22s">
-<div class="monthly-chart-title">
-<span>월별 처리 실적</span>
-<span style="font-size:12px;font-weight:400;color:var(--gray500)" id="monthlyChartSub">선택된 담당자 기준</span>
-</div>
-<div class="monthly-bars" id="monthlyBars"></div>
-<div class="chart-legend">
-<div class="legend-item"><div class="legend-dot" style="background:#6366F1"></div>의뢰</div>
-<div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>견적</div>
-<div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>발주</div>
-<div class="legend-item"><div class="legend-dot" style="background:#002C5F"></div>집행</div>
-</div>
-</div>
-
-<div class="reveal" style="transition-delay:0.25s">
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-<h3 style="font-size:16px;font-weight:600;color:var(--dark)">공사 진행 현황</h3>
-<span style="font-size:13px;color:var(--gray500)" id="kanbanSubtitle">카드 버튼으로 단계 이동 · 메모 입력 가능</span>
-</div>
-<div class="mgmt-kanban">
-<div class="kanban-col col-request"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>의뢰</div><span class="kanban-count" id="count-의뢰">0</span></div><div class="kanban-body" id="body-의뢰"></div></div>
-<div class="kanban-col col-estimate"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>견적</div><span class="kanban-count" id="count-견적">0</span></div><div class="kanban-body" id="body-견적"></div></div>
-<div class="kanban-col col-order"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>발주</div><span class="kanban-count" id="count-발주">0</span></div><div class="kanban-body" id="body-발주"></div></div>
-<div class="kanban-col col-exec"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>집행</div><span class="kanban-count" id="count-집행">0</span></div><div class="kanban-body" id="body-집행"></div></div>
-</div>
-</div>
-</div>
-</section>
-<section class="contact" id="contact">
-<div class="contact-inner">
-<div class="reveal"><p class="section-label">Contact</p><h2 class="section-title">기타 문의</h2><p class="section-desc" style="margin-bottom:56px">시설 관련 문의사항은 아래 연락처로 편하게 연락 주세요.</p></div>
-<div class="contact-grid" id="contactGrid"></div>
-</div>
-</section>
-
-
-<section class="safety-sec" id="safety">
+<section class="safety-sec" id="safety" data-page="safety">
 <div class="safety-inner">
 <div class="reveal"><p class="section-label">Safety Management</p><h2 class="section-title">안전 관리</h2><p class="section-desc">캠퍼스 배치도에서 공사 진행 건물을 실시간으로 확인하세요. 불이 켜진 건물을 클릭하면 상세 정보를 확인할 수 있습니다.</p></div>
 
@@ -729,7 +655,87 @@ a.contact-value:hover{color:var(--primary)}
 </div>
 </div>
 </section>
+<section class="infra-manage" id="infra-manage" data-page="infra-manage">
+<div class="infra-manage-inner">
+<div class="reveal"><p class="section-label">Work Support</p><h2 class="section-title">업무 지원</h2><p class="section-desc">담당자별 업무 현황, 마감 알림, 공사 진행 상태를 한눈에 관리하세요.</p></div>
 
+<div class="mgmt-filter-bar reveal" style="transition-delay:0.1s">
+<div class="mgmt-filter-group" id="yearFilterGroup"></div>
+<div class="mgmt-filter-group" id="monthFilterGroup"></div>
+</div>
+
+<div class="mgmt-summary reveal" style="transition-delay:0.15s">
+<div class="mgmt-summary-card s-request"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>의뢰</div><div class="mgmt-summary-num" id="summaryRequest">0</div><div class="mgmt-summary-sub">접수된 보수 요청</div></div>
+<div class="mgmt-summary-card s-estimate"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>견적</div><div class="mgmt-summary-num" id="summaryEstimate">0</div><div class="mgmt-summary-sub">견적 검토 중</div></div>
+<div class="mgmt-summary-card s-order"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>발주</div><div class="mgmt-summary-num" id="summaryOrder">0</div><div class="mgmt-summary-sub">공사 발주 완료</div></div>
+<div class="mgmt-summary-card s-exec"><div class="mgmt-summary-label"><span class="mgmt-summary-dot"></span>집행</div><div class="mgmt-summary-num" id="summaryExec">0</div><div class="mgmt-summary-sub">공사 집행 완료</div></div>
+</div>
+
+<div id="mgr-overdue-alert" style="display:none;margin-bottom:20px"></div>
+
+<div class="reveal" style="transition-delay:0.18s">
+<p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray500);margin-bottom:12px">담당자 선택</p>
+<div class="mgr-selector-bar" id="mgrSelectorBar"></div>
+<div class="disc-tab-bar" id="discTabBar">
+<button class="disc-tab active" data-disc="전체" onclick="setDiscFilter(this,'전체')">전체</button>
+<button class="disc-tab" data-disc="건축" onclick="setDiscFilter(this,'건축')">건축</button>
+<button class="disc-tab" data-disc="전기" onclick="setDiscFilter(this,'전기')">전기</button>
+<button class="disc-tab" data-disc="설비" onclick="setDiscFilter(this,'설비')">설비</button>
+<button class="disc-tab" data-disc="토목" onclick="setDiscFilter(this,'토목')">토목</button>
+</div>
+</div>
+
+<div class="mgr-dashboard reveal" style="transition-delay:0.2s" id="mgrDashboard">
+<div class="mgr-profile-card" id="mgrProfileCard">
+<div style="padding:40px;text-align:center;color:var(--gray300);font-size:13px">
+담당자를 선택하면<br>개인 현황이 표시됩니다
+</div>
+</div>
+<div class="mgr-workload-card">
+<div class="mgr-workload-title">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+담당자별 업무 부하
+</div>
+<div id="mgrWorkloadBars"></div>
+</div>
+</div>
+
+<div class="monthly-chart-wrap reveal" style="transition-delay:0.22s">
+<div class="monthly-chart-title">
+<span>월별 처리 실적</span>
+<span style="font-size:12px;font-weight:400;color:var(--gray500)" id="monthlyChartSub">선택된 담당자 기준</span>
+</div>
+<div class="monthly-bars" id="monthlyBars"></div>
+<div class="chart-legend">
+<div class="legend-item"><div class="legend-dot" style="background:#6366F1"></div>의뢰</div>
+<div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>견적</div>
+<div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>발주</div>
+<div class="legend-item"><div class="legend-dot" style="background:#002C5F"></div>집행</div>
+</div>
+</div>
+
+<div class="reveal" style="transition-delay:0.25s">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+<h3 style="font-size:16px;font-weight:600;color:var(--dark)">공사 진행 현황</h3>
+<span style="font-size:13px;color:var(--gray500)" id="kanbanSubtitle">카드 버튼으로 단계 이동 · 메모 입력 가능</span>
+</div>
+<div class="mgmt-kanban">
+<div class="kanban-col col-request"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>의뢰</div><span class="kanban-count" id="count-의뢰">0</span></div><div class="kanban-body" id="body-의뢰"></div></div>
+<div class="kanban-col col-estimate"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>견적</div><span class="kanban-count" id="count-견적">0</span></div><div class="kanban-body" id="body-견적"></div></div>
+<div class="kanban-col col-order"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>발주</div><span class="kanban-count" id="count-발주">0</span></div><div class="kanban-body" id="body-발주"></div></div>
+<div class="kanban-col col-exec"><div class="kanban-col-header"><div class="kanban-col-title"><span class="kanban-status-dot"></span>집행</div><span class="kanban-count" id="count-집행">0</span></div><div class="kanban-body" id="body-집행"></div></div>
+</div>
+</div>
+</div>
+</section>
+
+
+<section class="contact" id="contact" data-page="contact">
+<div class="contact-inner">
+<div class="reveal"><p class="section-label">Contact</p><h2 class="section-title">기타 문의</h2><p class="section-desc" style="margin-bottom:56px">시설 관련 문의사항은 아래 연락처로 편하게 연락 주세요.</p></div>
+<div class="contact-grid" id="contactGrid"></div>
+</div>
+</section>
 
 <footer class="footer">
 <div class="footer-inner">
@@ -932,7 +938,69 @@ let tmplPages=[];
 function getTodayFormatted(){const t=new Date();return`${t.getFullYear()}년 ${String(t.getMonth()+1).padStart(2,'0')}월 ${String(t.getDate()).padStart(2,'0')}일`}
 
 // ══════════ SITE FUNCTIONS ══════════
-function scrollToSection(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});closeMobileMenu()}
+function scrollToSection(id){
+  if(['about','services','infra-manage','safety','contact'].includes(id)){
+    showPage(id); return;
+  }
+  document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
+  closeMobileMenu();
+}
+
+const PAGE_IDS = ['about','services','infra-manage','safety','contact'];
+
+function showPage(id){
+  closeMobileMenu();
+  // hero 숨기기
+  const hero = document.getElementById('hero');
+  if(hero) hero.style.display = id ? 'none' : '';
+
+  // 모든 페이지 섹션 숨기기
+  PAGE_IDS.forEach(pid => {
+    const el = document.querySelector(`[data-page="${pid}"]`);
+    if(el){ el.style.display = 'none'; el.classList.remove('page-active'); }
+  });
+
+  // 선택된 섹션만 표시
+  if(id){
+    const target = document.querySelector(`[data-page="${id}"]`);
+    if(target){
+      target.style.display = '';
+      target.classList.add('page-active');
+      window.scrollTo({top:0, behavior:'instant'});
+      // 섹션 내부 reveal 트리거
+      setTimeout(()=>{
+        target.querySelectorAll('.reveal').forEach(el=>{
+          el.classList.add('visible');
+        });
+      }, 50);
+    }
+  }
+
+  // nav active 상태 업데이트
+  document.querySelectorAll('.nav-link, .nav-cta').forEach(btn => {
+    const isActive = btn.textContent.trim() && btn.getAttribute('onclick')?.includes(`'${id}'`);
+    btn.classList.toggle('active', !!isActive);
+  });
+
+  // 인프라/안전 섹션 진입 시 렌더 함수 호출
+  if(id === 'infra-manage'){
+    setTimeout(()=>{ renderMgmtFilters(); renderMgrSelectorBar(); renderMgmtDashboard(); }, 80);
+  }
+  if(id === 'safety'){
+    setTimeout(()=>{ sfRenderMap(); }, 80);
+  }
+}
+
+function showHome(){
+  const hero = document.getElementById('hero');
+  if(hero) hero.style.display = '';
+  PAGE_IDS.forEach(pid => {
+    const el = document.querySelector(`[data-page="${pid}"]`);
+    if(el){ el.style.display = 'none'; el.classList.remove('page-active'); }
+  });
+  document.querySelectorAll('.nav-link, .nav-cta').forEach(btn => btn.classList.remove('active'));
+  window.scrollTo({top:0, behavior:'instant'});
+}
 function closeMobileMenu(){document.getElementById("mobileMenu").classList.remove("open");document.getElementById("menuIcon").style.display="block";document.getElementById("closeIcon").style.display="none"}
 const icons={
   mail:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
@@ -948,8 +1016,8 @@ function renderZoneFilter(){const c=document.getElementById("zoneFilter");c.inne
 function renderBuildingGrid(){const c=document.getElementById("buildingGrid"),f=getFilteredBuildings(),cnt=document.querySelector(".zone-count");if(cnt)cnt.textContent=`${f.length}개 건물`;if(f.length===0){c.innerHTML=`<div class="no-results">${icons.search}<h4>검색 결과가 없습니다</h4><p>건물 코드 또는 건물명으로 다시 검색해 주세요.</p></div>`;return}c.innerHTML=f.map(b=>`<div class="building-card" data-code="${b.code}"><div class="building-header"><span class="building-code">${b.code}</span><span class="building-zone">${b.zone}</span></div><h4 class="building-name">${b.name}</h4><div class="building-tags">${DISCIPLINES.map(d=>`<span class="disc-tag ${DISC_CLASS[d]}">${d}</span>`).join("")}</div></div>`).join("");c.querySelectorAll(".building-card").forEach(card=>{card.addEventListener("click",()=>{selectedBuilding=BUILDINGS.find(b=>b.code===card.dataset.code);showBuildingDetail()})})}
 function showBuildingDetail(){if(!selectedBuilding)return;const b=selectedBuilding,c=document.getElementById("buildingDetail");c.innerHTML=`<div class="detail-header"><div><div class="detail-badges"><span class="detail-code">${b.code}</span><span class="detail-zone">${b.zone}</span></div><h3 class="detail-name">${b.name}</h3></div><button class="detail-back" id="detailBack">${icons.arrowLeft} 목록으로</button></div><div class="detail-body"><p class="detail-label">공종별 담당자 정보</p><div class="managers-grid">${DISCIPLINES.map(disc=>{const m=b.managers[disc],cls=DISC_CLASS[disc];return`<div class="manager-card"><div class="manager-header"><div class="manager-icon ${cls}">${DISC_ICONS[disc]}</div><span class="manager-disc ${cls}">${disc}</span></div><div class="manager-body"><div class="manager-info"><div class="manager-avatar ${cls}">${m.name.charAt(0)}</div><div><p class="manager-name">${m.name}</p><p class="manager-team">인프라건설팀</p></div></div><div class="manager-contacts"><a href="tel:${m.phone}" class="manager-contact">${icons.phoneSmall} ${m.phone}</a><a href="mailto:${m.email}" class="manager-contact" style="word-break:break-all">${icons.mailSmall} ${m.email}</a></div></div></div>`}).join("")}</div><div class="action-btns"><button class="cta-ppt" id="btnOpenPPT"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6" rx="1"/></svg> 시설물 작업의뢰서 작성</button><button class="unified-cta" id="btnDirectMail"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> 공사 의뢰하기 (아웃룩)</button></div></div>`;c.classList.add("visible");document.getElementById("buildingGrid").style.display="none";document.getElementById("detailBack").addEventListener("click",hideBuildingDetail);document.getElementById("btnOpenPPT").addEventListener("click",openRequestModal);document.getElementById("btnDirectMail").addEventListener("click",openDirectOutlook)}
 function hideBuildingDetail(){selectedBuilding=null;document.getElementById("buildingDetail").classList.remove("visible");document.getElementById("buildingGrid").style.display="grid"}
-function renderStats(){document.getElementById("statsGrid").innerHTML=STATS_DATA.map((s,i)=>`<div class="stat-card reveal" style="transition-delay:${i*0.08}s"><p class="stat-num">${s.num}</p><p class="stat-label">${s.label}</p></div>`).join("")}
-function renderContacts(){document.getElementById("contactGrid").innerHTML=CONTACTS.map((c,i)=>`<div class="contact-card reveal" style="transition-delay:${i*0.1}s"><div class="contact-icon">${icons[c.icon]}</div><p class="contact-label">${c.label}</p>${c.href?`<a href="${c.href}" class="contact-value">${c.value}</a>`:`<p class="contact-value">${c.value}</p>`}</div>`).join("")}
+function renderStats(){const sg=document.getElementById("statsGrid");if(!sg)return;sg.innerHTML=STATS_DATA.map((s,i)=>`<div class="stat-card reveal" style="transition-delay:${i*0.08}s"><p class="stat-num">${s.num}</p><p class="stat-label">${s.label}</p></div>`).join("")}
+function renderContacts(){const cg=document.getElementById("contactGrid");if(!cg)return;cg.innerHTML=CONTACTS.map((c,i)=>`<div class="contact-card reveal" style="transition-delay:${i*0.1}s"><div class="contact-icon">${icons[c.icon]}</div><p class="contact-label">${c.label}</p>${c.href?`<a href="${c.href}" class="contact-value">${c.value}</a>`:`<p class="contact-value">${c.value}</p>`}</div>`).join("")}
 function setupScrollReveal(){const o=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");o.unobserve(e.target)}})},{threshold:0.1});document.querySelectorAll(".reveal").forEach(el=>o.observe(el))}
 
 // ══════════ INFRA MGMT ══════════
@@ -1835,6 +1903,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   renderMgmtFilters();renderMgrSelectorBar();renderMgmtDashboard();
   document.getElementById('authOverlay').style.display='none';
   document.body.style.overflow='';
+  // 초기: 모든 페이지 섹션 숨김, hero만 표시
+  PAGE_IDS.forEach(pid => {
+    const el = document.querySelector(`[data-page="${pid}"]`);
+    if(el) el.style.display = 'none';
+  });
   sfRenderMap();
   // Ctrl+B/I shortcuts in contenteditable
   document.addEventListener('keydown',e=>{
